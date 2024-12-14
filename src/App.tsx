@@ -14,6 +14,8 @@ import Accreditation from "./pages/Accreditation";
 import NaacAccreditation from "./pages/accreditation/NaacAccreditation";
 import NbaAccreditation from "./pages/accreditation/NbaAccreditation";
 import AbetAccreditation from "./pages/accreditation/AbetAccreditation";
+import NirfAccreditation from "./pages/accreditation/NirfAccreditation";
+import QsAccreditation from "./pages/accreditation/QsAccreditation";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
@@ -50,6 +52,8 @@ function App() {
                 <Route path="/accreditation/naac" element={<NaacAccreditation />} />
                 <Route path="/accreditation/nba" element={<NbaAccreditation />} />
                 <Route path="/accreditation/abet" element={<AbetAccreditation />} />
+                <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
+                <Route path="/accreditation/qs" element={<QsAccreditation />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/blog" element={<Blog />} />
