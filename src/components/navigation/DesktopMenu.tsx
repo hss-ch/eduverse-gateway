@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,8 +10,30 @@ import {
 } from "@/components/ui/navigation-menu";
 import { solutions, resources } from "./navigationData";
 import { ListItem } from "./ListItem";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export function DesktopMenu() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account",
+      });
+      navigate("/auth");
+    }
+  };
+
   return (
     <NavigationMenu className="flex items-center">
       <NavigationMenuList className="gap-6">
@@ -55,12 +77,20 @@ export function DesktopMenu() {
           </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
-      <Link
-        to="/contact"
-        className="ml-8 px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-      >
-        Get Started
-      </Link>
+      <div className="ml-8 flex gap-4">
+        <Link
+          to="/contact"
+          className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+        >
+          Get Started
+        </Link>
+        <button
+          onClick={handleSignOut}
+          className="px-6 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
+        >
+          Sign Out
+        </button>
+      </div>
     </NavigationMenu>
   );
 }
