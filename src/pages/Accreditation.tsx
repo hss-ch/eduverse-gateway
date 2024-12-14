@@ -14,6 +14,7 @@ const accreditationBodies = [
     icon: Award,
     color: "bg-purple-100",
     iconColor: "text-primary",
+    route: "/accreditation/naac"
   },
   {
     name: "NBA",
@@ -22,6 +23,7 @@ const accreditationBodies = [
     icon: CheckCircle,
     color: "bg-blue-100",
     iconColor: "text-blue-600",
+    route: "/accreditation/nba"
   },
   {
     name: "ABET",
@@ -30,6 +32,7 @@ const accreditationBodies = [
     icon: BookOpen,
     color: "bg-green-100",
     iconColor: "text-green-600",
+    route: "/accreditation/abet"
   },
   {
     name: "NIRF",
@@ -38,6 +41,7 @@ const accreditationBodies = [
     icon: BarChart,
     color: "bg-orange-100",
     iconColor: "text-orange-600",
+    route: "/accreditation/nirf"
   },
   {
     name: "QS",
@@ -46,6 +50,7 @@ const accreditationBodies = [
     icon: Users,
     color: "bg-red-100",
     iconColor: "text-red-600",
+    route: "/accreditation/qs"
   },
 ];
 
@@ -88,7 +93,7 @@ const Accreditation = () => {
                     ))}
                   </ul>
                   <Link
-                    to={`/accreditation/${body.name.toLowerCase()}`}
+                    to={body.route || `/accreditation/${body.name.toLowerCase()}`}
                     className="mt-6 inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     Learn More

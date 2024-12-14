@@ -11,6 +11,9 @@ import Academic from "./pages/Academic";
 import Administrative from "./pages/Administrative";
 import Planning from "./pages/Planning";
 import Accreditation from "./pages/Accreditation";
+import NaacAccreditation from "./pages/accreditation/NaacAccreditation";
+import NbaAccreditation from "./pages/accreditation/NbaAccreditation";
+import AbetAccreditation from "./pages/accreditation/AbetAccreditation";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
@@ -44,6 +47,9 @@ function App() {
                 <Route path="/administrative" element={<Administrative />} />
                 <Route path="/planning" element={<Planning />} />
                 <Route path="/accreditation" element={<Accreditation />} />
+                <Route path="/accreditation/naac" element={<NaacAccreditation />} />
+                <Route path="/accreditation/nba" element={<NbaAccreditation />} />
+                <Route path="/accreditation/abet" element={<AbetAccreditation />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/blog" element={<Blog />} />
