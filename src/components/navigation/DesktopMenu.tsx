@@ -12,10 +12,26 @@ import { solutions, resources } from "./navigationData";
 import { ListItem } from "./ListItem";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 
 export function DesktopMenu() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -30,7 +46,7 @@ export function DesktopMenu() {
         title: "Signed out successfully",
         description: "You have been signed out of your account",
       });
-      navigate("/auth");
+      navigate("/");
     }
   };
 
@@ -76,20 +92,38 @@ export function DesktopMenu() {
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link to="/blog">
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Blog
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
       </NavigationMenuList>
       <div className="ml-8 flex gap-4">
-        <Link
-          to="/contact"
-          className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-        >
-          Get Started
-        </Link>
-        <button
-          onClick={handleSignOut}
-          className="px-6 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
-        >
-          Sign Out
-        </button>
+        {session ? (
+          <button
+            onClick={handleSignOut}
+            className="px-6 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
+          >
+            Sign Out
+          </button>
+        ) : (
+          <>
+            <Link
+              to="/auth"
+              className="px-6 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
+            >
+              Sign In
+            </Link>
+            <Link
+              to="/contact"
+              className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+            >
+              Get Started
+            </Link>
+          </>
+        )}
       </div>
     </NavigationMenu>
   );

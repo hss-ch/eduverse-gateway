@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { solutions, resources } from "./navigationData";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -8,6 +12,42 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      toast({
+        title: "Error signing out",
+        description: error.message,
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out successfully",
+        description: "You have been signed out of your account",
+      });
+      navigate("/");
+    }
+    toggleMenu();
+  };
+
   return (
     <div className="relative">
       <button
@@ -57,21 +97,40 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
                 Pricing
               </Link>
 
+              <Link
+                to="/blog"
+                className="block px-3 py-2 text-sm text-secondary/70 hover:bg-accent rounded-md"
+                onClick={() => toggleMenu()}
+              >
+                Blog
+              </Link>
+
               <div className="pt-2 flex flex-col gap-2">
-                <Link
-                  to="/auth"
-                  className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-center"
-                  onClick={() => toggleMenu()}
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/contact"
-                  className="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors text-center"
-                  onClick={() => toggleMenu()}
-                >
-                  Get Started
-                </Link>
+                {session ? (
+                  <button
+                    onClick={handleSignOut}
+                    className="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors text-center"
+                  >
+                    Sign Out
+                  </button>
+                ) : (
+                  <>
+                    <Link
+                      to="/auth"
+                      className="px-4 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors text-center"
+                      onClick={() => toggleMenu()}
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      to="/contact"
+                      className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors text-center"
+                      onClick={() => toggleMenu()}
+                    >
+                      Get Started
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
