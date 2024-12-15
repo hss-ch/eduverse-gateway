@@ -11,13 +11,17 @@ interface Post {
   title: string;
   content: string;
   created_at: string;
-  author?: {
-    full_name: string | null;
-  }[];
+  author_id: string;
+}
+
+interface Profile {
+  id: string;
+  full_name: string | null;
 }
 
 const Blog = () => {
   const [session, setSession] = useState<any>(null);
+  const [authorProfiles, setAuthorProfiles] = useState<{ [key: string]: Profile }>({});
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -36,17 +40,33 @@ const Blog = () => {
   const { data: posts = [], isLoading } = useQuery({
     queryKey: ['posts'],
     queryFn: async () => {
-      const { data, error } = await supabase
+      console.log('Fetching posts...');
+      const { data: postsData, error: postsError } = await supabase
         .from('blogs')
-        .select(`
-          *,
-          author:profiles(full_name)
-        `)
+        .select('*')
         .eq('published', true)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      return data || [];
+      if (postsError) throw postsError;
+
+      // Fetch author profiles for all posts
+      const authorIds = [...new Set(postsData.map(post => post.author_id))];
+      const { data: profilesData, error: profilesError } = await supabase
+        .from('profiles')
+        .select('id, full_name')
+        .in('id', authorIds);
+
+      if (profilesError) throw profilesError;
+
+      // Create a map of author profiles
+      const profilesMap = (profilesData || []).reduce((acc, profile) => ({
+        ...acc,
+        [profile.id]: profile
+      }), {});
+
+      setAuthorProfiles(profilesMap);
+
+      return postsData || [];
     },
   });
 
@@ -75,7 +95,7 @@ const Blog = () => {
                   title={post.title}
                   content={post.content}
                   created_at={post.created_at}
-                  author={post.author}
+                  author={[authorProfiles[post.author_id]]}
                 />
               ))}
             </div>
