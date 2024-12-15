@@ -1,133 +1,47 @@
-import { motion } from "framer-motion";
-import { Calendar, User, Plus } from "lucide-react";
-import { MainNav } from "@/components/MainNav";
-import { Footer } from "@/components/Footer";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect, useState } from "react";
+import { BlogPost } from "@/components/blog/BlogPost";
 
-const Blog = () => {
-  const navigate = useNavigate();
-  const [session, setSession] = useState<any>(null);
+export default function Blog() {
+  const { data: blogs, isLoading } = useQuery({
+    queryKey: ["blogs"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("blogs")
+        .select(`
+          id,
+          title,
+          content,
+          created_at,
+          author_id,
+          profiles (
+            full_name
+          )
+        `)
+        .eq("published", true)
+        .order("created_at", { ascending: false });
 
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
+      if (error) throw error;
+      return data;
+    },
+  });
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <div className="min-h-screen bg-accent">
-      <MainNav />
-      
-      <section className="pt-24 px-6">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <div className="flex justify-between items-center mb-8">
-              <h1 className="text-4xl md:text-5xl font-bold text-secondary">
-                Blog
-              </h1>
-              {session && (
-                <Button
-                  onClick={() => navigate("/blog/new")}
-                  className="bg-primary text-white hover:bg-primary/90"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Create New Post
-                </Button>
-              )}
-            </div>
-            <p className="text-secondary/70 max-w-2xl mx-auto">
-              Latest updates and insights from GuideCampus
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
-            {blogPosts.map((post, index) => (
-              <motion.article
-                key={post.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="bg-white rounded-2xl overflow-hidden hover:shadow-lg transition-all duration-300"
-              >
-                <img
-                  src={post.image}
-                  alt={post.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-6">
-                  <div className="flex items-center text-sm text-secondary/60 mb-4">
-                    <Calendar className="h-4 w-4 mr-2" />
-                    {post.date}
-                    <span className="mx-2">•</span>
-                    <User className="h-4 w-4 mr-2" />
-                    {post.author}
-                  </div>
-                  <h3 className="text-xl font-semibold text-secondary mb-2">
-                    {post.title}
-                  </h3>
-                  <p className="text-secondary/70 mb-4">
-                    {post.excerpt}
-                  </p>
-                  <Button
-                    variant="link"
-                    className="p-0 h-auto text-primary hover:text-primary/90"
-                    onClick={() => navigate(`/blog/${post.id}`)}
-                  >
-                    Read More
-                  </Button>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <Footer />
+    <div className="grid gap-6">
+      {blogs?.map((blog) => (
+        <BlogPost
+          key={blog.id}
+          id={blog.id}
+          title={blog.title}
+          content={blog.content}
+          created_at={blog.created_at}
+          author={blog.profiles}
+        />
+      ))}
     </div>
   );
-};
-
-const blogPosts = [
-  {
-    id: 1,
-    title: "The Future of Education Management",
-    excerpt: "Discover how AI and automation are transforming educational institutions.",
-    date: "March 15, 2024",
-    author: "John Doe",
-    image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
-  },
-  {
-    id: 2,
-    title: "Streamlining Administrative Tasks",
-    excerpt: "Learn how to reduce administrative burden with modern tools.",
-    date: "March 10, 2024",
-    author: "Jane Smith",
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
-  },
-  {
-    id: 3,
-    title: "Enhancing Student Experience",
-    excerpt: "Tips for creating a better learning environment through technology.",
-    date: "March 5, 2024",
-    author: "Mike Johnson",
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-  },
-];
-
-export default Blog;
+}
