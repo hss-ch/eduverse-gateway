@@ -9,7 +9,7 @@ interface BlogPostProps {
   created_at: string;
   author?: {
     full_name: string | null;
-  };
+  }[];
 }
 
 export function BlogPost({ id, title, content, created_at, author }: BlogPostProps) {
@@ -19,7 +19,7 @@ export function BlogPost({ id, title, content, created_at, author }: BlogPostPro
         <CardHeader>
           <CardTitle>{title}</CardTitle>
           <CardDescription>
-            {author?.full_name && `By ${author.full_name} • `}
+            {author?.[0]?.full_name && `By ${author[0].full_name} • `}
             {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
           </CardDescription>
         </CardHeader>
