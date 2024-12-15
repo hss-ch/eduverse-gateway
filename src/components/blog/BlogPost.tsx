@@ -8,7 +8,7 @@ interface BlogPostProps {
   content: string;
   created_at: string;
   author?: {
-    full_name: string;
+    full_name: string | null;
   };
 }
 
