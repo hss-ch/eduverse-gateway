@@ -14,7 +14,7 @@ export default function Blog() {
           content,
           created_at,
           author_id,
-          profiles!blogs_author_id_fkey (
+          profiles (
             full_name
           )
         `)
