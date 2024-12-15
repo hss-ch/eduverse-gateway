@@ -1,12 +1,29 @@
 import { motion } from "framer-motion";
-import { Calendar, User } from "lucide-react";
+import { Calendar, User, Plus } from "lucide-react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useEffect, useState } from "react";
 
 const Blog = () => {
   const navigate = useNavigate();
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <div className="min-h-screen bg-accent">
@@ -20,9 +37,20 @@ const Blog = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
-              Blog
-            </h1>
+            <div className="flex justify-between items-center mb-8">
+              <h1 className="text-4xl md:text-5xl font-bold text-secondary">
+                Blog
+              </h1>
+              {session && (
+                <Button
+                  onClick={() => navigate("/blog/new")}
+                  className="bg-primary text-white hover:bg-primary/90"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Create New Post
+                </Button>
+              )}
+            </div>
             <p className="text-secondary/70 max-w-2xl mx-auto">
               Latest updates and insights from GuideCampus
             </p>

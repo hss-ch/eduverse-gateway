@@ -38,11 +38,6 @@ export const resources = [
     description: "Get in touch with our team.",
   },
   {
-    title: "Blog",
-    href: "/blog",
-    description: "Latest updates and insights.",
-  },
-  {
     title: "Careers",
     href: "/careers",
     description: "Join our growing team.",

@@ -1,25 +1,7 @@
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useEffect, useState } from "react";
 
 export function Footer() {
-  const [session, setSession] = useState<any>(null);
-
-  useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
   return (
     <footer className="bg-secondary text-white py-16">
       <div className="container mx-auto px-6">
@@ -48,13 +30,6 @@ export function Footer() {
               <li><Link to="/about" className="text-gray-400 hover:text-white transition-colors">About Us</Link></li>
               <li><Link to="/contact" className="text-gray-400 hover:text-white transition-colors">Contact</Link></li>
               <li><Link to="/blog" className="text-gray-400 hover:text-white transition-colors">Blog</Link></li>
-              {session && (
-                <li>
-                  <Link to="/blog/portal" className="text-gray-400 hover:text-white transition-colors">
-                    Blog Portal
-                  </Link>
-                </li>
-              )}
             </ul>
           </div>
           
