@@ -23,6 +23,8 @@ import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Blog from "./pages/Blog";
 import BlogNew from "./pages/BlogNew";
+import BlogView from "./pages/BlogView";
+import BlogEdit from "./pages/BlogEdit";
 import { BlogLayout } from "./components/blog/BlogLayout";
 import Pricing from "./pages/Pricing";
 import Features from "./pages/Features";
@@ -102,6 +104,15 @@ function App() {
                     element={
                       <ProtectedRoute>
                         <BlogNew />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path=":id" element={<BlogView />} />
+                  <Route
+                    path="edit/:id"
+                    element={
+                      <ProtectedRoute>
+                        <BlogEdit />
                       </ProtectedRoute>
                     }
                   />
