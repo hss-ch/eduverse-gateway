@@ -9,13 +9,48 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      blog_ratings: {
+        Row: {
+          blog_id: string | null
+          created_at: string
+          id: string
+          rating: number
+          user_id: string | null
+        }
+        Insert: {
+          blog_id?: string | null
+          created_at?: string
+          id?: string
+          rating: number
+          user_id?: string | null
+        }
+        Update: {
+          blog_id?: string | null
+          created_at?: string
+          id?: string
+          rating?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_ratings_blog_id_fkey"
+            columns: ["blog_id"]
+            isOneToOne: false
+            referencedRelation: "blogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blogs: {
         Row: {
           author_id: string
           content: string
           created_at: string
           id: string
+          image_url: string | null
           published: boolean | null
+          rating: number | null
+          ratings_count: number | null
           title: string
           updated_at: string
         }
@@ -24,7 +59,10 @@ export type Database = {
           content: string
           created_at?: string
           id?: string
+          image_url?: string | null
           published?: boolean | null
+          rating?: number | null
+          ratings_count?: number | null
           title: string
           updated_at?: string
         }
@@ -33,7 +71,10 @@ export type Database = {
           content?: string
           created_at?: string
           id?: string
+          image_url?: string | null
           published?: boolean | null
+          rating?: number | null
+          ratings_count?: number | null
           title?: string
           updated_at?: string
         }
