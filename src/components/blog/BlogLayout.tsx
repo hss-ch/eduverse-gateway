@@ -10,11 +10,16 @@ export function BlogLayout() {
   const session = useSession();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-accent/50">
       <MainNav />
       <main className="flex-1 container mx-auto px-6 py-24">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">Blog</h1>
+          <div>
+            <h1 className="text-4xl font-bold text-secondary mb-2">Blog</h1>
+            <p className="text-muted-foreground">
+              Discover insights and stories from our community
+            </p>
+          </div>
           {session && location.pathname === "/blog" && (
             <Link to="/blog/new">
               <Button className="flex items-center gap-2">
@@ -24,7 +29,9 @@ export function BlogLayout() {
             </Link>
           )}
         </div>
-        <Outlet />
+        <div className="bg-background rounded-lg p-6 shadow-sm">
+          <Outlet />
+        </div>
       </main>
       <Footer />
     </div>
