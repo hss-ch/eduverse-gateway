@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { MainNav } from "@/components/MainNav";
-import { Footer } from "@/components/Footer";
 import { BlogPost } from "@/components/blog/BlogPost";
 import { BlogManager } from "@/components/blog/BlogManager";
 import { supabase } from "@/integrations/supabase/client";
@@ -72,8 +70,6 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-accent">
-      <MainNav />
-      
       <section className="pt-24 px-6">
         <div className="container max-w-4xl">
           <h1 className="text-4xl font-bold text-secondary mb-12">Blog</h1>
@@ -102,8 +98,6 @@ const Blog = () => {
           )}
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 };

@@ -84,78 +84,15 @@ function App() {
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route
-                  path="/academic"
-                  element={
-                    <ProtectedRoute>
-                      <Academic />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/administrative"
-                  element={
-                    <ProtectedRoute>
-                      <Administrative />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/planning"
-                  element={
-                    <ProtectedRoute>
-                      <Planning />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/accreditation"
-                  element={
-                    <ProtectedRoute>
-                      <Accreditation />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/accreditation/naac"
-                  element={
-                    <ProtectedRoute>
-                      <NaacAccreditation />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/accreditation/nba"
-                  element={
-                    <ProtectedRoute>
-                      <NbaAccreditation />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/accreditation/abet"
-                  element={
-                    <ProtectedRoute>
-                      <AbetAccreditation />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/accreditation/nirf"
-                  element={
-                    <ProtectedRoute>
-                      <NirfAccreditation />
-                    </ProtectedRoute>
-                  }
-                />
-                <Route
-                  path="/accreditation/qs"
-                  element={
-                    <ProtectedRoute>
-                      <QsAccreditation />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/academic" element={<Academic />} />
+                <Route path="/administrative" element={<Administrative />} />
+                <Route path="/planning" element={<Planning />} />
+                <Route path="/accreditation" element={<Accreditation />} />
+                <Route path="/accreditation/naac" element={<NaacAccreditation />} />
+                <Route path="/accreditation/nba" element={<NbaAccreditation />} />
+                <Route path="/accreditation/abet" element={<AbetAccreditation />} />
+                <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
+                <Route path="/accreditation/qs" element={<QsAccreditation />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/blog" element={<BlogLayout />}>
