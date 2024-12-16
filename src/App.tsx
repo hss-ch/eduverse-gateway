@@ -76,58 +76,56 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 
 function App() {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <AnimatePresence mode="wait">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/academic" element={<Academic />} />
-                <Route path="/administrative" element={<Administrative />} />
-                <Route path="/planning" element={<Planning />} />
-                <Route path="/accreditation" element={<Accreditation />} />
-                <Route path="/accreditation/naac" element={<NaacAccreditation />} />
-                <Route path="/accreditation/nba" element={<NbaAccreditation />} />
-                <Route path="/accreditation/abet" element={<AbetAccreditation />} />
-                <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
-                <Route path="/accreditation/qs" element={<QsAccreditation />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/blog" element={<BlogLayout />}>
-                  <Route index element={<Blog />} />
-                  <Route
-                    path="new"
-                    element={
-                      <ProtectedRoute>
-                        <BlogNew />
-                      </ProtectedRoute>
-                    }
-                  />
-                  <Route path=":id" element={<BlogView />} />
-                  <Route
-                    path="edit/:id"
-                    element={
-                      <ProtectedRoute>
-                        <BlogEdit />
-                      </ProtectedRoute>
-                    }
-                  />
-                </Route>
-                <Route path="/pricing" element={<Pricing />} />
-                <Route path="/features" element={<Features />} />
-                <Route path="/careers" element={<Careers />} />
-                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-                <Route path="/terms-of-service" element={<TermsOfService />} />
-              </Routes>
-            </AnimatePresence>
-          </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <AnimatePresence mode="wait">
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/academic" element={<Academic />} />
+              <Route path="/administrative" element={<Administrative />} />
+              <Route path="/planning" element={<Planning />} />
+              <Route path="/accreditation" element={<Accreditation />} />
+              <Route path="/accreditation/naac" element={<NaacAccreditation />} />
+              <Route path="/accreditation/nba" element={<NbaAccreditation />} />
+              <Route path="/accreditation/abet" element={<AbetAccreditation />} />
+              <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
+              <Route path="/accreditation/qs" element={<QsAccreditation />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/blog" element={<BlogLayout />}>
+                <Route index element={<Blog />} />
+                <Route
+                  path="new"
+                  element={
+                    <ProtectedRoute>
+                      <BlogNew />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path=":id" element={<BlogView />} />
+                <Route
+                  path="edit/:id"
+                  element={
+                    <ProtectedRoute>
+                      <BlogEdit />
+                    </ProtectedRoute>
+                  }
+                />
+              </Route>
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/features" element={<Features />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+            </Routes>
+          </AnimatePresence>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 }
 
