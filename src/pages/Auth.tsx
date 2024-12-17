@@ -14,26 +14,35 @@ export default function Auth() {
   useEffect(() => {
     let mounted = true;
 
-    // Check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session && mounted) {
-        console.log("Session found, redirecting to home");
-        navigate("/");
+    async function getInitialSession() {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log("Auth page - Initial session check:", session);
+        
+        if (mounted && session) {
+          console.log("Session found, redirecting to home");
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error in getInitialSession:", error);
       }
-    });
+    }
 
-    // Listen for auth changes
+    getInitialSession();
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
       console.log("Auth state changed:", event, session);
       
-      if (event === 'SIGNED_IN' && mounted) {
-        console.log("User signed in, redirecting to home");
-        navigate("/");
-      } else if (event === 'SIGNED_OUT' && mounted) {
-        console.log("User signed out, redirecting to auth");
-        navigate("/auth");
+      if (mounted) {
+        if (event === 'SIGNED_IN') {
+          console.log("User signed in, redirecting to home");
+          navigate("/");
+        } else if (event === 'SIGNED_OUT') {
+          console.log("User signed out");
+          navigate("/auth");
+        }
       }
     });
 

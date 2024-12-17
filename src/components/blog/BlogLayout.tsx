@@ -12,23 +12,44 @@ export function BlogLayout() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("Blog layout - Current session:", session);
-      setSession(session);
-      setLoading(false);
-    });
+    let mounted = true;
 
-    // Listen for auth changes
+    async function getInitialSession() {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log("Blog layout - Initial session check:", session);
+        
+        if (mounted) {
+          if (error) {
+            console.error("Error fetching session:", error);
+          }
+          setSession(session);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error in getInitialSession:", error);
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    getInitialSession();
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log("Blog layout - Auth state changed:", session);
-      setSession(session);
-      setLoading(false);
+      if (mounted) {
+        setSession(session);
+        setLoading(false);
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   // Show loading state while checking authentication
