@@ -8,15 +8,21 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
 
+interface Profile {
+  full_name: string | null;
+}
+
 interface BlogPost {
   id: string;
   title: string;
   content: string;
   created_at: string;
   author_id: string;
-  author: {
-    full_name: string | null;
-  }[];
+  image_url?: string | null;
+  published: boolean;
+  rating: number;
+  ratings_count: number;
+  profiles?: Profile[];
 }
 
 export default function BlogView() {
@@ -33,13 +39,20 @@ export default function BlogView() {
           .from('blogs')
           .select(`
             *,
-            author:profiles(full_name)
+            profiles:profiles(full_name)
           `)
           .eq('id', id)
           .single();
 
         if (error) throw error;
-        setPost(data);
+        
+        // Transform the data to match our BlogPost interface
+        const transformedPost: BlogPost = {
+          ...data,
+          profiles: data.profiles as Profile[]
+        };
+        
+        setPost(transformedPost);
       } catch (error: any) {
         console.error('Error fetching post:', error);
         toast({
@@ -82,7 +95,7 @@ export default function BlogView() {
     );
   }
 
-  const authorName = post.author?.[0]?.full_name || "Anonymous";
+  const authorName = post.profiles?.[0]?.full_name || "Anonymous";
   const authorInitials = authorName
     .split(" ")
     .map((n) => n[0])
@@ -114,6 +127,14 @@ export default function BlogView() {
             </p>
           </div>
         </div>
+
+        {post.image_url && (
+          <img 
+            src={post.image_url} 
+            alt={post.title}
+            className="w-full h-auto rounded-lg mb-8"
+          />
+        )}
 
         <div className="whitespace-pre-wrap leading-relaxed">
           {post.content.split('\n').map((paragraph, index) => (

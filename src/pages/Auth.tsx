@@ -5,17 +5,42 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function Auth() {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
-    supabase.auth.onAuthStateChange((event, session) => {
-      console.log("Auth state changed:", event, session);
+    // Check current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
         navigate("/");
       }
     });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth state changed:", event, session);
+      
+      if (event === 'SIGNED_IN') {
+        navigate("/");
+      } else if (event === 'SIGNED_OUT') {
+        navigate("/auth");
+      } else if (event === 'USER_UPDATED') {
+        console.log("User updated:", session);
+      } else if (event === 'TOKEN_REFRESHED') {
+        console.log("Token refreshed:", session);
+      } else if (event === 'USER_DELETED') {
+        navigate("/auth");
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, [navigate]);
 
   return (
@@ -43,6 +68,7 @@ export default function Auth() {
               }}
               theme="light"
               providers={[]}
+              redirectTo={window.location.origin}
             />
           </div>
         </div>
