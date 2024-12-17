@@ -33,8 +33,6 @@ export default function Auth() {
         console.log("User updated:", session);
       } else if (event === 'TOKEN_REFRESHED') {
         console.log("Token refreshed:", session);
-      } else if (event === 'USER_DELETED') {
-        navigate("/auth");
       }
     });
 

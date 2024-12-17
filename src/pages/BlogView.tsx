@@ -22,7 +22,7 @@ interface BlogPost {
   published: boolean;
   rating: number;
   ratings_count: number;
-  profiles?: Profile[];
+  author?: Profile;
 }
 
 export default function BlogView() {
@@ -39,20 +39,23 @@ export default function BlogView() {
           .from('blogs')
           .select(`
             *,
-            profiles:profiles(full_name)
+            author:profiles!blogs_author_id_fkey(full_name)
           `)
           .eq('id', id)
           .single();
 
         if (error) throw error;
         
-        // Transform the data to match our BlogPost interface
-        const transformedPost: BlogPost = {
-          ...data,
-          profiles: data.profiles as Profile[]
-        };
-        
-        setPost(transformedPost);
+        if (data) {
+          // Transform the data to match our BlogPost interface
+          const transformedPost: BlogPost = {
+            ...data,
+            author: Array.isArray(data.author) && data.author.length > 0 
+              ? data.author[0] 
+              : undefined
+          };
+          setPost(transformedPost);
+        }
       } catch (error: any) {
         console.error('Error fetching post:', error);
         toast({
@@ -95,7 +98,7 @@ export default function BlogView() {
     );
   }
 
-  const authorName = post.profiles?.[0]?.full_name || "Anonymous";
+  const authorName = post.author?.full_name || "Anonymous";
   const authorInitials = authorName
     .split(" ")
     .map((n) => n[0])
