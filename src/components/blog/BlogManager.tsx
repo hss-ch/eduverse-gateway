@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
+import { useSession } from "@supabase/auth-helpers-react";
 
 interface BlogPost {
   id: string;
@@ -19,14 +19,24 @@ interface BlogPost {
 export function BlogManager() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const session = useSession();
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
 
+  useEffect(() => {
+    if (session) {
+      fetchPosts();
+    }
+  }, [session]);
+
   const fetchPosts = async () => {
+    if (!session) return;
+    
     try {
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
+        .eq('author_id', session.user.id)
         .order('created_at', { ascending: false });
 
       if (error) throw error;
@@ -48,7 +58,8 @@ export function BlogManager() {
       const { error } = await supabase
         .from('blogs')
         .update({ published: !post.published })
-        .eq('id', post.id);
+        .eq('id', post.id)
+        .eq('author_id', session?.user.id);
 
       if (error) throw error;
 
@@ -75,7 +86,8 @@ export function BlogManager() {
       const { error } = await supabase
         .from('blogs')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .eq('author_id', session?.user.id);
 
       if (error) throw error;
 
@@ -95,26 +107,39 @@ export function BlogManager() {
     }
   };
 
-  return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold">Manage Blog Posts</h2>
-        <Button onClick={() => navigate('/blog/new')}>
-          Create New Post
+  if (!session) {
+    return (
+      <div className="text-center p-4">
+        <p className="text-muted-foreground">Please sign in to manage your posts</p>
+        <Button 
+          className="mt-4"
+          onClick={() => navigate('/auth')}
+        >
+          Sign In
         </Button>
       </div>
+    );
+  }
 
-      <div className="grid gap-6">
-        {posts.map((post) => (
+  if (loading) {
+    return <div className="text-center p-4">Loading your posts...</div>;
+  }
+
+  return (
+    <div className="space-y-4">
+      {posts.length === 0 ? (
+        <p className="text-center text-muted-foreground">You haven't created any posts yet.</p>
+      ) : (
+        posts.map((post) => (
           <Card key={post.id}>
             <CardHeader>
-              <CardTitle>{post.title}</CardTitle>
+              <CardTitle className="text-lg">{post.title}</CardTitle>
               <CardDescription>
                 Created {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-secondary/70 line-clamp-3">{post.content}</p>
+              <p className="text-muted-foreground line-clamp-2">{post.content}</p>
             </CardContent>
             <CardFooter className="flex justify-between">
               <div className="flex gap-2">
@@ -139,8 +164,8 @@ export function BlogManager() {
               </Button>
             </CardFooter>
           </Card>
-        ))}
-      </div>
+        ))
+      )}
     </div>
   );
 }
