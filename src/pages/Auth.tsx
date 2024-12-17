@@ -15,6 +15,7 @@ export default function Auth() {
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session) {
+        console.log("Session found, redirecting to home");
         navigate("/");
       }
     });
@@ -26,8 +27,10 @@ export default function Auth() {
       console.log("Auth state changed:", event, session);
       
       if (event === 'SIGNED_IN') {
+        console.log("User signed in, redirecting to home");
         navigate("/");
       } else if (event === 'SIGNED_OUT') {
+        console.log("User signed out, redirecting to auth");
         navigate("/auth");
       } else if (event === 'USER_UPDATED') {
         console.log("User updated:", session);
@@ -45,7 +48,7 @@ export default function Auth() {
     <div className="min-h-screen flex flex-col bg-accent">
       <MainNav />
       <div className="flex-grow flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+        <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-sm">
           <div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               Welcome to GuideCampus

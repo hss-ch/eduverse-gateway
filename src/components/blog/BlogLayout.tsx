@@ -3,11 +3,37 @@ import { MainNav } from "../MainNav";
 import { Footer } from "../Footer";
 import { Button } from "../ui/button";
 import { PlusCircle } from "lucide-react";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 export function BlogLayout() {
   const location = useLocation();
-  const session = useSession();
+  const [session, setSession] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Check current session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Blog layout - Current session:", session);
+      setSession(session);
+      setLoading(false);
+    });
+
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("Blog layout - Auth state changed:", session);
+      setSession(session);
+      setLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-accent/50">
