@@ -12,9 +12,11 @@ export default function Auth() {
   const { toast } = useToast();
 
   useEffect(() => {
+    let mounted = true;
+
     // Check current session
     supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
+      if (session && mounted) {
         console.log("Session found, redirecting to home");
         navigate("/");
       }
@@ -26,20 +28,17 @@ export default function Auth() {
     } = supabase.auth.onAuthStateChange((event, session) => {
       console.log("Auth state changed:", event, session);
       
-      if (event === 'SIGNED_IN') {
+      if (event === 'SIGNED_IN' && mounted) {
         console.log("User signed in, redirecting to home");
         navigate("/");
-      } else if (event === 'SIGNED_OUT') {
+      } else if (event === 'SIGNED_OUT' && mounted) {
         console.log("User signed out, redirecting to auth");
         navigate("/auth");
-      } else if (event === 'USER_UPDATED') {
-        console.log("User updated:", session);
-      } else if (event === 'TOKEN_REFRESHED') {
-        console.log("Token refreshed:", session);
       }
     });
 
     return () => {
+      mounted = false;
       subscription.unsubscribe();
     };
   }, [navigate]);

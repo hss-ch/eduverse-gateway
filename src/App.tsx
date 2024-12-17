@@ -46,23 +46,39 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
+
     // Check current session
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    async function getSession() {
+      const { data: { session }, error } = await supabase.auth.getSession();
       console.log("Protected route - Current session:", session);
-      setSession(session);
-      setLoading(false);
-    });
+      
+      if (mounted) {
+        if (error) {
+          console.error("Error fetching session:", error);
+        }
+        setSession(session);
+        setLoading(false);
+      }
+    }
+
+    getSession();
 
     // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log("Protected route - Auth state changed:", session);
-      setSession(session);
-      setLoading(false);
+      if (mounted) {
+        setSession(session);
+        setLoading(false);
+      }
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   if (loading) {
