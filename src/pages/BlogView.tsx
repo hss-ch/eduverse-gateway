@@ -22,7 +22,7 @@ interface BlogPost {
   published: boolean;
   rating: number;
   ratings_count: number;
-  profiles?: Profile;
+  profiles: Profile | null;
 }
 
 export default function BlogView() {
@@ -54,7 +54,7 @@ export default function BlogView() {
         
         if (data) {
           console.log('Fetched post data:', data);
-          setPost(data);
+          setPost(data as BlogPost);
         }
       } catch (error: any) {
         console.error('Error fetching post:', error);
