@@ -26,7 +26,7 @@ export function BlogLayout() {
           if (mounted) {
             toast({
               title: "Error",
-              description: "Failed to get session. Please try signing in again.",
+              description: "Failed to get session",
               variant: "destructive",
             });
           }

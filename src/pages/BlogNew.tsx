@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,29 +7,86 @@ import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { ArrowLeft, ImagePlus } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { BlogManager } from "@/components/blog/BlogManager";
 
 export default function BlogNew() {
   const navigate = useNavigate();
-  const session = useSession();
   const { toast } = useToast();
+  const [session, setSession] = useState<any>(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!session) {
-      toast({
-        title: "Authentication required",
-        description: "Please sign in to create a blog post",
-        variant: "destructive",
-      });
-      navigate("/auth");
+    let mounted = true;
+
+    async function getInitialSession() {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log("BlogNew - Getting initial session:", session);
+        
+        if (error) {
+          console.error("Error getting session:", error);
+          if (mounted) {
+            toast({
+              title: "Error",
+              description: "Failed to get session. Please try signing in again.",
+              variant: "destructive",
+            });
+            navigate("/auth");
+          }
+          return;
+        }
+
+        if (!session) {
+          if (mounted) {
+            toast({
+              title: "Authentication required",
+              description: "Please sign in to create a blog post",
+              variant: "destructive",
+            });
+            navigate("/auth");
+          }
+          return;
+        }
+
+        if (mounted) {
+          setSession(session);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error in getInitialSession:", error);
+        if (mounted) {
+          setLoading(false);
+          navigate("/auth");
+        }
+      }
     }
-  }, [session, navigate, toast]);
+
+    getInitialSession();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("BlogNew - Auth state changed:", _event, session);
+      if (mounted) {
+        setSession(session);
+        setLoading(false);
+        if (!session) {
+          navigate("/auth");
+        }
+      }
+    });
+
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, [navigate, toast]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -99,6 +155,14 @@ export default function BlogNew() {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!session) {
     return null;
