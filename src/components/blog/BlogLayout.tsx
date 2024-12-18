@@ -5,30 +5,53 @@ import { Button } from "../ui/button";
 import { PlusCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export function BlogLayout() {
   const location = useLocation();
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
     let mounted = true;
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (mounted) {
-        console.log("BlogLayout - Initial session:", session);
-        setSession(session);
-        setLoading(false);
-      }
-    });
+    async function getInitialSession() {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        console.log("BlogLayout - Getting initial session:", session);
+        
+        if (error) {
+          console.error("Error getting session:", error);
+          if (mounted) {
+            toast({
+              title: "Error",
+              description: "Failed to get session. Please try signing in again.",
+              variant: "destructive",
+            });
+          }
+          return;
+        }
 
-    // Listen for auth changes
+        if (mounted) {
+          setSession(session);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error("Error in getInitialSession:", error);
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    getInitialSession();
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("BlogLayout - Auth state changed:", _event, session);
       if (mounted) {
-        console.log("BlogLayout - Auth state changed:", session);
         setSession(session);
         setLoading(false);
       }
@@ -38,7 +61,7 @@ export function BlogLayout() {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, []);
+  }, [toast]);
 
   if (loading) {
     return (
