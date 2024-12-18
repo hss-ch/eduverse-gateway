@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,7 +6,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { useEffect, useState } from "react";
 
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
@@ -48,33 +47,21 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let mounted = true;
 
-    async function getInitialSession() {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        console.log("Protected route - Initial session check:", session);
-        
-        if (mounted) {
-          if (error) {
-            console.error("Error fetching session:", error);
-          }
-          setSession(session);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error in getInitialSession:", error);
-        if (mounted) {
-          setLoading(false);
-        }
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (mounted) {
+        console.log("ProtectedRoute - Initial session:", session);
+        setSession(session);
+        setLoading(false);
       }
-    }
+    });
 
-    getInitialSession();
-
+    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("Protected route - Auth state changed:", session);
       if (mounted) {
+        console.log("ProtectedRoute - Auth state changed:", session);
         setSession(session);
         setLoading(false);
       }

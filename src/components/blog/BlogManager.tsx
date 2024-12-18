@@ -6,7 +6,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
-import { useSession } from "@supabase/auth-helpers-react";
+import { useQuery } from "@tanstack/react-query";
 
 interface BlogPost {
   id: string;
@@ -19,39 +19,50 @@ interface BlogPost {
 export function BlogManager() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const session = useSession();
-  const [posts, setPosts] = useState<BlogPost[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
-    if (session) {
-      fetchPosts();
-    }
-  }, [session]);
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
 
-  const fetchPosts = async () => {
-    if (!session) return;
-    
-    try {
+    // Listen for auth changes
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("BlogManager - Auth state changed:", session);
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const { data: posts = [], isLoading, refetch } = useQuery({
+    queryKey: ['user-posts', session?.user?.id],
+    queryFn: async () => {
+      if (!session?.user?.id) return [];
+      
       const { data, error } = await supabase
         .from('blogs')
         .select('*')
         .eq('author_id', session.user.id)
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      setPosts(data || []);
-    } catch (error) {
-      console.error('Error fetching posts:', error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch blog posts",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+      if (error) {
+        console.error('Error fetching posts:', error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch blog posts",
+          variant: "destructive",
+        });
+        return [];
+      }
+
+      return data || [];
+    },
+    enabled: !!session?.user?.id,
+  });
 
   const togglePublish = async (post: BlogPost) => {
     try {
@@ -59,7 +70,7 @@ export function BlogManager() {
         .from('blogs')
         .update({ published: !post.published })
         .eq('id', post.id)
-        .eq('author_id', session?.user.id);
+        .eq('author_id', session?.user?.id);
 
       if (error) throw error;
 
@@ -68,7 +79,7 @@ export function BlogManager() {
         description: `Post ${post.published ? 'unpublished' : 'published'} successfully`,
       });
 
-      fetchPosts();
+      refetch();
     } catch (error) {
       console.error('Error toggling post publish status:', error);
       toast({
@@ -87,7 +98,7 @@ export function BlogManager() {
         .from('blogs')
         .delete()
         .eq('id', id)
-        .eq('author_id', session?.user.id);
+        .eq('author_id', session?.user?.id);
 
       if (error) throw error;
 
@@ -96,7 +107,7 @@ export function BlogManager() {
         description: "Post deleted successfully",
       });
 
-      fetchPosts();
+      refetch();
     } catch (error) {
       console.error('Error deleting post:', error);
       toast({
@@ -121,12 +132,19 @@ export function BlogManager() {
     );
   }
 
-  if (loading) {
+  if (isLoading) {
     return <div className="text-center p-4">Loading your posts...</div>;
   }
 
   return (
     <div className="space-y-4">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-bold">Your Posts</h2>
+        <Button onClick={() => navigate('/blog/new')}>
+          Create New Post
+        </Button>
+      </div>
+
       {posts.length === 0 ? (
         <p className="text-center text-muted-foreground">You haven't created any posts yet.</p>
       ) : (

@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation, Navigate } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import { MainNav } from "../MainNav";
 import { Footer } from "../Footer";
 import { Button } from "../ui/button";
@@ -14,33 +14,21 @@ export function BlogLayout() {
   useEffect(() => {
     let mounted = true;
 
-    async function getInitialSession() {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        console.log("Blog layout - Initial session check:", session);
-        
-        if (mounted) {
-          if (error) {
-            console.error("Error fetching session:", error);
-          }
-          setSession(session);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error("Error in getInitialSession:", error);
-        if (mounted) {
-          setLoading(false);
-        }
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (mounted) {
+        console.log("BlogLayout - Initial session:", session);
+        setSession(session);
+        setLoading(false);
       }
-    }
+    });
 
-    getInitialSession();
-
+    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("Blog layout - Auth state changed:", session);
       if (mounted) {
+        console.log("BlogLayout - Auth state changed:", session);
         setSession(session);
         setLoading(false);
       }
@@ -52,7 +40,6 @@ export function BlogLayout() {
     };
   }, []);
 
-  // Show loading state while checking authentication
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
