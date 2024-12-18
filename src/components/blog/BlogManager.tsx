@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,6 +61,8 @@ export function BlogManager() {
       return data || [];
     },
     enabled: !!session?.user?.id,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
   });
 
   const togglePublish = async (post: BlogPost) => {
@@ -140,9 +141,6 @@ export function BlogManager() {
     <div className="space-y-4">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">Your Posts</h2>
-        <Button onClick={() => navigate('/blog/new')}>
-          Create New Post
-        </Button>
       </div>
 
       {posts.length === 0 ? (
