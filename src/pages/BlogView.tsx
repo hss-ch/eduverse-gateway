@@ -22,7 +22,7 @@ interface BlogPost {
   published: boolean;
   rating: number;
   ratings_count: number;
-  author?: Profile;
+  profiles?: Profile;
 }
 
 export default function BlogView() {
@@ -35,26 +35,26 @@ export default function BlogView() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        console.log('Fetching post with ID:', id);
         const { data, error } = await supabase
           .from('blogs')
           .select(`
             *,
-            author:profiles!blogs_author_id_fkey(full_name)
+            profiles (
+              full_name
+            )
           `)
           .eq('id', id)
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error('Error fetching post:', error);
+          throw error;
+        }
         
         if (data) {
-          // Transform the data to match our BlogPost interface
-          const transformedPost: BlogPost = {
-            ...data,
-            author: Array.isArray(data.author) && data.author.length > 0 
-              ? data.author[0] 
-              : undefined
-          };
-          setPost(transformedPost);
+          console.log('Fetched post data:', data);
+          setPost(data);
         }
       } catch (error: any) {
         console.error('Error fetching post:', error);
@@ -98,7 +98,7 @@ export default function BlogView() {
     );
   }
 
-  const authorName = post.author?.full_name || "Anonymous";
+  const authorName = post.profiles?.full_name || "Anonymous";
   const authorInitials = authorName
     .split(" ")
     .map((n) => n[0])
