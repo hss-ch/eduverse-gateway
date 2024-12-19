@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
@@ -34,6 +34,7 @@ export function BlogPost({
 }: BlogPostProps) {
   const session = useSession();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [currentRating, setCurrentRating] = useState(rating);
   const [currentCount, setCurrentCount] = useState(ratings_count);
   const authorName = author?.[0]?.full_name || "Anonymous";
@@ -52,6 +53,7 @@ export function BlogPost({
         description: "Please sign in to rate posts",
         variant: "destructive"
       });
+      navigate("/auth");
       return;
     }
 
