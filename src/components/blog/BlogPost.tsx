@@ -2,12 +2,22 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { CalendarDays, User, Star } from "lucide-react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useToast } from "../ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+
+// Default placeholder images for blog posts
+const DEFAULT_IMAGES = [
+  "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
+  "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
+  "https://images.unsplash.com/photo-1518770660439-4636190af475",
+  "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
+  "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+  "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+];
 
 interface BlogPostProps {
   id: string;
@@ -44,10 +54,14 @@ export function BlogPost({
     .join("")
     .toUpperCase();
 
+  // Get a random placeholder image if no image_url is provided
+  const displayImage = image_url || DEFAULT_IMAGES[Math.floor(Math.random() * DEFAULT_IMAGES.length)];
+
   const handleRating = async (rating: number, e: React.MouseEvent) => {
     e.preventDefault(); // Prevent link navigation when rating
     
     if (!session) {
+      console.log('User not authenticated, redirecting to auth page');
       toast({
         title: "Authentication Required",
         description: "Please sign in to rate posts",
@@ -106,26 +120,28 @@ export function BlogPost({
   return (
     <Link to={`/blog/${id}`}>
       <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white dark:bg-secondary h-full overflow-hidden">
-        {image_url && (
-          <div className="relative w-full h-48">
-            <img 
-              src={image_url} 
-              alt={title}
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
-              <div className="flex items-center justify-between text-white">
-                <div className="flex items-center space-x-2">
-                  <CalendarDays className="h-4 w-4" />
-                  <p className="text-sm">
-                    {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
-                  </p>
-                </div>
-                <Badge variant="secondary" className="bg-primary/80">Blog</Badge>
+        <div className="relative w-full h-48">
+          <img 
+            src={displayImage} 
+            alt={title}
+            className="w-full h-full object-cover"
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.src = DEFAULT_IMAGES[0]; // Fallback to first placeholder image
+            }}
+          />
+          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
+            <div className="flex items-center justify-between text-white">
+              <div className="flex items-center space-x-2">
+                <CalendarDays className="h-4 w-4" />
+                <p className="text-sm">
+                  {formatDistanceToNow(new Date(created_at), { addSuffix: true })}
+                </p>
               </div>
+              <Badge variant="secondary" className="bg-primary/80">Blog</Badge>
             </div>
           </div>
-        )}
+        </div>
         <CardHeader className="space-y-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
