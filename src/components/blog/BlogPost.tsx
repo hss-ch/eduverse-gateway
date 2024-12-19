@@ -80,9 +80,14 @@ export function BlogPost({
           blog_id: id,
           user_id: session.user.id,
           rating
+        }, {
+          onConflict: 'user_id, blog_id'
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error submitting rating:', error);
+        throw error;
+      }
 
       // Update the average rating in the blogs table
       const { data: newRating } = await supabase
@@ -90,18 +95,24 @@ export function BlogPost({
         .select('rating')
         .eq('blog_id', id);
 
-      const averageRating = newRating?.reduce((acc, curr) => acc + curr.rating, 0) / (newRating?.length || 1);
+      if (!newRating) {
+        throw new Error('Failed to fetch updated ratings');
+      }
 
-      await supabase
+      const averageRating = newRating.reduce((acc, curr) => acc + curr.rating, 0) / (newRating.length || 1);
+
+      const { error: updateError } = await supabase
         .from('blogs')
         .update({ 
           rating: averageRating,
-          ratings_count: newRating?.length || 0
+          ratings_count: newRating.length
         })
         .eq('id', id);
 
+      if (updateError) throw updateError;
+
       setCurrentRating(averageRating);
-      setCurrentCount(newRating?.length || 0);
+      setCurrentCount(newRating.length);
 
       toast({
         title: "Success",
@@ -111,7 +122,7 @@ export function BlogPost({
       console.error('Error rating post:', error);
       toast({
         title: "Error",
-        description: "Failed to submit rating",
+        description: error.message || "Failed to submit rating",
         variant: "destructive"
       });
     }
