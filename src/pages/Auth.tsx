@@ -63,9 +63,8 @@ export default function Auth() {
           navigate("/auth");
         } else if (event === 'USER_UPDATED') {
           console.log("User updated");
-        } else if (event === 'USER_DELETED') {
-          console.log("User deleted");
-          navigate("/auth");
+        } else if (event === 'PASSWORD_RECOVERY') {
+          console.log("Password recovery");
         }
       }
     });
@@ -110,14 +109,6 @@ export default function Auth() {
               theme="light"
               providers={[]}
               redirectTo={window.location.origin}
-              onError={(error) => {
-                console.error("Auth error:", error);
-                toast({
-                  title: "Authentication Error",
-                  description: error.message,
-                  variant: "destructive",
-                });
-              }}
             />
           </div>
         </div>
