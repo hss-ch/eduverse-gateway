@@ -59,8 +59,9 @@ export function BlogPost({
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
     e.preventDefault(); // Prevent link navigation when rating
+    e.stopPropagation(); // Stop event propagation
     
-    if (!session) {
+    if (!session?.user) {
       console.log('User not authenticated, redirecting to auth page');
       toast({
         title: "Authentication Required",
@@ -129,7 +130,7 @@ export function BlogPost({
   };
 
   return (
-    <Link to={`/blog/${id}`}>
+    <Link to={`/blog/${id}`} className="block">
       <Card className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 bg-white dark:bg-secondary h-full overflow-hidden">
         <div className="relative w-full h-48">
           <img 
@@ -166,7 +167,7 @@ export function BlogPost({
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-1">
+            <div className="flex items-center space-x-1" onClick={(e) => e.preventDefault()}>
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
