@@ -19,12 +19,27 @@ export default function Auth() {
         const { data: { session }, error } = await supabase.auth.getSession();
         console.log("Auth page - Initial session check:", session);
         
+        if (error) {
+          console.error("Error checking session:", error);
+          toast({
+            title: "Error",
+            description: error.message,
+            variant: "destructive",
+          });
+          return;
+        }
+        
         if (mounted && session) {
           console.log("Session found, redirecting to home");
           navigate("/");
         }
       } catch (error) {
         console.error("Error in getInitialSession:", error);
+        toast({
+          title: "Error",
+          description: "An error occurred while checking your session",
+          variant: "destructive",
+        });
       }
     }
 
@@ -38,9 +53,18 @@ export default function Auth() {
       if (mounted) {
         if (event === 'SIGNED_IN') {
           console.log("User signed in, redirecting to home");
+          toast({
+            title: "Success",
+            description: "Successfully signed in",
+          });
           navigate("/");
         } else if (event === 'SIGNED_OUT') {
           console.log("User signed out");
+          navigate("/auth");
+        } else if (event === 'USER_UPDATED') {
+          console.log("User updated");
+        } else if (event === 'USER_DELETED') {
+          console.log("User deleted");
           navigate("/auth");
         }
       }
@@ -50,7 +74,7 @@ export default function Auth() {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [navigate]);
+  }, [navigate, toast]);
 
   return (
     <div className="min-h-screen flex flex-col bg-accent">
@@ -73,11 +97,27 @@ export default function Auth() {
                 style: {
                   button: { background: '#9B87F5', color: 'white' },
                   anchor: { color: '#9B87F5' },
+                  input: { borderRadius: '0.375rem' },
+                  message: { borderRadius: '0.375rem' },
                 },
+                className: {
+                  container: 'space-y-4',
+                  button: 'rounded-md',
+                  input: 'rounded-md',
+                  message: 'rounded-md',
+                }
               }}
               theme="light"
               providers={[]}
               redirectTo={window.location.origin}
+              onError={(error) => {
+                console.error("Auth error:", error);
+                toast({
+                  title: "Authentication Error",
+                  description: error.message,
+                  variant: "destructive",
+                });
+              }}
             />
           </div>
         </div>
