@@ -16,7 +16,7 @@ export function DashboardNav() {
         className="w-full justify-start gap-2"
         asChild
       >
-        <Link to="/dashboard">
+        <Link to="/dashboard?tab=profile">
           <UserCircle className="h-4 w-4" />
           Profile
         </Link>
@@ -36,9 +36,9 @@ export function DashboardNav() {
         className="w-full justify-start gap-2"
         asChild
       >
-        <Link to="/careers">
-          <Briefcase className="h-4 w-4" />
-          Careers
+        <Link to="/dashboard?tab=demos">
+          <Calendar className="h-4 w-4" />
+          Demo Requests
         </Link>
       </Button>
       <Button
@@ -46,9 +46,9 @@ export function DashboardNav() {
         className="w-full justify-start gap-2"
         asChild
       >
-        <Link to="/contact">
-          <Calendar className="h-4 w-4" />
-          Schedule Demo
+        <Link to="/dashboard?tab=applications">
+          <Briefcase className="h-4 w-4" />
+          Job Applications
         </Link>
       </Button>
       <Button

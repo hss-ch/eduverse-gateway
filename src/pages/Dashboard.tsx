@@ -5,6 +5,8 @@ import { Footer } from "@/components/Footer";
 import { DashboardNav } from "@/components/dashboard/DashboardNav";
 import { UserManagement } from "@/components/dashboard/UserManagement";
 import { ProfileManagement } from "@/components/dashboard/ProfileManagement";
+import { DemoRequestsManagement } from "@/components/dashboard/DemoRequestsManagement";
+import { JobApplicationsManagement } from "@/components/dashboard/JobApplicationsManagement";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -65,12 +67,20 @@ const Dashboard = () => {
             <TabsList>
               <TabsTrigger value="profile">Profile</TabsTrigger>
               <TabsTrigger value="users">Users</TabsTrigger>
+              <TabsTrigger value="demos">Demo Requests</TabsTrigger>
+              <TabsTrigger value="applications">Job Applications</TabsTrigger>
             </TabsList>
             <TabsContent value="profile">
               <ProfileManagement session={session} />
             </TabsContent>
             <TabsContent value="users">
               <UserManagement session={session} />
+            </TabsContent>
+            <TabsContent value="demos">
+              <DemoRequestsManagement />
+            </TabsContent>
+            <TabsContent value="applications">
+              <JobApplicationsManagement />
             </TabsContent>
           </Tabs>
         </div>
