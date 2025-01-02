@@ -33,11 +33,11 @@ export default function Auth() {
           console.log("Session found, redirecting to home");
           navigate("/");
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error in getInitialSession:", error);
         toast({
           title: "Error",
-          description: "An error occurred while checking your session",
+          description: error.message || "An error occurred while checking your session",
           variant: "destructive",
         });
       }
@@ -108,7 +108,7 @@ export default function Auth() {
               }}
               theme="light"
               providers={[]}
-              redirectTo={window.location.origin}
+              redirectTo={`${window.location.origin}/auth/callback`}
             />
           </div>
         </div>
