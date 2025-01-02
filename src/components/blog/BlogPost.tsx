@@ -1,13 +1,10 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import { Card, CardHeader, CardTitle, CardContent } from "../ui/card";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
-import { CalendarDays, User, Star } from "lucide-react";
-import { useSession } from "@supabase/auth-helpers-react";
-import { useToast } from "../ui/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { CalendarDays, User } from "lucide-react";
+import { BlogRating } from "./BlogRating";
 
 // Default placeholder images for blog posts with proper URL format
 const DEFAULT_IMAGES = [
@@ -30,6 +27,7 @@ interface BlogPostProps {
   author?: {
     full_name: string | null;
   }[];
+  session?: any;
 }
 
 export function BlogPost({ 
@@ -40,13 +38,9 @@ export function BlogPost({
   author,
   image_url,
   rating = 0,
-  ratings_count = 0
+  ratings_count = 0,
+  session
 }: BlogPostProps) {
-  const session = useSession();
-  const { toast } = useToast();
-  const navigate = useNavigate();
-  const [currentRating, setCurrentRating] = useState(rating);
-  const [currentCount, setCurrentCount] = useState(ratings_count);
   const authorName = author?.[0]?.full_name || "Anonymous";
   const authorInitials = authorName
     .split(" ")
@@ -56,78 +50,6 @@ export function BlogPost({
 
   // Get a random placeholder image if no image_url is provided
   const displayImage = image_url || DEFAULT_IMAGES[Math.floor(Math.random() * DEFAULT_IMAGES.length)];
-
-  const handleRating = async (rating: number, e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent link navigation
-    e.stopPropagation(); // Stop event propagation
-    
-    if (!session) {
-      console.log('User not authenticated, redirecting to auth page');
-      toast({
-        title: "Authentication Required",
-        description: "Please sign in to rate posts",
-        variant: "destructive"
-      });
-      navigate("/auth");
-      return;
-    }
-
-    try {
-      console.log('Submitting rating:', { blog_id: id, user_id: session.user.id, rating });
-      
-      const { error } = await supabase
-        .from('blog_ratings')
-        .upsert({
-          blog_id: id,
-          user_id: session.user.id,
-          rating
-        }, {
-          onConflict: 'user_id, blog_id'
-        });
-
-      if (error) {
-        console.error('Error submitting rating:', error);
-        throw error;
-      }
-
-      // Update the average rating in the blogs table
-      const { data: newRating } = await supabase
-        .from('blog_ratings')
-        .select('rating')
-        .eq('blog_id', id);
-
-      if (!newRating) {
-        throw new Error('Failed to fetch updated ratings');
-      }
-
-      const averageRating = newRating.reduce((acc, curr) => acc + curr.rating, 0) / (newRating.length || 1);
-
-      const { error: updateError } = await supabase
-        .from('blogs')
-        .update({ 
-          rating: averageRating,
-          ratings_count: newRating.length
-        })
-        .eq('id', id);
-
-      if (updateError) throw updateError;
-
-      setCurrentRating(averageRating);
-      setCurrentCount(newRating.length);
-
-      toast({
-        title: "Success",
-        description: "Rating submitted successfully"
-      });
-    } catch (error: any) {
-      console.error('Error rating post:', error);
-      toast({
-        title: "Error",
-        description: error.message || "Failed to submit rating",
-        variant: "destructive"
-      });
-    }
-  };
 
   return (
     <Link to={`/blog/${id}`} className="block">
@@ -139,7 +61,7 @@ export function BlogPost({
             className="w-full h-full object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
-              target.src = DEFAULT_IMAGES[0]; // Fallback to first placeholder image
+              target.src = DEFAULT_IMAGES[0];
             }}
           />
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
@@ -167,28 +89,12 @@ export function BlogPost({
                 </div>
               </div>
             </div>
-            <div 
-              className="flex items-center space-x-1" 
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-              }}
-            >
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  onClick={(e) => handleRating(star, e)}
-                  className="text-yellow-400 hover:text-yellow-500 transition-colors"
-                >
-                  <Star 
-                    className={`h-4 w-4 ${star <= currentRating ? 'fill-current' : ''}`}
-                  />
-                </button>
-              ))}
-              <span className="text-sm text-muted-foreground ml-1">
-                ({currentCount})
-              </span>
-            </div>
+            <BlogRating 
+              id={id} 
+              initialRating={rating} 
+              initialCount={ratings_count}
+              session={session}
+            />
           </div>
           <CardTitle className="text-xl font-bold hover:text-primary transition-colors line-clamp-2">
             {title}

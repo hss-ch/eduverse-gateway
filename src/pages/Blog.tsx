@@ -1,127 +1,87 @@
 import { useEffect, useState } from "react";
 import { BlogPost } from "@/components/blog/BlogPost";
 import { supabase } from "@/integrations/supabase/client";
-import { useQuery } from "@tanstack/react-query";
-import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/components/ui/use-toast";
 
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  created_at: string;
-  author_id: string;
-}
-
-interface Profile {
-  id: string;
-  full_name: string | null;
-}
-
-const Blog = () => {
+export default function Blog() {
+  const [posts, setPosts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [session, setSession] = useState<any>(null);
-  const [authorProfiles, setAuthorProfiles] = useState<{ [key: string]: Profile }>({});
+  const { toast } = useToast();
 
   useEffect(() => {
-    let mounted = true;
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("Blog - Getting initial session:", session);
+      setSession(session);
+    });
 
-    async function getInitialSession() {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        console.log("Blog - Getting initial session:", session);
-        if (mounted) {
-          setSession(session);
-        }
-      } catch (error) {
-        console.error("Error in getInitialSession:", error);
-      }
-    }
-
-    getInitialSession();
-
+    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log("Blog - Auth state changed:", _event, session);
-      if (mounted) {
-        setSession(session);
-      }
+      setSession(session);
     });
 
-    return () => {
-      mounted = false;
-      subscription.unsubscribe();
-    };
+    return () => subscription.unsubscribe();
   }, []);
 
-  const { data: posts = [], isLoading } = useQuery({
-    queryKey: ['posts'],
-    queryFn: async () => {
-      console.log('Fetching posts...');
-      const { data: postsData, error: postsError } = await supabase
-        .from('blogs')
-        .select('*')
-        .eq('published', true)
-        .order('created_at', { ascending: false });
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        console.log("Fetching blog posts...");
+        const { data, error } = await supabase
+          .from("blogs")
+          .select(`
+            *,
+            profiles (
+              full_name
+            )
+          `)
+          .eq("published", true)
+          .order("created_at", { ascending: false });
 
-      if (postsError) throw postsError;
+        if (error) {
+          console.error("Error fetching posts:", error);
+          throw error;
+        }
 
-      // Fetch author profiles for all posts
-      const authorIds = [...new Set(postsData.map(post => post.author_id))];
-      const { data: profilesData, error: profilesError } = await supabase
-        .from('profiles')
-        .select('id, full_name')
-        .in('id', authorIds);
+        console.log("Fetched posts:", data);
+        setPosts(data || []);
+      } catch (error: any) {
+        console.error("Error in fetchPosts:", error);
+        toast({
+          title: "Error",
+          description: "Failed to fetch blog posts",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    }
 
-      if (profilesError) throw profilesError;
+    fetchPosts();
+  }, [toast]);
 
-      // Create a map of author profiles
-      const profilesMap = (profilesData || []).reduce((acc, profile) => ({
-        ...acc,
-        [profile.id]: profile
-      }), {});
-
-      setAuthorProfiles(profilesMap);
-
-      return postsData || [];
-    },
-  });
+  if (loading) {
+    return (
+      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        {[1, 2, 3].map((n) => (
+          <div
+            key={n}
+            className="h-[400px] bg-muted animate-pulse rounded-lg"
+          />
+        ))}
+      </div>
+    );
+  }
 
   return (
-    <div className="space-y-8">
-      {isLoading ? (
-        // Loading skeletons
-        Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="space-y-4">
-            <div className="flex items-center space-x-4">
-              <Skeleton className="h-12 w-12 rounded-full" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-[200px]" />
-                <Skeleton className="h-4 w-[150px]" />
-              </div>
-            </div>
-            <Skeleton className="h-8 w-[300px]" />
-            <Skeleton className="h-24 w-full" />
-          </div>
-        ))
-      ) : posts.length === 0 ? (
-        <div className="text-center py-12">
-          <h3 className="text-2xl font-semibold text-muted-foreground">No blog posts yet</h3>
-          <p className="text-muted-foreground mt-2">Check back later for new content!</p>
-        </div>
-      ) : (
-        posts.map((post: Post) => (
-          <BlogPost
-            key={post.id}
-            id={post.id}
-            title={post.title}
-            content={post.content}
-            created_at={post.created_at}
-            author={[authorProfiles[post.author_id]]}
-          />
-        ))
-      )}
+    <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+      {posts.map((post) => (
+        <BlogPost key={post.id} {...post} session={session} />
+      ))}
     </div>
   );
-};
-
-export default Blog;
+}
