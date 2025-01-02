@@ -28,6 +28,11 @@ export const solutions = [
 
 export const resources = [
   {
+    title: "Dashboard",
+    href: "/dashboard",
+    description: "Manage your profile and account settings.",
+  },
+  {
     title: "About Us",
     href: "/about",
     description: "Learn about our mission and vision.",

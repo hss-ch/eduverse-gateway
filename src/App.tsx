@@ -30,6 +30,7 @@ import Features from "./pages/Features";
 import Careers from "./pages/Careers";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Dashboard from "./pages/Dashboard";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -138,6 +139,14 @@ function App() {
               <Route path="/careers" element={<Careers />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route
+                path="/dashboard"
+                element={
+                  <ProtectedRoute>
+                    <Dashboard />
+                  </ProtectedRoute>
+                }
+              />
             </Routes>
           </AnimatePresence>
         </BrowserRouter>
