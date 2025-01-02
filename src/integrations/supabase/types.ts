@@ -88,6 +88,78 @@ export type Database = {
           },
         ]
       }
+      demo_requests: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          message: string | null
+          name: string
+          organization: string
+          preferred_date: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          organization: string
+          preferred_date: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          organization?: string
+          preferred_date?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      job_applications: {
+        Row: {
+          cover_letter: string
+          created_at: string
+          email: string
+          id: string
+          job_title: string
+          name: string
+          phone: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          cover_letter: string
+          created_at?: string
+          email: string
+          id?: string
+          job_title: string
+          name: string
+          phone: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          cover_letter?: string
+          created_at?: string
+          email?: string
+          id?: string
+          job_title?: string
+          name?: string
+          phone?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

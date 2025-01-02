@@ -4,8 +4,21 @@ import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { PageHeader } from "@/components/PageHeader";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { DemoScheduler } from "@/components/demo/DemoScheduler";
+import { useToast } from "@/components/ui/use-toast";
 
 const Pricing = () => {
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [showDemoDialog, setShowDemoDialog] = useState(false);
+  const { toast } = useToast();
+
+  const handleGetStarted = (planName: string) => {
+    setSelectedPlan(planName);
+    setShowDemoDialog(true);
+  };
+
   return (
     <div className="min-h-screen bg-accent">
       <MainNav />
@@ -57,6 +70,7 @@ const Pricing = () => {
                   ))}
                 </ul>
                 <Button
+                  onClick={() => handleGetStarted(plan.name)}
                   className={`w-full ${
                     plan.popular
                       ? "bg-white text-primary hover:bg-white/90"
@@ -70,6 +84,27 @@ const Pricing = () => {
           </div>
         </div>
       </section>
+
+      <Dialog open={showDemoDialog} onOpenChange={setShowDemoDialog}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Schedule a Demo - {selectedPlan} Plan</DialogTitle>
+            <DialogDescription>
+              Fill out the form below to schedule a personalized demo of our platform.
+            </DialogDescription>
+          </DialogHeader>
+          <DemoScheduler 
+            selectedPlan={selectedPlan}
+            onSuccess={() => {
+              setShowDemoDialog(false);
+              toast({
+                title: "Demo Request Submitted",
+                description: "We'll get back to you shortly to confirm your demo session.",
+              });
+            }}
+          />
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
