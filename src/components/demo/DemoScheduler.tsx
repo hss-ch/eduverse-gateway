@@ -13,8 +13,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { format } from "date-fns";
+import { supabase } from "@/integrations/supabase/client";
 
-export function DemoScheduler() {
+interface DemoSchedulerProps {
+  selectedPlan?: string | null;
+  onSuccess?: () => void;
+}
+
+export function DemoScheduler({ selectedPlan, onSuccess }: DemoSchedulerProps) {
   const { toast } = useToast();
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [formData, setFormData] = useState({
@@ -34,24 +40,47 @@ export function DemoScheduler() {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Demo scheduled:", { ...formData, date });
-    
-    // Here you would typically send this data to your backend
-    toast({
-      title: "Demo Scheduled!",
-      description: `We'll contact you soon to confirm your demo on ${date ? format(date, 'PPP') : 'selected date'}.`,
-    });
+    if (!date) return;
 
-    // Reset form
-    setFormData({
-      name: "",
-      email: "",
-      organization: "",
-      message: "",
-    });
-    setDate(undefined);
+    try {
+      const { error } = await supabase.from('demo_requests').insert({
+        name: formData.name,
+        email: formData.email,
+        organization: formData.organization,
+        message: `${formData.message}${selectedPlan ? `\nSelected Plan: ${selectedPlan}` : ''}`,
+        preferred_date: date.toISOString().split('T')[0],
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Demo Scheduled!",
+        description: `We'll contact you soon to confirm your demo on ${format(date, 'PPP')}.`,
+      });
+
+      // Reset form
+      setFormData({
+        name: "",
+        email: "",
+        organization: "",
+        message: "",
+      });
+      setDate(undefined);
+
+      // Call onSuccess callback if provided
+      if (onSuccess) {
+        onSuccess();
+      }
+    } catch (error) {
+      console.error('Error scheduling demo:', error);
+      toast({
+        title: "Error",
+        description: "There was an error scheduling your demo. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
