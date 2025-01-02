@@ -58,10 +58,10 @@ export function BlogPost({
   const displayImage = image_url || DEFAULT_IMAGES[Math.floor(Math.random() * DEFAULT_IMAGES.length)];
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent link navigation when rating
+    e.preventDefault(); // Prevent link navigation
     e.stopPropagation(); // Stop event propagation
     
-    if (!session?.user) {
+    if (!session) {
       console.log('User not authenticated, redirecting to auth page');
       toast({
         title: "Authentication Required",
@@ -167,7 +167,13 @@ export function BlogPost({
                 </div>
               </div>
             </div>
-            <div className="flex items-center space-x-1" onClick={(e) => e.preventDefault()}>
+            <div 
+              className="flex items-center space-x-1" 
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
               {[1, 2, 3, 4, 5].map((star) => (
                 <button
                   key={star}
