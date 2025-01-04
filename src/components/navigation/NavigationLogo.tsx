@@ -1,11 +1,21 @@
-import { Link } from "react-router-dom";
-import { Compass } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export function NavigationLogo() {
+  const navigate = useNavigate();
+  
+  console.log("NavigationLogo rendering"); // Debug log
+  
   return (
-    <Link to="/" className="flex items-center gap-2 font-bold text-xl text-primary">
-      <Compass className="h-6 w-6" />
-      GuideCampus
-    </Link>
+    <div 
+      className="flex items-center space-x-2 cursor-pointer"
+      onClick={() => {
+        console.log("Logo clicked, navigating to /"); // Debug log
+        if (window.location.pathname !== '/') {
+          navigate('/');
+        }
+      }}
+    >
+      <span className="font-bold text-xl">GuideCampus</span>
+    </div>
   );
 }
