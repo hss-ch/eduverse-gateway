@@ -21,7 +21,6 @@ export function MainNav() {
           className="mr-6 flex items-center space-x-2"
           onClick={(e) => {
             console.log("Logo clicked, navigating to /"); // Debug log
-            // Prevent default if it's already on the home page
             if (window.location.pathname === '/') {
               e.preventDefault();
               console.log("Already on home page, preventing navigation");
@@ -31,8 +30,12 @@ export function MainNav() {
           <NavigationLogo />
         </Link>
         <div className="flex flex-1 items-center space-x-2 justify-between">
-          <DesktopMenu />
-          <MobileMenu isOpen={isOpen} toggleMenu={toggleMenu} />
+          <div className="hidden md:block">
+            <DesktopMenu />
+          </div>
+          <div className="block md:hidden">
+            <MobileMenu isOpen={isOpen} toggleMenu={toggleMenu} />
+          </div>
         </div>
       </div>
     </header>
