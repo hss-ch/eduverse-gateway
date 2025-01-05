@@ -40,7 +40,7 @@ export function DesktopMenu() {
                       <ListItem
                         key={subItem.title}
                         title={subItem.title}
-                        href={subItem.href}
+                        to={subItem.href}
                       >
                         {subItem.description}
                       </ListItem>

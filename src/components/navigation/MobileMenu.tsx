@@ -17,11 +17,14 @@ import {
 } from "@/components/ui/accordion";
 import { navigationData } from "./navigationData";
 
-export function MobileMenu() {
-  const [isOpen, setIsOpen] = useState(false);
+interface MobileMenuProps {
+  isOpen: boolean;
+  toggleMenu: () => void;
+}
 
+export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet open={isOpen} onOpenChange={toggleMenu}>
       <SheetTrigger asChild className="md:hidden">
         <Button variant="ghost" size="icon">
           <Menu className="h-6 w-6" />
@@ -35,7 +38,7 @@ export function MobileMenu() {
             variant="ghost"
             size="icon"
             className="absolute right-4 top-4"
-            onClick={() => setIsOpen(false)}
+            onClick={toggleMenu}
           >
             <X className="h-6 w-6" />
           </Button>
@@ -56,7 +59,7 @@ export function MobileMenu() {
                             key={subIndex}
                             to={subItem.href}
                             className="p-2 hover:bg-accent rounded-md"
-                            onClick={() => setIsOpen(false)}
+                            onClick={toggleMenu}
                           >
                             <div className="font-medium">{subItem.title}</div>
                             <p className="text-sm text-muted-foreground">
@@ -71,7 +74,7 @@ export function MobileMenu() {
                   <Link
                     to={item.href || "#"}
                     className="flex h-12 items-center justify-between py-4 px-4 text-lg hover:bg-accent rounded-md"
-                    onClick={() => setIsOpen(false)}
+                    onClick={toggleMenu}
                   >
                     {item.title}
                   </Link>
