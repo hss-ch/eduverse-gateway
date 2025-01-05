@@ -51,11 +51,11 @@ export function DesktopMenu() {
   };
 
   return (
-    <NavigationMenu className="flex items-center">
+    <NavigationMenu>
       <NavigationMenuList className="gap-6">
         <NavigationMenuItem>
           <NavigationMenuTrigger>Solutions</NavigationMenuTrigger>
-          <NavigationMenuContent>
+          <NavigationMenuContent className="right-0">
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
               {solutions.map((solution) => (
                 <ListItem
@@ -71,7 +71,7 @@ export function DesktopMenu() {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Resources</NavigationMenuTrigger>
-          <NavigationMenuContent>
+          <NavigationMenuContent className="right-0">
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
               {resources.map((resource) => (
                 <ListItem
