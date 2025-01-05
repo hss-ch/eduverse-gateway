@@ -12,11 +12,18 @@ export function BlogPost() {
   const [blog, setBlog] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
     getBlog();
     checkAdminStatus();
+    checkSession();
   }, [id]);
+
+  async function checkSession() {
+    const { data: { session: currentSession } } = await supabase.auth.getSession();
+    setSession(currentSession);
+  }
 
   async function getBlog() {
     try {
@@ -114,7 +121,12 @@ export function BlogPost() {
           ))}
         </div>
         <div className="mt-8">
-          <BlogRating blogId={blog.id} />
+          <BlogRating 
+            id={blog.id} 
+            initialRating={blog.rating || 0}
+            initialCount={blog.ratings_count || 0}
+            session={session}
+          />
         </div>
       </CardContent>
     </Card>

@@ -1,4 +1,14 @@
-export const navigationData = [
+interface NavigationItem {
+  title: string;
+  href?: string;
+  items?: {
+    title: string;
+    href: string;
+    description: string;
+  }[];
+}
+
+export const navigationData: NavigationItem[] = [
   {
     title: "Solutions",
     items: [
