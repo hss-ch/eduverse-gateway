@@ -13,40 +13,67 @@ interface BlogPost {
   content: string;
   published: boolean;
   created_at: string;
+  author_id: string;
 }
 
 export function BlogManager() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [session, setSession] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session?.user?.id) {
+        checkAdminStatus(session.user.id);
+      }
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log("BlogManager - Auth state changed:", session);
       setSession(session);
+      if (session?.user?.id) {
+        checkAdminStatus(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
 
+  const checkAdminStatus = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error checking admin status:', error);
+      return;
+    }
+
+    setIsAdmin(data?.role === 'admin');
+  };
+
   const { data: posts = [], isLoading, refetch } = useQuery({
-    queryKey: ['user-posts', session?.user?.id],
+    queryKey: ['blog-posts', session?.user?.id, isAdmin],
     queryFn: async () => {
       if (!session?.user?.id) return [];
       
-      const { data, error } = await supabase
+      let query = supabase
         .from('blogs')
         .select('*')
-        .eq('author_id', session.user.id)
         .order('created_at', { ascending: false });
+
+      // If user is not admin, only show their posts
+      if (!isAdmin) {
+        query = query.eq('author_id', session.user.id);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error('Error fetching posts:', error);
@@ -70,8 +97,7 @@ export function BlogManager() {
       const { error } = await supabase
         .from('blogs')
         .update({ published: !post.published })
-        .eq('id', post.id)
-        .eq('author_id', session?.user?.id);
+        .eq('id', post.id);
 
       if (error) throw error;
 
@@ -98,8 +124,7 @@ export function BlogManager() {
       const { error } = await supabase
         .from('blogs')
         .delete()
-        .eq('id', id)
-        .eq('author_id', session?.user?.id);
+        .eq('id', id);
 
       if (error) throw error;
 
@@ -122,7 +147,7 @@ export function BlogManager() {
   if (!session) {
     return (
       <div className="text-center p-4">
-        <p className="text-muted-foreground">Please sign in to manage your posts</p>
+        <p className="text-muted-foreground">Please sign in to manage posts</p>
         <Button 
           className="mt-4"
           onClick={() => navigate('/auth')}
@@ -140,13 +165,15 @@ export function BlogManager() {
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold">Your Posts</h2>
+        <h2 className="text-2xl font-bold">
+          {isAdmin ? "All Blog Posts" : "Your Posts"}
+        </h2>
       </div>
 
       {posts.length === 0 ? (
-        <p className="text-center text-muted-foreground">You haven't created any posts yet.</p>
+        <p className="text-center text-muted-foreground">No posts found.</p>
       ) : (
-        posts.map((post) => (
+        posts.map((post: BlogPost) => (
           <Card key={post.id}>
             <CardHeader>
               <CardTitle className="text-lg">{post.title}</CardTitle>

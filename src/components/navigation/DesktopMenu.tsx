@@ -18,20 +18,42 @@ export function DesktopMenu() {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [session, setSession] = useState<any>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
+      if (session?.user?.id) {
+        checkAdminStatus(session.user.id);
+      }
     });
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session?.user?.id) {
+        checkAdminStatus(session.user.id);
+      }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const checkAdminStatus = async (userId: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', userId)
+      .single();
+
+    if (error) {
+      console.error('Error checking admin status:', error);
+      return;
+    }
+
+    setIsAdmin(data?.role === 'admin');
+  };
 
   const handleSignOut = async () => {
     const { error } = await supabase.auth.signOut();
@@ -95,12 +117,22 @@ export function DesktopMenu() {
       </NavigationMenuList>
       <div className="ml-8 flex gap-4">
         {session ? (
-          <button
-            onClick={handleSignOut}
-            className="px-6 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
-          >
-            Sign Out
-          </button>
+          <>
+            {isAdmin && (
+              <Link
+                to="/blog"
+                className="px-4 py-2 text-primary hover:text-primary/80 transition-colors"
+              >
+                Manage Blogs
+              </Link>
+            )}
+            <button
+              onClick={handleSignOut}
+              className="px-6 py-2 border border-primary text-primary rounded-lg hover:bg-primary/10 transition-colors"
+            >
+              Sign Out
+            </button>
+          </>
         ) : (
           <>
             <Link
