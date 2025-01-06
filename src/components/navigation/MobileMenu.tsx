@@ -25,12 +25,12 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
   return (
     <Sheet open={isOpen} onOpenChange={toggleMenu}>
       <SheetTrigger asChild className="md:hidden">
-        <Button variant="ghost" size="icon">
+        <Button variant="ghost" size="icon" className="relative z-50">
           <Menu className="h-6 w-6" />
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+      <SheetContent side="right" className="w-[300px] sm:w-[400px] z-50">
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>
           <Button

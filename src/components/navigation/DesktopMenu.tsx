@@ -22,7 +22,7 @@ export function DesktopMenu() {
   };
 
   return (
-    <NavigationMenu className="hidden md:flex">
+    <NavigationMenu className="relative">
       <NavigationMenuList className="space-x-2">
         {navigationData.map((item) => (
           <NavigationMenuItem key={item.title}>
@@ -34,7 +34,7 @@ export function DesktopMenu() {
                 >
                   {item.title}
                 </NavigationMenuTrigger>
-                <NavigationMenuContent>
+                <NavigationMenuContent className="absolute">
                   <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {item.items.map((subItem) => (
                       <ListItem
