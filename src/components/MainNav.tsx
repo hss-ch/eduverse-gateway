@@ -14,7 +14,7 @@ export function MainNav() {
   };
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-[100] w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center justify-between">
         <Link 
           to="/" 
@@ -30,7 +30,7 @@ export function MainNav() {
           <NavigationLogo />
         </Link>
         <div className="flex items-center space-x-2">
-          <div className="hidden md:block relative">
+          <div className="hidden md:block">
             <DesktopMenu />
           </div>
           <div className="block md:hidden">

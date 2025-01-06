@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,6 +15,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { navigationData } from "./navigationData";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -22,6 +23,14 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
+  const navigate = useNavigate();
+  const supabase = useSupabaseClient();
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    navigate('/auth');
+  };
+
   return (
     <Sheet open={isOpen} onOpenChange={toggleMenu}>
       <SheetTrigger asChild className="md:hidden">
@@ -30,7 +39,7 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
           <span className="sr-only">Toggle menu</span>
         </Button>
       </SheetTrigger>
-      <SheetContent side="right" className="w-[300px] sm:w-[400px] z-50">
+      <SheetContent side="right" className="w-[300px] sm:w-[400px] z-[100]">
         <SheetHeader>
           <SheetTitle>Menu</SheetTitle>
           <Button
@@ -81,6 +90,27 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
               </AccordionItem>
             ))}
           </Accordion>
+          <div className="mt-6 space-y-2">
+            <Button 
+              variant="ghost" 
+              className="w-full justify-start" 
+              onClick={() => {
+                toggleMenu();
+                navigate('/auth');
+              }}
+            >
+              Sign In
+            </Button>
+            <Button 
+              className="w-full justify-start bg-primary text-white hover:bg-primary/90"
+              onClick={() => {
+                toggleMenu();
+                navigate('/auth');
+              }}
+            >
+              Sign Up
+            </Button>
+          </div>
         </nav>
       </SheetContent>
     </Sheet>
