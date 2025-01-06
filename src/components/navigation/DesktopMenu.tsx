@@ -44,8 +44,8 @@ export function DesktopMenu() {
                   >
                     {item.title}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-0 left-0 w-[400px] md:w-[500px] lg:w-[600px]">
-                    <div className="relative">
+                  <NavigationMenuContent className="absolute top-0 left-0 w-[400px] md:w-[500px] lg:w-[600px] z-[100]">
+                    <div className="relative mt-2">
                       <ul className="grid w-full gap-3 p-4 md:grid-cols-2 bg-white rounded-lg shadow-lg">
                         {item.items.map((subItem) => (
                           <ListItem

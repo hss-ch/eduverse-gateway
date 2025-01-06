@@ -51,7 +51,7 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
             <X className="h-6 w-6" />
           </Button>
         </SheetHeader>
-        <nav className="mt-8">
+        <nav className="mt-8 h-[calc(100vh-8rem)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           <Accordion type="single" collapsible className="w-full">
             {navigationData.map((item, index) => (
               <AccordionItem key={index} value={`item-${index}`}>
