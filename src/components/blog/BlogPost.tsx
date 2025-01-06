@@ -15,7 +15,17 @@ export function BlogPost() {
   const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
-    getBlog();
+    if (id) {
+      getBlog();
+    } else {
+      setLoading(false);
+      console.error("BlogPost - No ID provided");
+      toast({
+        title: "Error",
+        description: "No blog post ID provided",
+        variant: "destructive",
+      });
+    }
     checkAdminStatus();
     checkSession();
   }, [id]);
@@ -27,6 +37,11 @@ export function BlogPost() {
 
   async function getBlog() {
     try {
+      if (!id) {
+        console.error("BlogPost - Attempted to fetch with undefined ID");
+        return;
+      }
+
       setLoading(true);
       console.log("BlogPost - Fetching blog:", id);
 
@@ -39,12 +54,22 @@ export function BlogPost() {
           )
         `)
         .eq("id", id)
-        .single();
+        .maybeSingle();
 
       if (blogError) throw blogError;
 
-      console.log("BlogPost - Blog data:", blogData);
-      setBlog(blogData);
+      if (!blogData) {
+        console.log("BlogPost - No blog found with ID:", id);
+        toast({
+          title: "Not Found",
+          description: "Blog post not found",
+          variant: "destructive",
+        });
+        setBlog(null);
+      } else {
+        console.log("BlogPost - Blog data:", blogData);
+        setBlog(blogData);
+      }
     } catch (error: any) {
       console.error("Error fetching blog:", error);
       toast({
