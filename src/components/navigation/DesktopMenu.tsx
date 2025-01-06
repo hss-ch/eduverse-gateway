@@ -44,18 +44,20 @@ export function DesktopMenu() {
                   >
                     {item.title}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute left-0 top-0 w-full data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 md:w-auto">
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-white rounded-lg shadow-lg">
-                      {item.items.map((subItem) => (
-                        <ListItem
-                          key={subItem.title}
-                          title={subItem.title}
-                          to={subItem.href}
-                        >
-                          {subItem.description}
-                        </ListItem>
-                      ))}
-                    </ul>
+                  <NavigationMenuContent className="absolute top-0 left-0 w-[400px] md:w-[500px] lg:w-[600px]">
+                    <div className="relative">
+                      <ul className="grid w-full gap-3 p-4 md:grid-cols-2 bg-white rounded-lg shadow-lg">
+                        {item.items.map((subItem) => (
+                          <ListItem
+                            key={subItem.title}
+                            title={subItem.title}
+                            to={subItem.href}
+                          >
+                            {subItem.description}
+                          </ListItem>
+                        ))}
+                      </ul>
+                    </div>
                   </NavigationMenuContent>
                 </>
               ) : (
