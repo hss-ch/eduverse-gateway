@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
+import { Star } from "lucide-react";
 
 export default function Blog() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -93,6 +94,15 @@ export default function Blog() {
       {posts.map((post) => (
         <Link key={post.id} to={`/blog/${post.id}`}>
           <Card className="h-full hover:shadow-md transition-shadow">
+            {post.image_url && (
+              <div className="relative w-full h-48 overflow-hidden rounded-t-lg">
+                <img
+                  src={post.image_url}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
             <CardHeader>
               <CardTitle className="line-clamp-2">{post.title}</CardTitle>
               <p className="text-sm text-muted-foreground">
@@ -101,6 +111,21 @@ export default function Blog() {
               <p className="text-xs text-muted-foreground">
                 {format(new Date(post.created_at), "MMMM d, yyyy")}
               </p>
+              <div className="flex items-center space-x-1 mt-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={`h-4 w-4 ${
+                      star <= (post.rating || 0)
+                        ? "text-yellow-400 fill-current"
+                        : "text-gray-300"
+                    }`}
+                  />
+                ))}
+                <span className="text-sm text-muted-foreground ml-1">
+                  ({post.ratings_count || 0})
+                </span>
+              </div>
             </CardHeader>
             <CardContent>
               <p className="line-clamp-3 text-muted-foreground">
