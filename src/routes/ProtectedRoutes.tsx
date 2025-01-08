@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route } from 'react-router-dom';
-import { ProtectedRoute } from './ProtectedRoute';
+import { ProtectedRoute } from "./ProtectedRoute";
 import Academic from "@/pages/Academic";
 import Administrative from "@/pages/Administrative";
 import Planning from "@/pages/Planning";
