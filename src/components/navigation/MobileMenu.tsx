@@ -15,7 +15,9 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { navigationData } from "./navigationData";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
+import { useEffect, useState } from "react";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -24,11 +26,44 @@ interface MobileMenuProps {
 
 export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
   const navigate = useNavigate();
-  const supabase = useSupabaseClient();
+  const { toast } = useToast();
+  const [session, setSession] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log("MobileMenu - Initial session:", session);
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      console.log("MobileMenu - Auth state changed:", session);
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    navigate('/auth');
+    try {
+      const { error } = await supabase.auth.signOut();
+      if (error) throw error;
+      
+      toast({
+        title: "Success",
+        description: "Signed out successfully",
+      });
+      toggleMenu();
+      navigate('/');
+    } catch (error: any) {
+      console.error("Error signing out:", error);
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -91,25 +126,49 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
             ))}
           </Accordion>
           <div className="mt-6 space-y-2">
-            <Button 
-              variant="ghost" 
-              className="w-full justify-start" 
-              onClick={() => {
-                toggleMenu();
-                navigate('/auth');
-              }}
-            >
-              Sign In
-            </Button>
-            <Button 
-              className="w-full justify-start bg-primary text-white hover:bg-primary/90"
-              onClick={() => {
-                toggleMenu();
-                navigate('/auth');
-              }}
-            >
-              Sign Up
-            </Button>
+            {session ? (
+              <>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start" 
+                  onClick={() => {
+                    toggleMenu();
+                    navigate('/dashboard');
+                  }}
+                >
+                  Dashboard
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start"
+                  onClick={handleSignOut}
+                >
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button 
+                  variant="ghost" 
+                  className="w-full justify-start" 
+                  onClick={() => {
+                    toggleMenu();
+                    navigate('/auth');
+                  }}
+                >
+                  Sign In
+                </Button>
+                <Button 
+                  className="w-full justify-start bg-primary text-white hover:bg-primary/90"
+                  onClick={() => {
+                    toggleMenu();
+                    navigate('/auth');
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </>
+            )}
           </div>
         </nav>
       </SheetContent>
