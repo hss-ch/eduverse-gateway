@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { BlogPost } from "@/components/blog/BlogPost";
+import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { format } from "date-fns";
 
 export default function Blog() {
   const [posts, setPosts] = useState<any[]>([]);
@@ -10,13 +12,11 @@ export default function Blog() {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log("Blog - Getting initial session:", session);
       setSession(session);
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -31,6 +31,8 @@ export default function Blog() {
     async function fetchPosts() {
       try {
         console.log("Fetching blog posts...");
+        setLoading(true);
+        
         const { data, error } = await supabase
           .from("blogs")
           .select(`
@@ -70,9 +72,18 @@ export default function Blog() {
         {[1, 2, 3].map((n) => (
           <div
             key={n}
-            className="h-[400px] bg-muted animate-pulse rounded-lg"
+            className="h-[300px] bg-muted animate-pulse rounded-lg"
           />
         ))}
+      </div>
+    );
+  }
+
+  if (posts.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <h2 className="text-2xl font-bold mb-4">No blog posts found</h2>
+        <p className="text-muted-foreground">Check back later for new content!</p>
       </div>
     );
   }
@@ -80,7 +91,24 @@ export default function Blog() {
   return (
     <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       {posts.map((post) => (
-        <BlogPost key={post.id} {...post} session={session} />
+        <Link key={post.id} to={`/blog/${post.id}`}>
+          <Card className="h-full hover:shadow-md transition-shadow">
+            <CardHeader>
+              <CardTitle className="line-clamp-2">{post.title}</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                By {post.profiles?.full_name || "Unknown Author"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {format(new Date(post.created_at), "MMMM d, yyyy")}
+              </p>
+            </CardHeader>
+            <CardContent>
+              <p className="line-clamp-3 text-muted-foreground">
+                {post.content}
+              </p>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </div>
   );

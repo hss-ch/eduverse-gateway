@@ -15,19 +15,16 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 
 export function DesktopMenu() {
-  const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
   const [session, setSession] = useState<any>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
-    // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       console.log("DesktopMenu - Initial session:", session);
       setSession(session);
     });
 
-    // Listen for auth changes
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
@@ -58,28 +55,18 @@ export function DesktopMenu() {
     }
   };
 
-  const toggleMenu = (menuId: string) => {
-    setOpenMenus(prev => ({
-      ...prev,
-      [menuId]: !prev[menuId]
-    }));
-  };
-
   return (
     <div className="flex items-center space-x-4">
       <NavigationMenu>
         <NavigationMenuList className="space-x-2">
-          {navigationData.map((item) => (
-            <NavigationMenuItem key={item.title}>
+          {navigationData.map((item, index) => (
+            <NavigationMenuItem key={index}>
               {item.items ? (
                 <>
-                  <NavigationMenuTrigger
-                    onClick={() => toggleMenu(item.title)}
-                    className="h-10"
-                  >
+                  <NavigationMenuTrigger className="h-10 bg-background">
                     {item.title}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       {item.items.map((subItem) => (
                         <ListItem
