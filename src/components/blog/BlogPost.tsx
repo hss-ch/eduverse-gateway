@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { BlogRating } from "./BlogRating";
@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function BlogPost() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [blog, setBlog] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -15,20 +16,22 @@ export function BlogPost() {
   const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
-    if (id) {
-      getBlog();
-    } else {
-      setLoading(false);
+    if (!id) {
       console.error("BlogPost - No ID provided");
+      setLoading(false);
+      navigate('/blog');
       toast({
         title: "Error",
-        description: "No blog post ID provided",
+        description: "Blog post not found",
         variant: "destructive",
       });
+      return;
     }
+
+    getBlog();
     checkAdminStatus();
     checkSession();
-  }, [id]);
+  }, [id, navigate, toast]);
 
   async function checkSession() {
     const { data: { session: currentSession } } = await supabase.auth.getSession();
@@ -65,7 +68,7 @@ export function BlogPost() {
           description: "Blog post not found",
           variant: "destructive",
         });
-        setBlog(null);
+        navigate('/blog');
       } else {
         console.log("BlogPost - Blog data:", blogData);
         setBlog(blogData);
@@ -77,6 +80,7 @@ export function BlogPost() {
         description: error.message,
         variant: "destructive",
       });
+      navigate('/blog');
     } finally {
       setLoading(false);
     }
