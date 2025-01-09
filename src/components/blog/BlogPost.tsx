@@ -34,8 +34,17 @@ export function BlogPost() {
   }, [id, navigate, toast]);
 
   async function checkSession() {
-    const { data: { session: currentSession } } = await supabase.auth.getSession();
-    setSession(currentSession);
+    try {
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      if (!currentSession) {
+        navigate("/auth");
+        return;
+      }
+      setSession(currentSession);
+    } catch (error) {
+      console.error("Error checking session:", error);
+      navigate("/auth");
+    }
   }
 
   async function getBlog() {
@@ -91,7 +100,10 @@ export function BlogPost() {
       console.log("BlogPost - Checking admin status");
       
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        navigate("/auth");
+        return;
+      }
 
       const { data: profile, error } = await supabase
         .from("profiles")

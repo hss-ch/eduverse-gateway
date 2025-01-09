@@ -1,4 +1,4 @@
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import { MainNav } from "../MainNav";
 import { Footer } from "../Footer";
 import { Button } from "../ui/button";
@@ -9,6 +9,7 @@ import { useToast } from "@/components/ui/use-toast";
 
 export function BlogLayout() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -33,6 +34,12 @@ export function BlogLayout() {
           return;
         }
 
+        if (!session) {
+          console.log("BlogLayout - No session found, redirecting to auth");
+          navigate("/auth");
+          return;
+        }
+
         if (mounted) {
           setSession(session);
           setLoading(false);
@@ -52,6 +59,10 @@ export function BlogLayout() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       console.log("BlogLayout - Auth state changed:", _event, session);
       if (mounted) {
+        if (!session) {
+          navigate("/auth");
+          return;
+        }
         setSession(session);
         setLoading(false);
       }
@@ -61,7 +72,7 @@ export function BlogLayout() {
       mounted = false;
       subscription.unsubscribe();
     };
-  }, [toast]);
+  }, [navigate, toast]);
 
   if (loading) {
     return (
