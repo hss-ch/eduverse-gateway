@@ -23,12 +23,22 @@ export function DeleteBlogDialog({ blogId }: DeleteBlogDialogProps) {
   const { toast } = useToast();
   const navigate = useNavigate();
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
       console.log("BlogAdminActions - Deleting blog:", blogId);
 
+      // First delete associated ratings
+      const { error: ratingsError } = await supabase
+        .from("blog_ratings")
+        .delete()
+        .eq("blog_id", blogId);
+
+      if (ratingsError) throw ratingsError;
+
+      // Then delete the blog
       const { error } = await supabase
         .from("blogs")
         .delete()
@@ -51,11 +61,12 @@ export function DeleteBlogDialog({ blogId }: DeleteBlogDialogProps) {
       });
     } finally {
       setIsDeleting(false);
+      setIsOpen(false);
     }
   };
 
   return (
-    <AlertDialog>
+    <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size="sm">
           Delete
@@ -66,7 +77,7 @@ export function DeleteBlogDialog({ blogId }: DeleteBlogDialogProps) {
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This action cannot be undone. This will permanently delete the blog
-            post and remove all associated data.
+            post and remove all associated data including ratings.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

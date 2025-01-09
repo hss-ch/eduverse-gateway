@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -18,6 +18,28 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   const [currentCount, setCurrentCount] = useState(initialCount);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [userRating, setUserRating] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchUserRating = async () => {
+      if (!session?.user?.id) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('blog_ratings')
+          .select('rating')
+          .eq('blog_id', id)
+          .eq('user_id', session.user.id)
+          .single();
+
+        if (error) throw error;
+        if (data) setUserRating(data.rating);
+      } catch (error) {
+        console.error('Error fetching user rating:', error);
+      }
+    };
+
+    fetchUserRating();
+  }, [id, session?.user?.id]);
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
     e.preventDefault();
@@ -40,6 +62,11 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       setIsSubmitting(true);
       console.log('Submitting rating:', { blog_id: id, user_id: session.user.id, rating });
       
+      // Optimistically update UI
+      setUserRating(rating);
+      const oldRating = currentRating;
+      const oldCount = currentCount;
+
       const { error } = await supabase
         .from('blog_ratings')
         .upsert({
@@ -50,36 +77,30 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
           onConflict: 'user_id, blog_id'
         });
 
-      if (error) {
-        console.error('Error submitting rating:', error);
-        throw error;
-      }
+      if (error) throw error;
 
-      // Update the average rating in the blogs table
-      const { data: newRating } = await supabase
+      // Fetch updated ratings
+      const { data: newRatings, error: fetchError } = await supabase
         .from('blog_ratings')
         .select('rating')
         .eq('blog_id', id);
 
-      if (!newRating) {
-        throw new Error('Failed to fetch updated ratings');
-      }
+      if (fetchError) throw fetchError;
 
-      const averageRating = newRating.reduce((acc, curr) => acc + curr.rating, 0) / (newRating.length || 1);
+      const averageRating = newRatings.reduce((acc, curr) => acc + curr.rating, 0) / newRatings.length;
 
       const { error: updateError } = await supabase
         .from('blogs')
         .update({ 
           rating: averageRating,
-          ratings_count: newRating.length
+          ratings_count: newRatings.length
         })
         .eq('id', id);
 
       if (updateError) throw updateError;
 
       setCurrentRating(averageRating);
-      setCurrentCount(newRating.length);
-      setUserRating(rating);
+      setCurrentCount(newRatings.length);
 
       toast({
         title: "Success",
@@ -87,6 +108,8 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       });
     } catch (error: any) {
       console.error('Error rating post:', error);
+      // Revert optimistic updates
+      setUserRating(null);
       toast({
         title: "Error",
         description: error.message || "Failed to submit rating",
@@ -98,13 +121,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   };
 
   return (
-    <div 
-      className="flex items-center space-x-1" 
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
+    <div className="flex items-center space-x-1">
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
