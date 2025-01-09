@@ -57,17 +57,17 @@ export function DesktopMenu() {
 
   return (
     <div className="flex items-center space-x-4">
-      <NavigationMenu className="relative z-50">
+      <NavigationMenu className="relative">
         <NavigationMenuList className="space-x-2">
           {navigationData.map((item, index) => (
             <NavigationMenuItem key={index}>
               {item.items ? (
                 <>
-                  <NavigationMenuTrigger className="h-10 bg-background hover:bg-accent">
+                  <NavigationMenuTrigger className="h-10">
                     {item.title}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg rounded-md">
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                  <NavigationMenuContent className="absolute top-full left-0 w-[400px] bg-white dark:bg-gray-950 shadow-lg rounded-md border border-border">
+                    <ul className="grid gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                       {item.items.map((subItem) => (
                         <ListItem
                           key={subItem.title}
