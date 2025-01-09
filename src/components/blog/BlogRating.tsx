@@ -16,6 +16,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   const { toast } = useToast();
   const [currentRating, setCurrentRating] = useState(initialRating);
   const [currentCount, setCurrentCount] = useState(initialCount);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
     e.preventDefault();
@@ -32,7 +33,10 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       return;
     }
 
+    if (isSubmitting) return;
+
     try {
+      setIsSubmitting(true);
       console.log('Submitting rating:', { blog_id: id, user_id: session.user.id, rating });
       
       const { error } = await supabase
@@ -86,6 +90,8 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
         description: error.message || "Failed to submit rating",
         variant: "destructive"
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -101,7 +107,8 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
         <button
           key={star}
           onClick={(e) => handleRating(star, e)}
-          className="text-yellow-400 hover:text-yellow-500 transition-colors"
+          className={`text-yellow-400 hover:text-yellow-500 transition-colors ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          disabled={isSubmitting}
         >
           <Star 
             className={`h-4 w-4 ${star <= currentRating ? 'fill-current' : ''}`}
