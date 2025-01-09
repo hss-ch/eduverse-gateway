@@ -6,18 +6,15 @@ interface PublishButtonProps {
   blogId: string;
   isPublished: boolean;
   onStatusChange?: () => void;
-  isUpdating: boolean;
-  setIsUpdating: (value: boolean) => void;
 }
 
 export function PublishButton({ 
   blogId, 
   isPublished, 
-  onStatusChange,
-  isUpdating,
-  setIsUpdating 
+  onStatusChange 
 }: PublishButtonProps) {
   const { toast } = useToast();
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const togglePublishStatus = async () => {
     try {

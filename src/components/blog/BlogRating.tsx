@@ -17,6 +17,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   const [currentRating, setCurrentRating] = useState(initialRating);
   const [currentCount, setCurrentCount] = useState(initialCount);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userRating, setUserRating] = useState<number | null>(null);
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
     e.preventDefault();
@@ -78,6 +79,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
 
       setCurrentRating(averageRating);
       setCurrentCount(newRating.length);
+      setUserRating(rating);
 
       toast({
         title: "Success",
@@ -107,11 +109,15 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
         <button
           key={star}
           onClick={(e) => handleRating(star, e)}
-          className={`text-yellow-400 hover:text-yellow-500 transition-colors ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+          className={`text-yellow-400 hover:text-yellow-500 transition-colors ${
+            isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+          }`}
           disabled={isSubmitting}
         >
           <Star 
-            className={`h-4 w-4 ${star <= currentRating ? 'fill-current' : ''}`}
+            className={`h-4 w-4 ${
+              star <= (userRating || currentRating) ? 'fill-current' : ''
+            }`}
           />
         </button>
       ))}

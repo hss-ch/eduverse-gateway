@@ -66,19 +66,21 @@ export function DesktopMenu() {
                   <NavigationMenuTrigger className="h-10 bg-background hover:bg-accent">
                     {item.title}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full z-[100] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg rounded-md border border-border">
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {item.items.map((subItem) => (
-                        <ListItem
-                          key={subItem.title}
-                          title={subItem.title}
-                          to={subItem.href}
-                        >
-                          {subItem.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
+
+<NavigationMenuContent className="absolute top-full z-[100] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg rounded-md border border-border">
+  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+    {item.items.map((subItem) => (
+      <ListItem
+        key={subItem.title}
+        title={subItem.title}
+        to={subItem.href}
+      >
+        {subItem.description}
+      </ListItem>
+    ))}
+  </ul>
+</NavigationMenuContent>
+
                 </>
               ) : (
                 <Link to={item.href || "#"}>
