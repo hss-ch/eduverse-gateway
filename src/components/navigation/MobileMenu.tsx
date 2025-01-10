@@ -49,40 +49,25 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
     try {
       console.log("MobileMenu - Starting sign out process");
       
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      console.log("MobileMenu - Current session before logout:", currentSession);
-      
-      if (!currentSession) {
-        console.log("MobileMenu - No active session found, clearing state and redirecting");
-        setSession(null);
-        toggleMenu();
-        navigate('/auth');
-        return;
-      }
-      
+      // Clear local session state first
       setSession(null);
+      localStorage.removeItem('supabase.auth.token');
       
-      const { error } = await supabase.auth.signOut();
+      // Attempt to sign out from Supabase
+      await supabase.auth.signOut({
+        scope: 'local'
+      });
       
-      if (error) {
-        console.error("MobileMenu - Error during sign out:", error);
-        toast({
-          title: "Notice",
-          description: "You have been signed out.",
-        });
-      } else {
-        console.log("MobileMenu - Sign out successful");
-        toast({
-          title: "Success",
-          description: "Signed out successfully",
-        });
-      }
+      console.log("MobileMenu - Sign out successful");
+      toast({
+        title: "Success",
+        description: "Signed out successfully",
+      });
       
       toggleMenu();
       navigate('/auth');
     } catch (error: any) {
       console.error("MobileMenu - Error in handleSignOut:", error);
-      setSession(null);
       toast({
         title: "Notice",
         description: "You have been signed out.",

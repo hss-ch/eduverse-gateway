@@ -39,38 +39,24 @@ export function DesktopMenu() {
     try {
       console.log("DesktopMenu - Starting sign out process");
       
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      console.log("DesktopMenu - Current session before logout:", currentSession);
-      
-      if (!currentSession) {
-        console.log("DesktopMenu - No active session found, clearing state and redirecting");
-        setSession(null);
-        navigate('/auth');
-        return;
-      }
-      
+      // Clear local session state first
       setSession(null);
+      localStorage.removeItem('supabase.auth.token');
       
-      const { error } = await supabase.auth.signOut();
+      // Attempt to sign out from Supabase
+      await supabase.auth.signOut({
+        scope: 'local'
+      });
       
-      if (error) {
-        console.error("DesktopMenu - Error during sign out:", error);
-        toast({
-          title: "Notice",
-          description: "You have been signed out.",
-        });
-      } else {
-        console.log("DesktopMenu - Sign out successful");
-        toast({
-          title: "Success",
-          description: "Signed out successfully",
-        });
-      }
+      console.log("DesktopMenu - Sign out successful");
+      toast({
+        title: "Success",
+        description: "Signed out successfully",
+      });
       
       navigate('/auth');
     } catch (error: any) {
       console.error("DesktopMenu - Error in handleSignOut:", error);
-      setSession(null);
       toast({
         title: "Notice",
         description: "You have been signed out.",
