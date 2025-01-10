@@ -49,20 +49,27 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
     try {
       console.log("MobileMenu - Starting sign out process");
       
-      // Clear local session state first
+      // First clear local state and storage
       setSession(null);
-      localStorage.removeItem('supabase.auth.token');
+      localStorage.clear(); // Clear all local storage to ensure complete cleanup
       
-      // Attempt to sign out from Supabase
-      await supabase.auth.signOut({
-        scope: 'local'
-      });
+      // Then sign out from Supabase
+      const { error } = await supabase.auth.signOut();
       
-      console.log("MobileMenu - Sign out successful");
-      toast({
-        title: "Success",
-        description: "Signed out successfully",
-      });
+      if (error) {
+        console.error("MobileMenu - Sign out error:", error);
+        // Even if there's an error, we want to clear the local state
+        toast({
+          title: "Notice",
+          description: "You have been signed out locally.",
+        });
+      } else {
+        console.log("MobileMenu - Sign out successful");
+        toast({
+          title: "Success",
+          description: "Signed out successfully",
+        });
+      }
       
       toggleMenu();
       navigate('/auth');
