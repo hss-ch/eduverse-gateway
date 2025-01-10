@@ -37,40 +37,31 @@ export function DesktopMenu() {
 
   const handleSignOut = async () => {
     try {
-      // First try to refresh the session
-      const { data: { session: currentSession }, error: refreshError } = await supabase.auth.getSession();
+      console.log("DesktopMenu - Starting sign out process");
       
-      if (refreshError) {
-        console.error("Error refreshing session:", refreshError);
-        // If we can't refresh, clear the session locally
-        setSession(null);
-        navigate('/auth');
-        return;
-      }
-
-      // Attempt to sign out
-      const { error } = await supabase.auth.signOut();
+      // Clear local session state first
+      setSession(null);
+      
+      // Attempt to sign out from Supabase
+      const { error } = await supabase.auth.signOut({ scope: 'local' });
+      
       if (error) {
-        console.error("Error signing out:", error);
-        if (error.message.includes('session_not_found')) {
-          // If session not found, clear it locally
-          setSession(null);
-          navigate('/auth');
-          return;
-        }
+        console.error("DesktopMenu - Error during sign out:", error);
         throw error;
       }
       
+      console.log("DesktopMenu - Sign out successful");
       toast({
         title: "Success",
         description: "Signed out successfully",
       });
-      navigate('/');
+      
+      navigate('/auth');
     } catch (error: any) {
-      console.error("Error in handleSignOut:", error);
+      console.error("DesktopMenu - Error in handleSignOut:", error);
       toast({
         title: "Error",
-        description: error.message || "An error occurred while signing out",
+        description: "An error occurred while signing out. Please try again.",
         variant: "destructive",
       });
       // Ensure user is redirected to auth page even if there's an error
