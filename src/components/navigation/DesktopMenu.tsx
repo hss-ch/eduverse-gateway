@@ -39,43 +39,49 @@ export function DesktopMenu() {
     try {
       console.log("DesktopMenu - Starting sign out process");
       
-      // First verify we have a valid session
+      // First check if we have a valid session
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       console.log("DesktopMenu - Current session before logout:", currentSession);
       
+      // If no session exists, just clear local state and redirect
       if (!currentSession) {
-        console.log("DesktopMenu - No active session found, redirecting to auth");
+        console.log("DesktopMenu - No active session found, clearing state and redirecting");
         setSession(null);
         navigate('/auth');
         return;
       }
+      
+      // Clear local session state first to prevent UI flicker
+      setSession(null);
       
       // Attempt to sign out from Supabase
       const { error } = await supabase.auth.signOut();
       
       if (error) {
         console.error("DesktopMenu - Error during sign out:", error);
-        throw error;
+        // Even if there's an error, we want to clear the local session
+        toast({
+          title: "Notice",
+          description: "You have been signed out.",
+        });
+      } else {
+        console.log("DesktopMenu - Sign out successful");
+        toast({
+          title: "Success",
+          description: "Signed out successfully",
+        });
       }
       
-      console.log("DesktopMenu - Sign out successful");
-      // Only clear session after successful logout
-      setSession(null);
-      
-      toast({
-        title: "Success",
-        description: "Signed out successfully",
-      });
-      
+      // Always navigate to auth page
       navigate('/auth');
     } catch (error: any) {
       console.error("DesktopMenu - Error in handleSignOut:", error);
+      // Clear session and redirect even if there's an error
+      setSession(null);
       toast({
-        title: "Error",
-        description: "An error occurred while signing out. Please try again.",
-        variant: "destructive",
+        title: "Notice",
+        description: "You have been signed out.",
       });
-      // Ensure user is redirected to auth page even if there's an error
       navigate('/auth');
     }
   };
