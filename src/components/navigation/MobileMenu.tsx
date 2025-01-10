@@ -47,8 +47,31 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
 
   const handleSignOut = async () => {
     try {
+      // First try to refresh the session
+      const { data: { session: currentSession }, error: refreshError } = await supabase.auth.getSession();
+      
+      if (refreshError) {
+        console.error("Error refreshing session:", refreshError);
+        // If we can't refresh, clear the session locally
+        setSession(null);
+        toggleMenu();
+        navigate('/auth');
+        return;
+      }
+
+      // Attempt to sign out
       const { error } = await supabase.auth.signOut();
-      if (error) throw error;
+      if (error) {
+        console.error("Error signing out:", error);
+        if (error.message.includes('session_not_found')) {
+          // If session not found, clear it locally
+          setSession(null);
+          toggleMenu();
+          navigate('/auth');
+          return;
+        }
+        throw error;
+      }
       
       toast({
         title: "Success",
@@ -57,12 +80,15 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
       toggleMenu();
       navigate('/');
     } catch (error: any) {
-      console.error("Error signing out:", error);
+      console.error("Error in handleSignOut:", error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "An error occurred while signing out",
         variant: "destructive",
       });
+      // Ensure user is redirected to auth page even if there's an error
+      toggleMenu();
+      navigate('/auth');
     }
   };
 
