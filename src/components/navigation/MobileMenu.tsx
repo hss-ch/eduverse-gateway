@@ -49,11 +49,9 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
     try {
       console.log("MobileMenu - Starting sign out process");
       
-      // First check if we have a valid session
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       console.log("MobileMenu - Current session before logout:", currentSession);
       
-      // If no session exists, just clear local state and redirect
       if (!currentSession) {
         console.log("MobileMenu - No active session found, clearing state and redirecting");
         setSession(null);
@@ -62,15 +60,12 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
         return;
       }
       
-      // Clear local session state first to prevent UI flicker
       setSession(null);
       
-      // Attempt to sign out from Supabase
       const { error } = await supabase.auth.signOut();
       
       if (error) {
         console.error("MobileMenu - Error during sign out:", error);
-        // Even if there's an error, we want to clear the local session
         toast({
           title: "Notice",
           description: "You have been signed out.",
@@ -87,7 +82,6 @@ export function MobileMenu({ isOpen, toggleMenu }: MobileMenuProps) {
       navigate('/auth');
     } catch (error: any) {
       console.error("MobileMenu - Error in handleSignOut:", error);
-      // Clear session and redirect even if there's an error
       setSession(null);
       toast({
         title: "Notice",

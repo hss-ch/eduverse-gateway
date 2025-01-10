@@ -39,11 +39,9 @@ export function DesktopMenu() {
     try {
       console.log("DesktopMenu - Starting sign out process");
       
-      // First check if we have a valid session
       const { data: { session: currentSession } } = await supabase.auth.getSession();
       console.log("DesktopMenu - Current session before logout:", currentSession);
       
-      // If no session exists, just clear local state and redirect
       if (!currentSession) {
         console.log("DesktopMenu - No active session found, clearing state and redirecting");
         setSession(null);
@@ -51,15 +49,12 @@ export function DesktopMenu() {
         return;
       }
       
-      // Clear local session state first to prevent UI flicker
       setSession(null);
       
-      // Attempt to sign out from Supabase
       const { error } = await supabase.auth.signOut();
       
       if (error) {
         console.error("DesktopMenu - Error during sign out:", error);
-        // Even if there's an error, we want to clear the local session
         toast({
           title: "Notice",
           description: "You have been signed out.",
@@ -72,11 +67,9 @@ export function DesktopMenu() {
         });
       }
       
-      // Always navigate to auth page
       navigate('/auth');
     } catch (error: any) {
       console.error("DesktopMenu - Error in handleSignOut:", error);
-      // Clear session and redirect even if there's an error
       setSession(null);
       toast({
         title: "Notice",
@@ -88,8 +81,8 @@ export function DesktopMenu() {
 
   return (
     <div className="flex items-center space-x-4">
-      <NavigationMenu className="relative z-[100]">
-        <NavigationMenuList className="space-x-2">
+      <NavigationMenu>
+        <NavigationMenuList>
           {navigationData.map((item, index) => (
             <NavigationMenuItem key={index}>
               {item.items ? (
@@ -97,11 +90,11 @@ export function DesktopMenu() {
                   <NavigationMenuTrigger className="h-10 bg-background hover:bg-accent">
                     {item.title}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full z-[100] bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 shadow-lg rounded-md border border-border">
+                  <NavigationMenuContent>
                     <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {item.items.map((subItem) => (
+                      {item.items.map((subItem, subIndex) => (
                         <ListItem
-                          key={subItem.title}
+                          key={subIndex}
                           title={subItem.title}
                           to={subItem.href}
                         >
