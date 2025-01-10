@@ -42,8 +42,8 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   }, [id, session?.user?.id]);
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+    e.preventDefault();  // Prevent any navigation
+    e.stopPropagation(); // Stop event bubbling
     
     if (!session) {
       console.log('User not authenticated, redirecting to auth page');
@@ -64,9 +64,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       
       // Optimistically update UI
       setUserRating(rating);
-      const oldRating = currentRating;
-      const oldCount = currentCount;
-
+      
       const { error } = await supabase
         .from('blog_ratings')
         .upsert({
@@ -121,7 +119,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   };
 
   return (
-    <div className="flex items-center space-x-1">
+    <div className="flex items-center space-x-1" onClick={(e) => e.stopPropagation()}>
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
