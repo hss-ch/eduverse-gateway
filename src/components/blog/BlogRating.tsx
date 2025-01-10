@@ -42,7 +42,6 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   }, [id, session?.user?.id]);
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
-    // Prevent any navigation and event bubbling
     e.preventDefault();
     e.stopPropagation();
     
