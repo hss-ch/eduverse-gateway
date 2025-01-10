@@ -39,11 +39,19 @@ export function DesktopMenu() {
     try {
       console.log("DesktopMenu - Starting sign out process");
       
-      // Clear local session state first
-      setSession(null);
+      // First verify we have a valid session
+      const { data: { session: currentSession } } = await supabase.auth.getSession();
+      console.log("DesktopMenu - Current session before logout:", currentSession);
+      
+      if (!currentSession) {
+        console.log("DesktopMenu - No active session found, redirecting to auth");
+        setSession(null);
+        navigate('/auth');
+        return;
+      }
       
       // Attempt to sign out from Supabase
-      const { error } = await supabase.auth.signOut({ scope: 'local' });
+      const { error } = await supabase.auth.signOut();
       
       if (error) {
         console.error("DesktopMenu - Error during sign out:", error);
@@ -51,6 +59,9 @@ export function DesktopMenu() {
       }
       
       console.log("DesktopMenu - Sign out successful");
+      // Only clear session after successful logout
+      setSession(null);
+      
       toast({
         title: "Success",
         description: "Signed out successfully",
