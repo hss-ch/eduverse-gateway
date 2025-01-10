@@ -30,7 +30,7 @@ export function MainNav() {
           <NavigationLogo />
         </Link>
         <div className="flex items-center space-x-2">
-          <div className="hidden md:block relative z-50">
+          <div className="hidden md:block relative z-[100]">
             <DesktopMenu />
           </div>
           <div className="block md:hidden">

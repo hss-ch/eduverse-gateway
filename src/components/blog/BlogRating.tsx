@@ -42,8 +42,9 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   }, [id, session?.user?.id]);
 
   const handleRating = async (rating: number, e: React.MouseEvent) => {
-    e.preventDefault();  // Prevent any navigation
-    e.stopPropagation(); // Stop event bubbling
+    // Prevent any navigation and event bubbling
+    e.preventDefault();
+    e.stopPropagation();
     
     if (!session) {
       console.log('User not authenticated, redirecting to auth page');
@@ -61,6 +62,10 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
     try {
       setIsSubmitting(true);
       console.log('Submitting rating:', { blog_id: id, user_id: session.user.id, rating });
+      
+      // Store old values for rollback if needed
+      const oldRating = currentRating;
+      const oldCount = currentCount;
       
       // Optimistically update UI
       setUserRating(rating);
@@ -119,7 +124,13 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   };
 
   return (
-    <div className="flex items-center space-x-1" onClick={(e) => e.stopPropagation()}>
+    <div 
+      className="flex items-center space-x-1" 
+      onClick={(e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      }}
+    >
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
