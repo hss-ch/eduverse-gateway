@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { RatingStars } from "./rating/RatingStars";
+import { RatingCount } from "./rating/RatingCount";
 
 interface BlogRatingProps {
   id: string;
@@ -29,7 +30,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
           .select('rating')
           .eq('blog_id', id)
           .eq('user_id', session.user.id)
-          .single();
+          .maybeSingle();
 
         if (error) throw error;
         if (data) setUserRating(data.rating);
@@ -62,14 +63,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       setIsSubmitting(true);
       console.log('Submitting rating:', { blog_id: id, user_id: session.user.id, rating });
       
-      // Store old values for rollback if needed
-      const oldRating = currentRating;
-      const oldCount = currentCount;
-      
-      // Optimistically update UI
-      setUserRating(rating);
-      
-      const { error } = await supabase
+      const { error: upsertError } = await supabase
         .from('blog_ratings')
         .upsert({
           blog_id: id,
@@ -79,7 +73,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
           onConflict: 'blog_id,user_id'
         });
 
-      if (error) throw error;
+      if (upsertError) throw upsertError;
 
       // Fetch updated ratings
       const { data: newRatings, error: fetchError } = await supabase
@@ -103,6 +97,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
 
       setCurrentRating(averageRating);
       setCurrentCount(newRatings.length);
+      setUserRating(rating);
 
       toast({
         title: "Success",
@@ -110,8 +105,6 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       });
     } catch (error: any) {
       console.error('Error rating post:', error);
-      // Revert optimistic updates
-      setUserRating(null);
       toast({
         title: "Error",
         description: error.message || "Failed to submit rating",
@@ -130,25 +123,13 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
         e.stopPropagation();
       }}
     >
-      {[1, 2, 3, 4, 5].map((star) => (
-        <button
-          key={star}
-          onClick={(e) => handleRating(star, e)}
-          className={`text-yellow-400 hover:text-yellow-500 transition-colors ${
-            isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-          }`}
-          disabled={isSubmitting}
-        >
-          <Star 
-            className={`h-4 w-4 ${
-              star <= (userRating || currentRating) ? 'fill-current' : ''
-            }`}
-          />
-        </button>
-      ))}
-      <span className="text-sm text-muted-foreground ml-1">
-        ({currentCount})
-      </span>
+      <RatingStars
+        rating={currentRating}
+        userRating={userRating}
+        isSubmitting={isSubmitting}
+        onRate={handleRating}
+      />
+      <RatingCount count={currentCount} />
     </div>
   );
 }
