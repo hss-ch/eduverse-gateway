@@ -35,6 +35,18 @@ export default function BlogView() {
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        // Validate that id is a valid UUID format
+        if (!id || id === 'new' || !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id)) {
+          console.error('Invalid blog post ID:', id);
+          toast({
+            title: "Error",
+            description: "Invalid blog post ID",
+            variant: "destructive",
+          });
+          navigate('/blog');
+          return;
+        }
+
         console.log('Fetching post with ID:', id);
         const { data, error } = await supabase
           .from('blogs')
@@ -45,17 +57,26 @@ export default function BlogView() {
             )
           `)
           .eq('id', id)
-          .single();
+          .maybeSingle();
 
         if (error) {
           console.error('Error fetching post:', error);
           throw error;
         }
         
-        if (data) {
-          console.log('Fetched post data:', data);
-          setPost(data as BlogPost);
+        if (!data) {
+          console.log('No post found with ID:', id);
+          toast({
+            title: "Not Found",
+            description: "The blog post you're looking for doesn't exist",
+            variant: "destructive",
+          });
+          navigate('/blog');
+          return;
         }
+
+        console.log('Fetched post data:', data);
+        setPost(data as BlogPost);
       } catch (error: any) {
         console.error('Error fetching post:', error);
         toast({
@@ -69,7 +90,7 @@ export default function BlogView() {
     };
 
     fetchPost();
-  }, [id, toast]);
+  }, [id, navigate, toast]);
 
   if (loading) {
     return (
@@ -81,21 +102,7 @@ export default function BlogView() {
   }
 
   if (!post) {
-    return (
-      <div className="max-w-4xl mx-auto px-6 py-8">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold">Post not found</h2>
-          <Button
-            variant="ghost"
-            className="mt-4"
-            onClick={() => navigate('/blog')}
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Blog
-          </Button>
-        </div>
-      </div>
-    );
+    return null;
   }
 
   const authorName = post.profiles?.full_name || "Anonymous";

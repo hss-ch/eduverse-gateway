@@ -11,6 +11,7 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import Blog from "@/pages/Blog";
 import BlogView from "@/pages/BlogView";
+import BlogNew from "@/pages/BlogNew";
 import { BlogLayout } from "@/components/blog/BlogLayout";
 import Pricing from "@/pages/Pricing";
 import Features from "@/pages/Features";
@@ -51,6 +52,11 @@ function App() {
               <Route path="/contact" element={<Contact />} />
               <Route path="/blog" element={<BlogLayout />}>
                 <Route index element={<Blog />} />
+                <Route path="new" element={
+                  <ProtectedRoute>
+                    <BlogNew />
+                  </ProtectedRoute>
+                } />
                 <Route path=":id" element={<BlogView />} />
               </Route>
               <Route path="/pricing" element={<Pricing />} />
