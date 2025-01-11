@@ -70,22 +70,25 @@ export const DesktopMenu = () => {
               <>
                 <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <div className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-popover">
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {item.items.map((subItem) => (
-                      <Link
-                        key={subItem.title}
-                        to={subItem.href.replace(/:\/$/, "")}
-                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                      >
-                        <div className="text-sm font-medium leading-none">
-                          {subItem.title}
-                        </div>
-                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                          {subItem.description}
-                        </p>
-                      </Link>
+                      <li key={subItem.title}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={subItem.href.replace(/:\/$/, "")}
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">
+                              {subItem.title}
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              {subItem.description}
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
                     ))}
-                  </div>
+                  </ul>
                 </NavigationMenuContent>
               </>
             ) : (
