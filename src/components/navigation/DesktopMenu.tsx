@@ -63,14 +63,16 @@ export const DesktopMenu = () => {
 
   return (
     <NavigationMenu className="hidden md:flex">
-      <NavigationMenuList>
+      <NavigationMenuList className="gap-2">
         {navigationData.map((item) => (
           <NavigationMenuItem key={item.title}>
             {item.items ? (
               <>
-                <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                <NavigationMenuTrigger className="bg-background hover:bg-accent">
+                  {item.title}
+                </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-background border rounded-md shadow-md">
                     {item.items.map((subItem) => (
                       <li key={subItem.title}>
                         <NavigationMenuLink asChild>
@@ -78,10 +80,10 @@ export const DesktopMenu = () => {
                             to={subItem.href.replace(/:\/$/, "")}
                             className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                           >
-                            <div className="text-sm font-medium leading-none">
+                            <div className="text-sm font-medium leading-none text-foreground">
                               {subItem.title}
                             </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-2">
                               {subItem.description}
                             </p>
                           </Link>
