@@ -1,27 +1,26 @@
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
+  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import { navigationData } from "./navigationData";
-import { ListItem } from "./ListItem";
-import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { Session } from "@supabase/supabase-js";
 
-export function DesktopMenu() {
-  const [session, setSession] = useState<any>(null);
-  const navigate = useNavigate();
+export const DesktopMenu = () => {
+  const [session, setSession] = useState<Session | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    console.log("DesktopMenu - Initial session:", session);
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log("DesktopMenu - Initial session:", session);
       setSession(session);
     });
 
@@ -37,114 +36,97 @@ export function DesktopMenu() {
 
   const handleSignOut = async () => {
     try {
-      console.log("DesktopMenu - Starting sign out process");
+      // Clear any stored session data
+      localStorage.clear();
       
-      // First clear local state and storage
-      setSession(null);
-      localStorage.clear(); // Clear all local storage to ensure complete cleanup
-      
-      // Then sign out from Supabase
       const { error } = await supabase.auth.signOut();
-      
       if (error) {
-        console.error("DesktopMenu - Sign out error:", error);
-        // Even if there's an error, we want to clear the local state
+        console.error("Sign out error:", error);
         toast({
-          title: "Notice",
-          description: "You have been signed out locally.",
+          variant: "destructive",
+          title: "Error signing out",
+          description: error.message,
         });
       } else {
-        console.log("DesktopMenu - Sign out successful");
         toast({
-          title: "Success",
-          description: "Signed out successfully",
+          title: "Signed out successfully",
         });
+        navigate("/");
       }
-      
-      navigate('/auth');
-    } catch (error: any) {
-      console.error("DesktopMenu - Error in handleSignOut:", error);
+    } catch (error) {
+      console.error("Sign out error:", error);
       toast({
-        title: "Notice",
-        description: "You have been signed out.",
+        variant: "destructive",
+        title: "Error signing out",
+        description: "An unexpected error occurred",
       });
-      navigate('/auth');
     }
   };
 
   return (
-    <div className="flex items-center space-x-4">
-      <NavigationMenu>
-        <NavigationMenuList>
-          {navigationData.map((item, index) => (
-            <NavigationMenuItem key={index}>
-              {item.items ? (
-                <>
-                  <NavigationMenuTrigger className="h-10 bg-background hover:bg-accent">
-                    {item.title}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {item.items.map((subItem, subIndex) => (
-                        <ListItem
-                          key={subIndex}
-                          title={subItem.title}
-                          to={subItem.href}
-                        >
-                          {subItem.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                  </NavigationMenuContent>
-                </>
-              ) : (
-                <NavigationMenuLink asChild>
-                  <Link
-                    to={item.href || "#"}
-                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                  >
-                    {item.title}
-                  </Link>
-                </NavigationMenuLink>
-              )}
-            </NavigationMenuItem>
-          ))}
-        </NavigationMenuList>
-      </NavigationMenu>
-      
-      <div className="flex items-center space-x-2">
+    <NavigationMenu className="hidden md:flex">
+      <NavigationMenuList>
+        {navigationData.map((item) => (
+          <NavigationMenuItem key={item.title}>
+            {item.items ? (
+              <>
+                <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {item.items.map((subItem) => (
+                      <li key={subItem.title}>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            to={subItem.href.replace(/:\/$/, "") || "#"}
+                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                          >
+                            <div className="text-sm font-medium leading-none">
+                              {subItem.title}
+                            </div>
+                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                              {subItem.description}
+                            </p>
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </>
+            ) : (
+              <NavigationMenuLink asChild>
+                <Link
+                  to={item.href?.replace(/:\/$/, "") || "#"}
+                  className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  {item.title}
+                </Link>
+              </NavigationMenuLink>
+            )}
+          </NavigationMenuItem>
+        ))}
         {session ? (
-          <>
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/dashboard')}
-            >
-              Dashboard
-            </Button>
-            <Button 
-              variant="ghost"
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              className="cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
               onClick={handleSignOut}
             >
               Sign Out
-            </Button>
-          </>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
         ) : (
-          <>
-            <Button 
-              variant="ghost" 
-              onClick={() => navigate('/auth')}
-            >
-              Sign In
-            </Button>
-            <Button 
-              onClick={() => navigate('/auth')} 
-              className="bg-primary text-white hover:bg-primary/90"
-            >
-              Sign Up
-            </Button>
-          </>
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <Link
+                to="/auth"
+                className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+              >
+                Sign In
+              </Link>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
         )}
-      </div>
-    </div>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
-}
+};
