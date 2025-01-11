@@ -12,6 +12,7 @@ import { navigationData } from "./navigationData";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
+import { DesktopSubmenuItem } from "./DesktopSubmenuItem";
 
 export const DesktopMenu = () => {
   const [session, setSession] = useState<Session | null>(null);
@@ -19,7 +20,7 @@ export const DesktopMenu = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("DesktopMenu - Initial session:", session);
+    console.log("DesktopMenu - Initial session check"); // Debug log
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -27,7 +28,7 @@ export const DesktopMenu = () => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("DesktopMenu - Auth state changed:", session);
+      console.log("DesktopMenu - Auth state changed:", session); // Debug log
       setSession(session);
     });
 
@@ -61,6 +62,8 @@ export const DesktopMenu = () => {
     }
   };
 
+  console.log("DesktopMenu - Rendering with session:", session); // Debug log
+
   return (
     <NavigationMenu className="hidden md:flex">
       <NavigationMenuList className="gap-2">
@@ -68,29 +71,23 @@ export const DesktopMenu = () => {
           <NavigationMenuItem key={item.title}>
             {item.items ? (
               <>
-                <NavigationMenuTrigger className="bg-background hover:bg-accent">
+                <NavigationMenuTrigger className="bg-background hover:bg-accent text-foreground">
                   {item.title}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-background border rounded-md shadow-md">
-                    {item.items.map((subItem) => (
-                      <li key={subItem.title}>
-                        <NavigationMenuLink asChild>
-                          <Link
-                            to={subItem.href.replace(/:\/$/, "")}
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none text-foreground">
-                              {subItem.title}
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground mt-2">
-                              {subItem.description}
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="w-[400px] md:w-[500px] lg:w-[600px] p-4 bg-background border rounded-md shadow-md">
+                    <ul className="grid gap-3 md:grid-cols-2">
+                      {item.items.map((subItem) => (
+                        <li key={subItem.title}>
+                          <DesktopSubmenuItem
+                            title={subItem.title}
+                            href={subItem.href}
+                            description={subItem.description}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </NavigationMenuContent>
               </>
             ) : (
