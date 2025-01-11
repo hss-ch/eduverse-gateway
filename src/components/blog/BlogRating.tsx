@@ -76,7 +76,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
           user_id: session.user.id,
           rating
         }, {
-          onConflict: 'user_id, blog_id'
+          onConflict: 'blog_id,user_id'
         });
 
       if (error) throw error;

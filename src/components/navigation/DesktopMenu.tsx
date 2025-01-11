@@ -36,9 +36,7 @@ export const DesktopMenu = () => {
 
   const handleSignOut = async () => {
     try {
-      // Clear any stored session data
       localStorage.clear();
-      
       const { error } = await supabase.auth.signOut();
       if (error) {
         console.error("Sign out error:", error);
@@ -72,58 +70,51 @@ export const DesktopMenu = () => {
               <>
                 <NavigationMenuTrigger>{item.title}</NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                  <div className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] bg-background">
                     {item.items.map((subItem) => (
-                      <li key={subItem.title}>
-                        <NavigationMenuLink asChild>
-                          <Link
-                            to={subItem.href.replace(/:\/$/, "") || "#"}
-                            className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-                          >
-                            <div className="text-sm font-medium leading-none">
-                              {subItem.title}
-                            </div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              {subItem.description}
-                            </p>
-                          </Link>
-                        </NavigationMenuLink>
-                      </li>
+                      <Link
+                        key={subItem.title}
+                        to={subItem.href.replace(/:\/$/, "")}
+                        className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      >
+                        <div className="text-sm font-medium leading-none">
+                          {subItem.title}
+                        </div>
+                        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                          {subItem.description}
+                        </p>
+                      </Link>
                     ))}
-                  </ul>
+                  </div>
                 </NavigationMenuContent>
               </>
             ) : (
-              <NavigationMenuLink asChild>
-                <Link
-                  to={item.href?.replace(/:\/$/, "") || "#"}
-                  className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-                >
-                  {item.title}
-                </Link>
-              </NavigationMenuLink>
+              <Link
+                to={item.href?.replace(/:\/$/, "") || "#"}
+                className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+              >
+                {item.title}
+              </Link>
             )}
           </NavigationMenuItem>
         ))}
         {session ? (
           <NavigationMenuItem>
-            <NavigationMenuLink
-              className="cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+            <button
               onClick={handleSignOut}
+              className="cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
             >
               Sign Out
-            </NavigationMenuLink>
+            </button>
           </NavigationMenuItem>
         ) : (
           <NavigationMenuItem>
-            <NavigationMenuLink asChild>
-              <Link
-                to="/auth"
-                className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-              >
-                Sign In
-              </Link>
-            </NavigationMenuLink>
+            <Link
+              to="/auth"
+              className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+            >
+              Sign In
+            </Link>
           </NavigationMenuItem>
         )}
       </NavigationMenuList>
