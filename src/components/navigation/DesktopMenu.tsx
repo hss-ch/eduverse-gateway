@@ -64,60 +64,62 @@ export const DesktopMenu = () => {
   console.log("DesktopMenu - Rendering with session:", session);
 
   return (
-    <div className="hidden md:block relative z-50">
-      <NavigationMenu>
-        <NavigationMenuList className="gap-2">
-          {navigationData.map((item) => (
-            <NavigationMenuItem key={item.title}>
-              {item.items ? (
-                <>
-                  <NavigationMenuTrigger className="bg-background hover:bg-accent text-foreground">
+    <div className="hidden md:block fixed top-0 left-0 right-0 bg-background z-50 border-b">
+      <div className="container mx-auto px-4">
+        <NavigationMenu className="relative">
+          <NavigationMenuList className="gap-2">
+            {navigationData.map((item) => (
+              <NavigationMenuItem key={item.title}>
+                {item.items ? (
+                  <>
+                    <NavigationMenuTrigger className="bg-background hover:bg-accent text-foreground">
+                      {item.title}
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <div className="absolute top-0 left-0 w-[400px] bg-white rounded-md shadow-lg border p-4 grid gap-3 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                        {item.items.map((subItem) => (
+                          <DesktopSubmenuItem
+                            key={subItem.title}
+                            title={subItem.title}
+                            href={subItem.href}
+                            description={subItem.description}
+                          />
+                        ))}
+                      </div>
+                    </NavigationMenuContent>
+                  </>
+                ) : (
+                  <Link
+                    to={item.href?.replace(/:\/$/, "") || "#"}
+                    className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                  >
                     {item.title}
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="absolute top-0 left-0 w-[400px] bg-white shadow-lg rounded-md p-4 grid gap-3 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                      {item.items.map((subItem) => (
-                        <DesktopSubmenuItem
-                          key={subItem.title}
-                          title={subItem.title}
-                          href={subItem.href}
-                          description={subItem.description}
-                        />
-                      ))}
-                    </div>
-                  </NavigationMenuContent>
-                </>
-              ) : (
+                  </Link>
+                )}
+              </NavigationMenuItem>
+            ))}
+            {session ? (
+              <NavigationMenuItem>
+                <button
+                  onClick={handleSignOut}
+                  className="cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
+                >
+                  Sign Out
+                </button>
+              </NavigationMenuItem>
+            ) : (
+              <NavigationMenuItem>
                 <Link
-                  to={item.href?.replace(/:\/$/, "") || "#"}
+                  to="/auth"
                   className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
                 >
-                  {item.title}
+                  Sign In
                 </Link>
-              )}
-            </NavigationMenuItem>
-          ))}
-          {session ? (
-            <NavigationMenuItem>
-              <button
-                onClick={handleSignOut}
-                className="cursor-pointer group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-              >
-                Sign Out
-              </button>
-            </NavigationMenuItem>
-          ) : (
-            <NavigationMenuItem>
-              <Link
-                to="/auth"
-                className="group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-accent/50 data-[state=open]:bg-accent/50"
-              >
-                Sign In
-              </Link>
-            </NavigationMenuItem>
-          )}
-        </NavigationMenuList>
-      </NavigationMenu>
+              </NavigationMenuItem>
+            )}
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
     </div>
   );
 };
