@@ -64,7 +64,7 @@ export const DesktopMenu = () => {
   console.log("DesktopMenu - Rendering with session:", session);
 
   return (
-    <NavigationMenu className="hidden md:flex">
+    <NavigationMenu>
       <NavigationMenuList className="gap-2">
         {navigationData.map((item) => (
           <NavigationMenuItem key={item.title}>
@@ -74,7 +74,7 @@ export const DesktopMenu = () => {
                   {item.title}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <div className="w-[400px] md:w-[500px] lg:w-[600px] p-4 md:grid-cols-2 grid gap-3">
+                  <div className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
                     {item.items.map((subItem) => (
                       <DesktopSubmenuItem
                         key={subItem.title}

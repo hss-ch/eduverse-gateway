@@ -105,7 +105,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
       <RatingStars
         rating={currentRating}
         userRating={userRating}
