@@ -8,7 +8,7 @@ interface DesktopSubmenuItemProps {
 }
 
 export const DesktopSubmenuItem = ({ title, href, description }: DesktopSubmenuItemProps) => {
-  console.log("Rendering submenu item:", title); // Debug log
+  console.log("Rendering submenu item:", title);
   
   return (
     <NavigationMenuLink asChild>
