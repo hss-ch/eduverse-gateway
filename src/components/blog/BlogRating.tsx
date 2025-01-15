@@ -15,14 +15,12 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   const { toast } = useToast();
   const [currentRating, setCurrentRating] = useState(initialRating);
   const [currentCount, setCurrentCount] = useState(initialCount);
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [userRating, setUserRating] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    const fetchUserRating = async () => {
-      if (!session?.user?.id) return;
-      
-      try {
+    if (session) {
+      const fetchUserRating = async () => {
         const { data, error } = await supabase
           .from('blog_ratings')
           .select('rating')
@@ -30,17 +28,21 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
           .eq('user_id', session.user.id)
           .maybeSingle();
 
-        if (error) throw error;
-        if (data) setUserRating(data.rating);
-      } catch (error) {
-        console.error('Error fetching user rating:', error);
-      }
-    };
+        if (error) {
+          console.error('Error fetching user rating:', error);
+          return;
+        }
 
-    fetchUserRating();
-  }, [id, session?.user?.id]);
+        if (data) {
+          setUserRating(data.rating);
+        }
+      };
 
-  const handleRating = async (rating: number, e: React.MouseEvent) => {
+      fetchUserRating();
+    }
+  }, [id, session]);
+
+  const handleRate = async (rating: number, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
@@ -56,55 +58,45 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
 
     if (isSubmitting) return;
 
+    setIsSubmitting(true);
+
     try {
-      setIsSubmitting(true);
-      console.log('Submitting rating:', { blog_id: id, user_id: session.user.id, rating });
-      
-      const { error: upsertError } = await supabase
+      const { error: ratingError } = await supabase
         .from('blog_ratings')
         .upsert({
           blog_id: id,
           user_id: session.user.id,
-          rating
+          rating: rating
         }, {
           onConflict: 'blog_id,user_id'
         });
 
-      if (upsertError) throw upsertError;
+      if (ratingError) throw ratingError;
 
-      // Fetch updated ratings
-      const { data: newRatings, error: fetchError } = await supabase
-        .from('blog_ratings')
-        .select('rating')
-        .eq('blog_id', id);
-
-      if (fetchError) throw fetchError;
-
-      const averageRating = newRatings.reduce((acc, curr) => acc + curr.rating, 0) / newRatings.length;
-
-      const { error: updateError } = await supabase
+      const { data: updatedBlog, error: blogError } = await supabase
         .from('blogs')
-        .update({ 
-          rating: averageRating,
-          ratings_count: newRatings.length
-        })
-        .eq('id', id);
+        .select('rating, ratings_count')
+        .eq('id', id)
+        .maybeSingle();
 
-      if (updateError) throw updateError;
+      if (blogError) throw blogError;
 
-      setCurrentRating(averageRating);
-      setCurrentCount(newRatings.length);
-      setUserRating(rating);
+      if (updatedBlog) {
+        setCurrentRating(updatedBlog.rating);
+        setCurrentCount(updatedBlog.ratings_count);
+        setUserRating(rating);
+      }
 
       toast({
         title: "Success",
-        description: "Rating submitted successfully"
+        description: "Rating updated successfully"
       });
+
     } catch (error: any) {
-      console.error('Error rating post:', error);
+      console.error('Error updating rating:', error);
       toast({
         title: "Error",
-        description: error.message || "Failed to submit rating",
+        description: "Failed to update rating",
         variant: "destructive"
       });
     } finally {
@@ -113,18 +105,12 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   };
 
   return (
-    <div 
-      className="flex items-center space-x-1" 
-      onClick={(e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      }}
-    >
+    <div className="flex items-center gap-2">
       <RatingStars
         rating={currentRating}
         userRating={userRating}
         isSubmitting={isSubmitting}
-        onRate={handleRating}
+        onRate={handleRate}
       />
       <RatingCount count={currentCount} />
     </div>

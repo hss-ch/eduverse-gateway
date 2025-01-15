@@ -13,7 +13,11 @@ export function RatingStars({ rating, userRating, isSubmitting, onRate }: Rating
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
-          onClick={(e) => onRate(star, e)}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onRate(star, e);
+          }}
           className={`text-yellow-400 hover:text-yellow-500 transition-colors ${
             isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
           }`}

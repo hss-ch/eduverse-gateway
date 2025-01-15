@@ -74,18 +74,15 @@ export const DesktopMenu = () => {
                   {item.title}
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
-                  <div className="w-[400px] md:w-[500px] lg:w-[600px] p-4 bg-background border rounded-md shadow-md">
-                    <ul className="grid gap-3 md:grid-cols-2">
-                      {item.items.map((subItem) => (
-                        <li key={subItem.title}>
-                          <DesktopSubmenuItem
-                            title={subItem.title}
-                            href={subItem.href}
-                            description={subItem.description}
-                          />
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="w-[400px] md:w-[500px] lg:w-[600px] p-4 md:grid-cols-2 grid gap-3">
+                    {item.items.map((subItem) => (
+                      <DesktopSubmenuItem
+                        key={subItem.title}
+                        title={subItem.title}
+                        href={subItem.href}
+                        description={subItem.description}
+                      />
+                    ))}
                   </div>
                 </NavigationMenuContent>
               </>
