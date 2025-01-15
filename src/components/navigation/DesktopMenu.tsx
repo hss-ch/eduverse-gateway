@@ -4,7 +4,6 @@ import {
   NavigationMenu,
   NavigationMenuContent,
   NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
@@ -20,7 +19,7 @@ export const DesktopMenu = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("DesktopMenu - Initial session check"); // Debug log
+    console.log("DesktopMenu - Initial session check");
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
     });
@@ -28,7 +27,7 @@ export const DesktopMenu = () => {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
-      console.log("DesktopMenu - Auth state changed:", session); // Debug log
+      console.log("DesktopMenu - Auth state changed:", session);
       setSession(session);
     });
 
@@ -62,7 +61,7 @@ export const DesktopMenu = () => {
     }
   };
 
-  console.log("DesktopMenu - Rendering with session:", session); // Debug log
+  console.log("DesktopMenu - Rendering with session:", session);
 
   return (
     <NavigationMenu className="hidden md:flex">

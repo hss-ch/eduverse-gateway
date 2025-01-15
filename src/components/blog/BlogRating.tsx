@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { RatingStars } from "./rating/RatingStars";
@@ -13,7 +12,6 @@ interface BlogRatingProps {
 }
 
 export function BlogRating({ id, initialRating, initialCount, session }: BlogRatingProps) {
-  const navigate = useNavigate();
   const { toast } = useToast();
   const [currentRating, setCurrentRating] = useState(initialRating);
   const [currentCount, setCurrentCount] = useState(initialCount);
@@ -47,13 +45,12 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
     e.stopPropagation();
     
     if (!session) {
-      console.log('User not authenticated, redirecting to auth page');
+      console.log('User not authenticated');
       toast({
         title: "Authentication Required",
         description: "Please sign in to rate posts",
         variant: "destructive"
       });
-      navigate("/auth");
       return;
     }
 
