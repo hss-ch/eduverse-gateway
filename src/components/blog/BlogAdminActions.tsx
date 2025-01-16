@@ -1,22 +1,23 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { DeleteBlogDialog } from "./admin/DeleteBlogDialog";
-import { PublishButton } from "./admin/PublishButton";
-import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { DeleteBlogDialog } from "./admin/DeleteBlogDialog";
+import { PublishButton } from "./admin/PublishButton";
+import { Loader2 } from "lucide-react";
 
 interface BlogAdminActionsProps {
   blogId: string;
-  isPublished: boolean;
-  onStatusChange?: () => void;
+  isPublished?: boolean;
+  onPublishChange?: (isPublished: boolean) => void;
 }
 
-export function BlogAdminActions({ blogId, isPublished, onStatusChange }: BlogAdminActionsProps) {
-  const navigate = useNavigate();
-  const { toast } = useToast();
+export function BlogAdminActions({ blogId, isPublished, onPublishChange }: BlogAdminActionsProps) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     const checkAdminStatus = async () => {
@@ -48,7 +49,7 @@ export function BlogAdminActions({ blogId, isPublished, onStatusChange }: BlogAd
         toast({
           title: "Error",
           description: "Failed to verify admin status",
-          variant: "destructive"
+          variant: "destructive",
         });
       } finally {
         setLoading(false);
@@ -59,11 +60,11 @@ export function BlogAdminActions({ blogId, isPublished, onStatusChange }: BlogAd
   }, [toast]);
 
   if (loading) {
-    return <div className="animate-pulse flex gap-2">
-      <div className="h-9 w-16 bg-muted rounded"></div>
-      <div className="h-9 w-20 bg-muted rounded"></div>
-      <div className="h-9 w-16 bg-muted rounded"></div>
-    </div>;
+    return (
+      <div className="flex justify-center p-4">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </div>
+    );
   }
 
   if (!isAdmin) {
@@ -71,21 +72,18 @@ export function BlogAdminActions({ blogId, isPublished, onStatusChange }: BlogAd
   }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 mt-4">
       <Button
         variant="outline"
-        size="sm"
-        onClick={() => navigate(`/blog/edit/${blogId}`)}
+        onClick={() => navigate(`/blog/${blogId}/edit`)}
       >
         Edit
       </Button>
-      
-      <PublishButton 
+      <PublishButton
         blogId={blogId}
-        isPublished={isPublished}
-        onStatusChange={onStatusChange}
+        initialPublished={isPublished}
+        onPublishChange={onPublishChange}
       />
-
       <DeleteBlogDialog blogId={blogId} />
     </div>
   );

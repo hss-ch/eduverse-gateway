@@ -1,22 +1,37 @@
 import { useState, useEffect } from "react";
-import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 import { RatingStars } from "./rating/RatingStars";
 import { RatingCount } from "./rating/RatingCount";
+import { Session } from "@supabase/supabase-js";
 
 interface BlogRatingProps {
   id: string;
-  initialRating: number;
-  initialCount: number;
-  session: any;
+  initialRating?: number;
+  initialCount?: number;
 }
 
-export function BlogRating({ id, initialRating, initialCount, session }: BlogRatingProps) {
-  const { toast } = useToast();
+export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRatingProps) {
+  const [session, setSession] = useState<Session | null>(null);
   const [currentRating, setCurrentRating] = useState(initialRating);
   const [currentCount, setCurrentCount] = useState(initialCount);
   const [userRating, setUserRating] = useState<number | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (session?.user?.id) {
@@ -42,9 +57,9 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
 
       fetchUserRating();
     }
-  }, [id, session]);
+  }, [id, session?.user?.id]);
 
-  const handleRate = async (rating: number, e: React.MouseEvent) => {
+  const handleRating = async (rating: number, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
@@ -53,7 +68,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       toast({
         title: "Authentication Required",
         description: "Please sign in to rate posts",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -70,34 +85,44 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
           blog_id: id,
           user_id: session.user.id,
           rating: rating
+        }, {
+          onConflict: 'blog_id,user_id'
         });
 
-      if (ratingError) throw ratingError;
+      if (ratingError) {
+        console.error('BlogRating - Error upserting rating:', ratingError);
+        throw ratingError;
+      }
 
+      // Fetch updated blog data
       const { data: updatedBlog, error: blogError } = await supabase
         .from('blogs')
         .select('rating, ratings_count')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
-      if (blogError) throw blogError;
+      if (blogError) {
+        console.error('BlogRating - Error fetching updated blog:', blogError);
+        throw blogError;
+      }
 
-      console.log("BlogRating - Updated blog data:", updatedBlog);
-      setCurrentRating(updatedBlog.rating);
-      setCurrentCount(updatedBlog.ratings_count);
-      setUserRating(rating);
+      if (updatedBlog) {
+        console.log("BlogRating - Updated blog data:", updatedBlog);
+        setCurrentRating(updatedBlog.rating);
+        setCurrentCount(updatedBlog.ratings_count);
+        setUserRating(rating);
 
-      toast({
-        title: "Success",
-        description: "Rating updated successfully"
-      });
-
+        toast({
+          title: "Success",
+          description: "Rating updated successfully",
+        });
+      }
     } catch (error: any) {
       console.error('BlogRating - Error updating rating:', error);
       toast({
         title: "Error",
         description: "Failed to update rating",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsSubmitting(false);
@@ -105,12 +130,11 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   };
 
   return (
-    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
+    <div className="flex items-center gap-2">
       <RatingStars
-        rating={currentRating}
-        userRating={userRating}
-        isSubmitting={isSubmitting}
-        onRate={handleRate}
+        rating={userRating ?? currentRating}
+        onRate={handleRating}
+        isInteractive={!!session}
       />
       <RatingCount count={currentCount} />
     </div>
