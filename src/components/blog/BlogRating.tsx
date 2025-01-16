@@ -19,8 +19,9 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (session) {
+    if (session?.user?.id) {
       const fetchUserRating = async () => {
+        console.log("Fetching user rating for blog:", id);
         const { data, error } = await supabase
           .from('blog_ratings')
           .select('rating')
@@ -34,6 +35,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
         }
 
         if (data) {
+          console.log("Found user rating:", data.rating);
           setUserRating(data.rating);
         }
       };
@@ -46,7 +48,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
     e.preventDefault();
     e.stopPropagation();
     
-    if (!session) {
+    if (!session?.user?.id) {
       console.log('User not authenticated');
       toast({
         title: "Authentication Required",
@@ -59,8 +61,10 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
     if (isSubmitting) return;
 
     setIsSubmitting(true);
+    console.log("Submitting rating:", rating, "for blog:", id);
 
     try {
+      // First, insert or update the user's rating
       const { error: ratingError } = await supabase
         .from('blog_ratings')
         .upsert({
@@ -73,6 +77,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
 
       if (ratingError) throw ratingError;
 
+      // Then fetch the updated blog data
       const { data: updatedBlog, error: blogError } = await supabase
         .from('blogs')
         .select('rating, ratings_count')
@@ -82,6 +87,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       if (blogError) throw blogError;
 
       if (updatedBlog) {
+        console.log("Updated blog rating data:", updatedBlog);
         setCurrentRating(updatedBlog.rating);
         setCurrentCount(updatedBlog.ratings_count);
         setUserRating(rating);

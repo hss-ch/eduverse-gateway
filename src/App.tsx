@@ -64,6 +64,12 @@ function App() {
               <Route path="/careers" element={<Careers />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
+              
+              {/* Solution Routes - No Authentication Required */}
+              <Route path="/academic" element={<Academic />} />
+              <Route path="/administrative" element={<Administrative />} />
+              <Route path="/planning" element={<Planning />} />
+              <Route path="/accreditation" element={<Accreditation />} />
 
               {/* Protected Routes */}
               <Route
@@ -71,38 +77,6 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Dashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/academic"
-                element={
-                  <ProtectedRoute>
-                    <Academic />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/administrative"
-                element={
-                  <ProtectedRoute>
-                    <Administrative />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/planning"
-                element={
-                  <ProtectedRoute>
-                    <Planning />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/accreditation"
-                element={
-                  <ProtectedRoute>
-                    <Accreditation />
                   </ProtectedRoute>
                 }
               />
