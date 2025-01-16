@@ -134,6 +134,7 @@ export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRati
       <RatingStars
         rating={userRating ?? currentRating}
         onRate={handleRating}
+        isSubmitting={isSubmitting}
         isInteractive={!!session}
       />
       <RatingCount count={currentCount} />

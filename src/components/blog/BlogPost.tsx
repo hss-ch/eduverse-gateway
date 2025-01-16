@@ -13,7 +13,6 @@ export function BlogPost() {
   const [blog, setBlog] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
-  const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
     if (!id) {
@@ -30,22 +29,7 @@ export function BlogPost() {
 
     getBlog();
     checkAdminStatus();
-    checkSession();
   }, [id, navigate, toast]);
-
-  async function checkSession() {
-    try {
-      const { data: { session: currentSession } } = await supabase.auth.getSession();
-      if (!currentSession) {
-        navigate("/auth");
-        return;
-      }
-      setSession(currentSession);
-    } catch (error) {
-      console.error("Error checking session:", error);
-      navigate("/auth");
-    }
-  }
 
   async function getBlog() {
     try {
@@ -150,7 +134,7 @@ export function BlogPost() {
             <BlogAdminActions
               blogId={blog.id}
               isPublished={blog.published}
-              onStatusChange={getBlog}
+              onPublishChange={getBlog}
             />
           )}
         </div>
@@ -166,7 +150,6 @@ export function BlogPost() {
             id={blog.id} 
             initialRating={blog.rating || 0}
             initialCount={blog.ratings_count || 0}
-            session={session}
           />
         </div>
       </CardContent>

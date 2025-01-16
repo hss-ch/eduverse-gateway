@@ -2,30 +2,26 @@ import { Star } from "lucide-react";
 
 interface RatingStarsProps {
   rating: number;
-  userRating: number | null;
-  isSubmitting: boolean;
   onRate: (rating: number, e: React.MouseEvent) => void;
+  isSubmitting?: boolean;
+  isInteractive?: boolean;
 }
 
-export function RatingStars({ rating, userRating, isSubmitting, onRate }: RatingStarsProps) {
+export function RatingStars({ rating, onRate, isSubmitting, isInteractive = true }: RatingStarsProps) {
   return (
     <>
       {[1, 2, 3, 4, 5].map((star) => (
         <button
           key={star}
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            onRate(star, e);
-          }}
+          onClick={(e) => onRate(star, e)}
           className={`text-yellow-400 hover:text-yellow-500 transition-colors ${
-            isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+            !isInteractive || isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
           }`}
-          disabled={isSubmitting}
+          disabled={!isInteractive || isSubmitting}
         >
           <Star 
             className={`h-4 w-4 ${
-              star <= (userRating || rating) ? 'fill-current' : ''
+              star <= rating ? 'fill-current' : ''
             }`}
           />
         </button>

@@ -5,14 +5,14 @@ import { Button } from "@/components/ui/button";
 
 interface PublishButtonProps {
   blogId: string;
-  isPublished: boolean;
-  onStatusChange?: () => void;
+  isPublished?: boolean;
+  onPublishChange?: (isPublished: boolean) => void;
 }
 
 export function PublishButton({ 
   blogId, 
-  isPublished, 
-  onStatusChange 
+  isPublished = false, 
+  onPublishChange 
 }: PublishButtonProps) {
   const { toast } = useToast();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -20,7 +20,7 @@ export function PublishButton({
   const togglePublishStatus = async () => {
     try {
       setIsUpdating(true);
-      console.log("BlogAdminActions - Toggling publish status for blog:", blogId);
+      console.log("PublishButton - Toggling publish status for blog:", blogId);
 
       const { error } = await supabase
         .from("blogs")
@@ -34,11 +34,11 @@ export function PublishButton({
         description: `Blog post ${isPublished ? "unpublished" : "published"} successfully`,
       });
 
-      if (onStatusChange) {
-        onStatusChange();
+      if (onPublishChange) {
+        onPublishChange(!isPublished);
       }
     } catch (error: any) {
-      console.error("Error updating blog status:", error);
+      console.error("PublishButton - Error updating blog status:", error);
       toast({
         title: "Error",
         description: error.message,
@@ -52,7 +52,6 @@ export function PublishButton({
   return (
     <Button
       variant={isPublished ? "destructive" : "default"}
-      size="sm"
       onClick={togglePublishStatus}
       disabled={isUpdating}
     >
