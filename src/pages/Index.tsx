@@ -12,6 +12,8 @@ import {
 } from "@/components/ui/carousel";
 
 const Index = () => {
+  console.log("Index page rendering"); // Debug log
+
   const slides = [
     {
       title: "Transform Your Institution",
@@ -43,7 +45,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-accent">
+    <div className="min-h-screen bg-background">
       <MainNav />
       
       {/* Hero Section with Slider */}
@@ -88,7 +90,7 @@ const Index = () => {
         </div>
       </section>
 
-      <section className="py-24 px-6 bg-white">
+      <section className="py-24 px-6">
         <div className="container">
           <motion.div
             initial={{ opacity: 0 }}
@@ -96,10 +98,10 @@ const Index = () => {
             transition={{ duration: 0.5 }}
             className="text-center mb-16"
           >
-            <h2 className="text-4xl font-bold text-secondary mb-4">
+            <h2 className="text-4xl font-bold text-foreground mb-4">
               Comprehensive Solutions
             </h2>
-            <p className="text-secondary/70 max-w-2xl mx-auto">
+            <p className="text-muted-foreground max-w-2xl mx-auto">
               Everything you need to manage your educational institution efficiently
             </p>
           </motion.div>
@@ -111,13 +113,13 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-8 rounded-2xl bg-accent hover:shadow-lg transition-all duration-300"
+                className="p-8 rounded-2xl bg-card hover:shadow-lg transition-all duration-300"
               >
                 <feature.icon className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-secondary mb-2">
+                <h3 className="text-xl font-semibold text-foreground mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-secondary/70">{feature.description}</p>
+                <p className="text-muted-foreground">{feature.description}</p>
               </motion.div>
             ))}
           </div>
@@ -133,15 +135,15 @@ const Index = () => {
             transition={{ duration: 0.5 }}
             className="text-center"
           >
-            <h2 className="text-4xl font-bold text-white mb-6">
+            <h2 className="text-4xl font-bold text-secondary-foreground mb-6">
               Ready to Transform Your Institution?
             </h2>
-            <p className="text-white/80 max-w-2xl mx-auto mb-8">
+            <p className="text-secondary-foreground/80 max-w-2xl mx-auto mb-8">
               Join hundreds of educational institutions that have already modernized their operations with our ERP solution.
             </p>
             <Link
               to="/contact"
-              className="inline-flex items-center px-8 py-4 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
+              className="inline-flex items-center px-8 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
             >
               Schedule a Demo
               <ArrowRight className="ml-2 h-5 w-5" />
