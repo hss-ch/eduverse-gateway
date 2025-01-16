@@ -81,7 +81,7 @@ export function BlogAdminActions({ blogId, isPublished, onPublishChange }: BlogA
       </Button>
       <PublishButton
         blogId={blogId}
-        initialPublished={isPublished}
+        isPublished={isPublished}
         onPublishChange={onPublishChange}
       />
       <DeleteBlogDialog blogId={blogId} />
