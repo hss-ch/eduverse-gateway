@@ -21,7 +21,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
   useEffect(() => {
     if (session?.user?.id) {
       const fetchUserRating = async () => {
-        console.log("Fetching user rating for blog:", id);
+        console.log("BlogRating - Fetching user rating for blog:", id);
         const { data, error } = await supabase
           .from('blog_ratings')
           .select('rating')
@@ -30,12 +30,12 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
           .maybeSingle();
 
         if (error) {
-          console.error('Error fetching user rating:', error);
+          console.error('BlogRating - Error fetching user rating:', error);
           return;
         }
 
         if (data) {
-          console.log("Found user rating:", data.rating);
+          console.log("BlogRating - Found user rating:", data.rating);
           setUserRating(data.rating);
         }
       };
@@ -49,7 +49,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
     e.stopPropagation();
     
     if (!session?.user?.id) {
-      console.log('User not authenticated');
+      console.log('BlogRating - User not authenticated');
       toast({
         title: "Authentication Required",
         description: "Please sign in to rate posts",
@@ -61,37 +61,31 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
     if (isSubmitting) return;
 
     setIsSubmitting(true);
-    console.log("Submitting rating:", rating, "for blog:", id);
+    console.log("BlogRating - Submitting rating:", rating, "for blog:", id);
 
     try {
-      // First, insert or update the user's rating
       const { error: ratingError } = await supabase
         .from('blog_ratings')
         .upsert({
           blog_id: id,
           user_id: session.user.id,
           rating: rating
-        }, {
-          onConflict: 'blog_id,user_id'
         });
 
       if (ratingError) throw ratingError;
 
-      // Then fetch the updated blog data
       const { data: updatedBlog, error: blogError } = await supabase
         .from('blogs')
         .select('rating, ratings_count')
         .eq('id', id)
-        .maybeSingle();
+        .single();
 
       if (blogError) throw blogError;
 
-      if (updatedBlog) {
-        console.log("Updated blog rating data:", updatedBlog);
-        setCurrentRating(updatedBlog.rating);
-        setCurrentCount(updatedBlog.ratings_count);
-        setUserRating(rating);
-      }
+      console.log("BlogRating - Updated blog data:", updatedBlog);
+      setCurrentRating(updatedBlog.rating);
+      setCurrentCount(updatedBlog.ratings_count);
+      setUserRating(rating);
 
       toast({
         title: "Success",
@@ -99,7 +93,7 @@ export function BlogRating({ id, initialRating, initialCount, session }: BlogRat
       });
 
     } catch (error: any) {
-      console.error('Error updating rating:', error);
+      console.error('BlogRating - Error updating rating:', error);
       toast({
         title: "Error",
         description: "Failed to update rating",

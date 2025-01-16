@@ -21,8 +21,11 @@ export function BlogAdminActions({ blogId, isPublished, onStatusChange }: BlogAd
   useEffect(() => {
     const checkAdminStatus = async () => {
       try {
+        console.log("BlogAdminActions - Checking admin status");
         const { data: { user } } = await supabase.auth.getUser();
+        
         if (!user) {
+          console.log("BlogAdminActions - No user found");
           setLoading(false);
           return;
         }
@@ -33,11 +36,15 @@ export function BlogAdminActions({ blogId, isPublished, onStatusChange }: BlogAd
           .eq('id', user.id)
           .single();
 
-        if (error) throw error;
+        if (error) {
+          console.error("BlogAdminActions - Error fetching profile:", error);
+          throw error;
+        }
 
+        console.log("BlogAdminActions - User role:", profile?.role);
         setIsAdmin(profile?.role === 'admin');
       } catch (error) {
-        console.error('Error checking admin status:', error);
+        console.error('BlogAdminActions - Error checking admin status:', error);
         toast({
           title: "Error",
           description: "Failed to verify admin status",
