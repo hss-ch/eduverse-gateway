@@ -95,19 +95,21 @@ export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRati
         .from('blogs')
         .select('rating, ratings_count')
         .eq('id', id)
-        .single();
+        .maybeSingle();
 
       if (blogError) throw blogError;
 
-      console.log("BlogRating - Updated blog data:", updatedBlog);
-      setCurrentRating(updatedBlog.rating);
-      setCurrentCount(updatedBlog.ratings_count);
-      setUserRating(rating);
+      if (updatedBlog) {
+        console.log("BlogRating - Updated blog data:", updatedBlog);
+        setCurrentRating(updatedBlog.rating);
+        setCurrentCount(updatedBlog.ratings_count);
+        setUserRating(rating);
 
-      toast({
-        title: "Success",
-        description: "Rating updated successfully",
-      });
+        toast({
+          title: "Success",
+          description: "Rating updated successfully",
+        });
+      }
     } catch (error: any) {
       console.error('BlogRating - Error updating rating:', error);
       toast({

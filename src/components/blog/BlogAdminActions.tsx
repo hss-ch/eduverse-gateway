@@ -31,6 +31,7 @@ export function BlogAdminActions({ blogId, isPublished, onPublishChange }: BlogA
           return;
         }
 
+        // Get user's profile with role
         const { data: profile, error } = await supabase
           .from('profiles')
           .select('role')
