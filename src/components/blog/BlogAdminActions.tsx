@@ -72,7 +72,7 @@ export function BlogAdminActions({ blogId, isPublished, onPublishChange }: BlogA
   }
 
   return (
-    <div className="flex gap-2 mt-4">
+    <div className="flex gap-2 mt-4" onClick={(e) => e.stopPropagation()}>
       <Button
         variant="outline"
         onClick={() => navigate(`/blog/${blogId}/edit`)}

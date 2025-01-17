@@ -46,7 +46,8 @@ export function BlogPost() {
         .select(`
           *,
           profiles:author_id (
-            full_name
+            full_name,
+            role
           )
         `)
         .eq("id", id)

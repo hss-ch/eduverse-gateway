@@ -123,7 +123,7 @@ export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRati
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
       <RatingStars
         rating={userRating ?? currentRating}
         onRate={handleRating}
