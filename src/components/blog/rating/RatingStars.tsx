@@ -15,7 +15,7 @@ export function RatingStars({ rating, onRate, isSubmitting, isInteractive = true
           key={star}
           onClick={(e) => onRate(star, e)}
           className={`text-yellow-400 hover:text-yellow-500 transition-colors ${
-            !isInteractive || isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+            !isInteractive || isSubmitting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'
           }`}
           disabled={!isInteractive || isSubmitting}
         >

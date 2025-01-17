@@ -89,22 +89,15 @@ export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRati
           onConflict: 'blog_id,user_id'
         });
 
-      if (ratingError) {
-        console.error('BlogRating - Error upserting rating:', ratingError);
-        throw ratingError;
-      }
+      if (ratingError) throw ratingError;
 
-      // Fetch updated blog data
       const { data: updatedBlog, error: blogError } = await supabase
         .from('blogs')
         .select('rating, ratings_count')
         .eq('id', id)
         .maybeSingle();
 
-      if (blogError) {
-        console.error('BlogRating - Error fetching updated blog:', blogError);
-        throw blogError;
-      }
+      if (blogError) throw blogError;
 
       if (updatedBlog) {
         console.log("BlogRating - Updated blog data:", updatedBlog);

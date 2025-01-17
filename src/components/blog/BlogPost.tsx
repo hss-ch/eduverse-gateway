@@ -5,6 +5,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { BlogRating } from "./BlogRating";
 import { BlogAdminActions } from "./BlogAdminActions";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
 
 export function BlogPost() {
   const { id } = useParams();
@@ -12,7 +14,6 @@ export function BlogPost() {
   const { toast } = useToast();
   const [blog, setBlog] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     if (!id) {
@@ -28,7 +29,6 @@ export function BlogPost() {
     }
 
     getBlog();
-    checkAdminStatus();
   }, [id, navigate, toast]);
 
   async function getBlog() {
@@ -79,31 +79,6 @@ export function BlogPost() {
     }
   }
 
-  async function checkAdminStatus() {
-    try {
-      console.log("BlogPost - Checking admin status");
-      
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) {
-        navigate("/auth");
-        return;
-      }
-
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-
-      if (error) throw error;
-
-      console.log("BlogPost - User role:", profile?.role);
-      setIsAdmin(profile?.role === "admin");
-    } catch (error: any) {
-      console.error("Error checking admin status:", error);
-    }
-  }
-
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -121,38 +96,54 @@ export function BlogPost() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="text-3xl font-bold mb-2">{blog.title}</CardTitle>
-            <p className="text-sm text-muted-foreground">
-              By {blog.profiles?.full_name || "Unknown Author"}
-            </p>
-          </div>
-          {isAdmin && (
+    <div className="max-w-4xl mx-auto px-6 py-8">
+      <Button
+        variant="ghost"
+        className="mb-6"
+        onClick={() => navigate('/blog')}
+      >
+        <ArrowLeft className="mr-2 h-4 w-4" />
+        Back to Blog
+      </Button>
+
+      <Card>
+        <CardHeader>
+          <div className="flex justify-between items-start">
+            <div>
+              <CardTitle className="text-3xl font-bold mb-2">{blog.title}</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                By {blog.profiles?.full_name || "Unknown Author"}
+              </p>
+            </div>
             <BlogAdminActions
               blogId={blog.id}
               isPublished={blog.published}
               onPublishChange={getBlog}
             />
+          </div>
+        </CardHeader>
+        <CardContent>
+          {blog.image_url && (
+            <img
+              src={blog.image_url}
+              alt={blog.title}
+              className="w-full h-auto rounded-lg mb-6"
+            />
           )}
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="prose max-w-none">
-          {blog.content.split("\n").map((paragraph: string, index: number) => (
-            <p key={index}>{paragraph}</p>
-          ))}
-        </div>
-        <div className="mt-8">
-          <BlogRating 
-            id={blog.id} 
-            initialRating={blog.rating || 0}
-            initialCount={blog.ratings_count || 0}
-          />
-        </div>
-      </CardContent>
-    </Card>
+          <div className="prose max-w-none">
+            {blog.content.split("\n").map((paragraph: string, index: number) => (
+              <p key={index}>{paragraph}</p>
+            ))}
+          </div>
+          <div className="mt-8">
+            <BlogRating 
+              id={blog.id} 
+              initialRating={blog.rating || 0}
+              initialCount={blog.ratings_count || 0}
+            />
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
