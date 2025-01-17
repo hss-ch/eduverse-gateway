@@ -10,7 +10,7 @@ import { Loader2 } from "lucide-react";
 interface BlogAdminActionsProps {
   blogId: string;
   isPublished?: boolean;
-  onPublishChange?: (isPublished: boolean) => void;
+  onPublishChange?: () => void;
 }
 
 export function BlogAdminActions({ blogId, isPublished, onPublishChange }: BlogAdminActionsProps) {
@@ -42,8 +42,9 @@ export function BlogAdminActions({ blogId, isPublished, onPublishChange }: BlogA
           throw error;
         }
 
-        console.log("BlogAdminActions - User role:", profile?.role);
-        setIsAdmin(profile?.role === 'admin');
+        const isUserAdmin = profile?.role === 'admin';
+        console.log("BlogAdminActions - User role:", profile?.role, "Is admin:", isUserAdmin);
+        setIsAdmin(isUserAdmin);
       } catch (error) {
         console.error('BlogAdminActions - Error checking admin status:', error);
         toast({
