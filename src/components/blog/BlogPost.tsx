@@ -41,6 +41,8 @@ export function BlogPost() {
       setLoading(true);
       console.log("BlogPost - Fetching blog:", id);
 
+      const { data: { user } } = await supabase.auth.getUser();
+      
       const { data: blogData, error: blogError } = await supabase
         .from("blogs")
         .select(`
@@ -64,6 +66,18 @@ export function BlogPost() {
         });
         navigate('/blog');
       } else {
+        // Check if the blog is published or if the user is the author
+        if (!blogData.published && (!user || user.id !== blogData.author_id)) {
+          console.log("BlogPost - Unauthorized access to unpublished blog");
+          toast({
+            title: "Unauthorized",
+            description: "You don't have permission to view this blog post",
+            variant: "destructive",
+          });
+          navigate('/blog');
+          return;
+        }
+
         console.log("BlogPost - Blog data:", blogData);
         setBlog(blogData);
       }
