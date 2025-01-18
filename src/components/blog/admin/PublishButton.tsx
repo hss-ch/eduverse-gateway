@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 interface PublishButtonProps {
   blogId: string;
   isPublished?: boolean;
-  onPublishChange?: (isPublished: boolean) => void;
+  onPublishChange?: () => void;
 }
 
 export function PublishButton({ 
@@ -35,7 +35,7 @@ export function PublishButton({
       });
 
       if (onPublishChange) {
-        onPublishChange(!isPublished);
+        onPublishChange();
       }
     } catch (error: any) {
       console.error("PublishButton - Error updating blog status:", error);

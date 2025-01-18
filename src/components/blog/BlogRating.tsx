@@ -86,6 +86,8 @@ export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRati
           blog_id: id,
           user_id: session.user.id,
           rating: rating
+        }, {
+          onConflict: 'blog_id,user_id'
         });
 
       if (ratingError) throw ratingError;
@@ -95,21 +97,19 @@ export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRati
         .from('blogs')
         .select('rating, ratings_count')
         .eq('id', id)
-        .maybeSingle();
+        .single();
 
       if (blogError) throw blogError;
 
-      if (updatedBlog) {
-        console.log("BlogRating - Updated blog data:", updatedBlog);
-        setCurrentRating(updatedBlog.rating);
-        setCurrentCount(updatedBlog.ratings_count);
-        setUserRating(rating);
+      console.log("BlogRating - Updated blog data:", updatedBlog);
+      setCurrentRating(updatedBlog.rating);
+      setCurrentCount(updatedBlog.ratings_count);
+      setUserRating(rating);
 
-        toast({
-          title: "Success",
-          description: "Rating updated successfully",
-        });
-      }
+      toast({
+        title: "Success",
+        description: "Rating updated successfully",
+      });
     } catch (error: any) {
       console.error('BlogRating - Error updating rating:', error);
       toast({
