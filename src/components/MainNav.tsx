@@ -31,7 +31,7 @@ export function MainNav() {
             <NavigationLogo />
           </Link>
           
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 -ml-8"> {/* Added -ml-8 to move menu left */}
             <div className="hidden md:block">
               <DesktopMenu />
             </div>
