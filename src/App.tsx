@@ -22,6 +22,11 @@ import Academic from "@/pages/Academic";
 import Administrative from "@/pages/Administrative";
 import Planning from "@/pages/Planning";
 import Accreditation from "@/pages/Accreditation";
+import NaacAccreditation from "@/pages/accreditation/NaacAccreditation";
+import NbaAccreditation from "@/pages/accreditation/NbaAccreditation";
+import AbetAccreditation from "@/pages/accreditation/AbetAccreditation";
+import NirfAccreditation from "@/pages/accreditation/NirfAccreditation";
+import QsAccreditation from "@/pages/accreditation/QsAccreditation";
 import Dashboard from "@/pages/Dashboard";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
 
@@ -70,6 +75,11 @@ function App() {
               <Route path="/administrative" element={<Administrative />} />
               <Route path="/planning" element={<Planning />} />
               <Route path="/accreditation" element={<Accreditation />} />
+              <Route path="/accreditation/naac" element={<NaacAccreditation />} />
+              <Route path="/accreditation/nba" element={<NbaAccreditation />} />
+              <Route path="/accreditation/abet" element={<AbetAccreditation />} />
+              <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
+              <Route path="/accreditation/qs" element={<QsAccreditation />} />
 
               {/* Protected Routes */}
               <Route

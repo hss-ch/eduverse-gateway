@@ -93,7 +93,7 @@ const Accreditation = () => {
                     ))}
                   </ul>
                   <Link
-                    to={body.route || `/accreditation/${body.name.toLowerCase()}`}
+                    to={body.route}
                     className="mt-6 inline-flex items-center px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
                   >
                     Learn More
