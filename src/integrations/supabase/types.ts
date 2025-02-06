@@ -160,6 +160,36 @@ export type Database = {
         }
         Relationships: []
       }
+      job_listings: {
+        Row: {
+          created_at: string
+          department: string
+          description: string
+          id: string
+          location: string
+          title: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          description: string
+          id?: string
+          location: string
+          title: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          description?: string
+          id?: string
+          location?: string
+          title?: string
+          type?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
