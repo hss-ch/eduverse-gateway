@@ -7,6 +7,7 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
 interface EmailRequest {
@@ -17,14 +18,26 @@ interface EmailRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
+  console.log("Function invoked with method:", req.method);
+  
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { 
+      headers: corsHeaders,
+      status: 204
+    });
   }
 
   try {
-    console.log("Received email request");
+    console.log("Parsing request body");
     const { to, subject, message, name }: EmailRequest = await req.json();
+
+    console.log("Request data:", { to, subject, name });
+    
+    if (!to || !subject || !message || !name) {
+      console.error("Missing required fields");
+      throw new Error("Missing required fields");
+    }
 
     console.log("Sending email to:", to);
     const emailResponse = await resend.emails.send({
@@ -50,10 +63,16 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in send-email function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ 
+        error: error.message,
+        details: error.toString()
+      }),
       {
         status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+        headers: { 
+          "Content-Type": "application/json",
+          ...corsHeaders
+        },
       }
     );
   }
