@@ -23,6 +23,7 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
+    console.log("Received email request");
     const { to, subject, message, name }: EmailRequest = await req.json();
 
     console.log("Sending email to:", to);
