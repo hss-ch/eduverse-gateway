@@ -7,7 +7,6 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
     "authorization, x-client-info, apikey, content-type",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
 interface EmailRequest {
@@ -18,35 +17,30 @@ interface EmailRequest {
 }
 
 const handler = async (req: Request): Promise<Response> => {
-  console.log("Function invoked with method:", req.method);
-  
+  console.log("Received request to send-email function");
+
   // Handle CORS preflight requests
   if (req.method === "OPTIONS") {
-    return new Response(null, { 
-      headers: corsHeaders,
-      status: 204
-    });
+    console.log("Handling CORS preflight request");
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    console.log("Parsing request body");
     const { to, subject, message, name }: EmailRequest = await req.json();
+    console.log("Parsed email request:", { to, subject, name });
 
-    console.log("Request data:", { to, subject, name });
-    
-    if (!to || !subject || !message || !name) {
+    if (!to || !subject || !message) {
       console.error("Missing required fields");
-      throw new Error("Missing required fields");
+      throw new Error("Missing required fields: to, subject, and message are required");
     }
 
-    console.log("Sending email to:", to);
     const emailResponse = await resend.emails.send({
       from: "Lovable <onboarding@resend.dev>",
       to: [to],
       subject: subject,
       html: `
         <h1>Hello ${name},</h1>
-        <p>${message}</p>
+        <div>${message}</div>
         <p>Best regards,<br>The Team</p>
       `,
     });
@@ -63,16 +57,10 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in send-email function:", error);
     return new Response(
-      JSON.stringify({ 
-        error: error.message,
-        details: error.toString()
-      }),
+      JSON.stringify({ error: error.message }),
       {
         status: 500,
-        headers: { 
-          "Content-Type": "application/json",
-          ...corsHeaders
-        },
+        headers: { "Content-Type": "application/json", ...corsHeaders },
       }
     );
   }
