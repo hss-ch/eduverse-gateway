@@ -34,14 +34,18 @@ const handler = async (req: Request): Promise<Response> => {
       throw new Error("Missing required fields: to, subject, and message are required");
     }
 
+    // For testing, we'll send from and to the same email address
     const emailResponse = await resend.emails.send({
-      from: "Lovable <onboarding@resend.dev>",
-      to: [to],
-      subject: subject,
+      from: "hss_ch@yahoo.com",
+      to: ["hss_ch@yahoo.com"], // During testing, we can only send to this email
+      reply_to: to, // Add the original recipient as reply-to
+      subject: `[From: ${name}] ${subject}`,
       html: `
-        <h1>Hello ${name},</h1>
+        <h1>New Message from ${name} (${to})</h1>
         <div>${message}</div>
         <p>Best regards,<br>The Team</p>
+        <hr>
+        <p><small>This email was sent to you because ${name} (${to}) tried to contact you through the website.</small></p>
       `,
     });
 
