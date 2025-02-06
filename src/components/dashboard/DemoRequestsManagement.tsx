@@ -18,10 +18,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export const DemoRequestsManagement = () => {
   const { toast } = useToast();
   const [selectedStatus, setSelectedStatus] = useState<string>("");
+  const [emailContent, setEmailContent] = useState({
+    subject: "",
+    message: "",
+  });
 
   const { data: demoRequests, isLoading } = useQuery({
     queryKey: ["demo-requests"],
@@ -65,6 +82,33 @@ export const DemoRequestsManagement = () => {
     }
   };
 
+  const sendEmail = async (to: string, name: string) => {
+    try {
+      const response = await supabase.functions.invoke('send-email', {
+        body: {
+          to,
+          subject: emailContent.subject,
+          message: emailContent.message,
+          name,
+        },
+      });
+
+      if (response.error) throw response.error;
+
+      toast({
+        title: "Email Sent",
+        description: "Your email has been sent successfully.",
+      });
+    } catch (error: any) {
+      console.error("Error sending email:", error);
+      toast({
+        title: "Error",
+        description: "Failed to send email. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   if (isLoading) {
     return <div>Loading demo requests...</div>;
   }
@@ -81,6 +125,7 @@ export const DemoRequestsManagement = () => {
             <TableHead>Preferred Date</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Message</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -110,6 +155,56 @@ export const DemoRequestsManagement = () => {
               </TableCell>
               <TableCell className="max-w-md truncate">
                 {demo.message}
+              </TableCell>
+              <TableCell>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" size="sm">
+                      Send Email
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Send Email Response</DialogTitle>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                      <div className="grid gap-2">
+                        <Label htmlFor="subject">Subject</Label>
+                        <Input
+                          id="subject"
+                          value={emailContent.subject}
+                          onChange={(e) =>
+                            setEmailContent((prev) => ({
+                              ...prev,
+                              subject: e.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                      <div className="grid gap-2">
+                        <Label htmlFor="message">Message</Label>
+                        <Textarea
+                          id="message"
+                          value={emailContent.message}
+                          onChange={(e) =>
+                            setEmailContent((prev) => ({
+                              ...prev,
+                              message: e.target.value,
+                            }))
+                          }
+                        />
+                      </div>
+                    </div>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="outline">Cancel</Button>
+                      </DialogClose>
+                      <Button onClick={() => sendEmail(demo.email, demo.name)}>
+                        Send Email
+                      </Button>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
               </TableCell>
             </TableRow>
           ))}
