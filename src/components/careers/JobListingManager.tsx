@@ -200,4 +200,4 @@ export function JobListingManager() {
       )}
     </div>
   );
-}
+};
