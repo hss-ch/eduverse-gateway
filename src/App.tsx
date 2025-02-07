@@ -15,6 +15,10 @@ import BlogNew from "@/pages/BlogNew";
 import { BlogLayout } from "@/components/blog/BlogLayout";
 import Pricing from "@/pages/Pricing";
 import Features from "@/pages/Features";
+import AdmissionsManagement from "@/pages/features/AdmissionsManagement";
+import StudentManagement from "@/pages/features/StudentManagement";
+import StaffManagement from "@/pages/features/StaffManagement";
+import ExaminationManagement from "@/pages/features/ExaminationManagement";
 import Careers from "@/pages/Careers";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
@@ -40,7 +44,7 @@ const queryClient = new QueryClient({
 });
 
 function App() {
-  console.log("App rendering"); // Debug log
+  console.log("App rendering");
   
   return (
     <QueryClientProvider client={queryClient}>
@@ -66,6 +70,10 @@ function App() {
               </Route>
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/features" element={<Features />} />
+              <Route path="/features/admissions" element={<AdmissionsManagement />} />
+              <Route path="/features/student-management" element={<StudentManagement />} />
+              <Route path="/features/staff-management" element={<StaffManagement />} />
+              <Route path="/features/examination" element={<ExaminationManagement />} />
               <Route path="/careers" element={<Careers />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
