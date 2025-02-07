@@ -37,6 +37,11 @@ export const navigationData: NavigationItem[] = [
         href: "/features",
         description: "Explore our comprehensive suite of ERP features.",
       },
+      {
+        title: "Pricing",
+        href: "/pricing",
+        description: "View our pricing plans and packages.",
+      },
     ],
   },
   {

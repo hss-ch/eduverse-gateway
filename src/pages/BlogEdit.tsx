@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function BlogEdit() {
   const { id } = useParams();
@@ -17,10 +18,13 @@ export default function BlogEdit() {
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [image, setImage] = useState<File | null>(null);
+  const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPost = async () => {
       try {
+        console.log('Fetching blog post for editing:', id);
         const { data, error } = await supabase
           .from('blogs')
           .select('*')
@@ -30,6 +34,7 @@ export default function BlogEdit() {
         if (error) throw error;
         
         if (data.author_id !== session?.user?.id) {
+          console.log('Unauthorized edit attempt');
           toast({
             title: "Error",
             description: "You don't have permission to edit this post",
@@ -39,8 +44,10 @@ export default function BlogEdit() {
           return;
         }
 
+        console.log('Blog post data loaded:', data);
         setTitle(data.title);
         setContent(data.content);
+        setCurrentImageUrl(data.image_url);
       } catch (error: any) {
         console.error('Error fetching post:', error);
         toast({
@@ -48,6 +55,7 @@ export default function BlogEdit() {
           description: "Failed to fetch blog post",
           variant: "destructive",
         });
+        navigate('/blog');
       } finally {
         setLoading(false);
       }
@@ -58,20 +66,52 @@ export default function BlogEdit() {
     }
   }, [id, session, toast, navigate]);
 
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!session) return;
 
     setIsSubmitting(true);
     try {
+      let imageUrl = currentImageUrl;
+
+      if (image) {
+        // Upload new image if selected
+        const fileExt = image.name.split('.').pop();
+        const filePath = `${crypto.randomUUID()}.${fileExt}`;
+        
+        const { error: uploadError } = await supabase.storage
+          .from('blog-images')
+          .upload(filePath, image);
+
+        if (uploadError) throw uploadError;
+
+        const { data: { publicUrl } } = supabase.storage
+          .from('blog-images')
+          .getPublicUrl(filePath);
+
+        imageUrl = publicUrl;
+      }
+
       const { error } = await supabase
         .from('blogs')
-        .update({ title, content })
+        .update({ 
+          title, 
+          content,
+          image_url: imageUrl,
+          updated_at: new Date().toISOString()
+        })
         .eq('id', id)
         .eq('author_id', session.user.id);
 
       if (error) throw error;
 
+      console.log('Blog post updated successfully');
       toast({
         title: "Success",
         description: "Blog post updated successfully",
@@ -90,7 +130,11 @@ export default function BlogEdit() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
@@ -104,44 +148,74 @@ export default function BlogEdit() {
         Back to Blog
       </Button>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="title" className="text-sm font-medium">
-            Title
-          </label>
-          <Input
-            id="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <label htmlFor="content" className="text-sm font-medium">
-            Content
-          </label>
-          <Textarea
-            id="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            required
-            className="min-h-[400px]"
-          />
-        </div>
-        <div className="flex justify-end gap-4">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={() => navigate('/blog')}
-            disabled={isSubmitting}
-          >
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isSubmitting}>
-            {isSubmitting ? "Updating..." : "Update Post"}
-          </Button>
-        </div>
-      </form>
+      <Card>
+        <CardHeader>
+          <CardTitle>Edit Blog Post</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="space-y-2">
+              <label htmlFor="title" className="text-sm font-medium">
+                Title
+              </label>
+              <Input
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="image" className="text-sm font-medium">
+                Cover Image
+              </label>
+              <div className="flex items-center gap-4">
+                <Input
+                  id="image"
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+                {currentImageUrl && (
+                  <img
+                    src={currentImageUrl}
+                    alt="Current cover"
+                    className="h-20 w-20 object-cover rounded-md"
+                  />
+                )}
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="content" className="text-sm font-medium">
+                Content
+              </label>
+              <Textarea
+                id="content"
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                required
+                className="min-h-[400px]"
+              />
+            </div>
+
+            <div className="flex justify-end gap-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate('/blog')}
+                disabled={isSubmitting}
+              >
+                Cancel
+              </Button>
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Updating..." : "Update Post"}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }
