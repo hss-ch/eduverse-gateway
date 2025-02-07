@@ -9,6 +9,8 @@ import BlogView from "@/pages/BlogView";
 import { BlogLayout } from "@/components/blog/BlogLayout";
 import Pricing from "@/pages/Pricing";
 import Features from "@/pages/Features";
+import AdmissionsManagement from "@/pages/features/AdmissionsManagement";
+import StudentManagement from "@/pages/features/StudentManagement";
 import Careers from "@/pages/Careers";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
@@ -26,6 +28,8 @@ export const PublicRoutes = () => {
       </Route>
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/features" element={<Features />} />
+      <Route path="/features/admissions" element={<AdmissionsManagement />} />
+      <Route path="/features/student-management" element={<StudentManagement />} />
       <Route path="/careers" element={<Careers />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-service" element={<TermsOfService />} />
