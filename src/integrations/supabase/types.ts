@@ -6,6 +6,16 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
+export interface JobListing {
+  id: string;
+  title: string;
+  location: string;
+  department: string;
+  type: string;
+  description: string;
+  created_at: string;
+}
+
 export type Database = {
   public: {
     Tables: {
@@ -31,15 +41,6 @@ export type Database = {
           rating?: number
           user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "blog_ratings_blog_id_fkey"
-            columns: ["blog_id"]
-            isOneToOne: false
-            referencedRelation: "blogs"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       blogs: {
         Row: {
@@ -78,15 +79,35 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "blogs_author_id_fkey"
-            columns: ["author_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
+      }
+      job_listings: {
+        Row: {
+          id: string
+          title: string
+          location: string
+          department: string
+          type: string
+          description: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          location: string
+          department: string
+          type: string
+          description: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          location?: string
+          department?: string
+          type?: string
+          description?: string
+          created_at?: string
+        }
       }
       demo_requests: {
         Row: {
@@ -122,7 +143,6 @@ export type Database = {
           status?: string | null
           updated_at?: string
         }
-        Relationships: []
       }
       job_applications: {
         Row: {
@@ -158,7 +178,6 @@ export type Database = {
           status?: string | null
           updated_at?: string
         }
-        Relationships: []
       }
       job_listings: {
         Row: {
@@ -166,56 +185,28 @@ export type Database = {
           department: string
           description: string
           id: string
-          location: string
-          title: string
-          type: string
+          location: string;
+          title: string;
+          type: string;
         }
         Insert: {
-          created_at?: string
-          department: string
-          description: string
-          id?: string
-          location: string
-          title: string
-          type: string
+          created_at?: string;
+          department: string;
+          description: string;
+          id?: string;
+          location: string;
+          title: string;
+          type: string;
         }
         Update: {
-          created_at?: string
-          department?: string
-          description?: string
-          id?: string
-          location?: string
-          title?: string
-          type?: string
+          created_at?: string;
+          department?: string;
+          description?: string;
+          id?: string;
+          location?: string;
+          title?: string;
+          type?: string;
         }
-        Relationships: []
-      }
-      profiles: {
-        Row: {
-          avatar_url: string | null
-          created_at: string
-          full_name: string | null
-          id: string
-          role: string | null
-          updated_at: string
-        }
-        Insert: {
-          avatar_url?: string | null
-          created_at?: string
-          full_name?: string | null
-          id: string
-          role?: string | null
-          updated_at?: string
-        }
-        Update: {
-          avatar_url?: string | null
-          created_at?: string
-          full_name?: string | null
-          id?: string
-          role?: string | null
-          updated_at?: string
-        }
-        Relationships: []
       }
     }
     Views: {
@@ -242,7 +233,7 @@ export type Tables<
   TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
     ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
         Database[PublicTableNameOrOptions["schema"]]["Views"])
-    : never = never,
+    : never,
 > = PublicTableNameOrOptions extends { schema: keyof Database }
   ? (Database[PublicTableNameOrOptions["schema"]]["Tables"] &
       Database[PublicTableNameOrOptions["schema"]]["Views"])[TableName] extends {
@@ -254,10 +245,10 @@ export type Tables<
         PublicSchema["Views"])
     ? (PublicSchema["Tables"] &
         PublicSchema["Views"])[PublicTableNameOrOptions] extends {
-        Row: infer R
-      }
-      ? R
-      : never
+      Row: infer R
+    }
+    ? R
+    : never
     : never
 
 export type TablesInsert<
@@ -277,8 +268,8 @@ export type TablesInsert<
     ? PublicSchema["Tables"][PublicTableNameOrOptions] extends {
         Insert: infer I
       }
-      ? I
-      : never
+    ? I
+    : never
     : never
 
 export type TablesUpdate<
