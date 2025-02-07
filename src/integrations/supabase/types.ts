@@ -80,35 +80,6 @@ export type Database = {
           updated_at?: string
         }
       }
-      job_listings: {
-        Row: {
-          id: string
-          title: string
-          location: string
-          department: string
-          type: string
-          description: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          title: string
-          location: string
-          department: string
-          type: string
-          description: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          title?: string
-          location?: string
-          department?: string
-          type?: string
-          description?: string
-          created_at?: string
-        }
-      }
       demo_requests: {
         Row: {
           created_at: string
@@ -185,27 +156,27 @@ export type Database = {
           department: string
           description: string
           id: string
-          location: string;
-          title: string;
-          type: string;
+          location: string
+          title: string
+          type: string
         }
         Insert: {
-          created_at?: string;
-          department: string;
-          description: string;
-          id?: string;
-          location: string;
-          title: string;
-          type: string;
+          created_at?: string
+          department: string
+          description: string
+          id?: string
+          location: string
+          title: string
+          type: string
         }
         Update: {
-          created_at?: string;
-          department?: string;
-          description?: string;
-          id?: string;
-          location?: string;
-          title?: string;
-          type?: string;
+          created_at?: string
+          department?: string
+          description?: string
+          id?: string
+          location?: string
+          title?: string
+          type?: string
         }
       }
     }
