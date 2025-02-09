@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -19,6 +20,9 @@ import AdmissionsManagement from "@/pages/features/AdmissionsManagement";
 import StudentManagement from "@/pages/features/StudentManagement";
 import StaffManagement from "@/pages/features/StaffManagement";
 import ExaminationManagement from "@/pages/features/ExaminationManagement";
+import TimetablesManagement from "@/pages/features/TimetablesManagement";
+import AttendanceManagement from "@/pages/features/AttendanceManagement";
+import FeeManagement from "@/pages/features/FeeManagement";
 import Careers from "@/pages/Careers";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
@@ -74,6 +78,9 @@ function App() {
               <Route path="/features/student-management" element={<StudentManagement />} />
               <Route path="/features/staff-management" element={<StaffManagement />} />
               <Route path="/features/examination" element={<ExaminationManagement />} />
+              <Route path="/features/timetables" element={<TimetablesManagement />} />
+              <Route path="/features/attendance" element={<AttendanceManagement />} />
+              <Route path="/features/fee-management" element={<FeeManagement />} />
               <Route path="/careers" element={<Careers />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />

@@ -2,11 +2,11 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { BookOpen, Users, ClipboardList } from "lucide-react";
+import { CreditCard, FileText, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 
-const AdmissionsManagement = () => {
-  console.log("Rendering AdmissionsManagement page");
+const FeeManagement = () => {
+  console.log("Rendering FeeManagement page");
   
   return (
     <div className="min-h-screen bg-accent">
@@ -14,8 +14,8 @@ const AdmissionsManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
-          alt="Admissions Management"
+          src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7"
+          alt="Fee Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
@@ -24,8 +24,8 @@ const AdmissionsManagement = () => {
       <section className="relative -mt-20 px-6">
         <div className="container">
           <PageHeader 
-            title="Admissions Management"
-            description="Streamline the entire admission process from application to enrollment with automated workflows and document management."
+            title="Fee Management"
+            description="Comprehensive fee structure management with installment options and defaulter tracking."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -55,20 +55,20 @@ const AdmissionsManagement = () => {
 
 const features = [
   {
-    title: "Online Applications",
-    description: "Enable prospective students to apply online with a user-friendly application form and document upload system.",
-    icon: BookOpen,
+    title: "Fee Structure",
+    description: "Manage complex fee structures and payment schedules.",
+    icon: CreditCard,
   },
   {
-    title: "Application Tracking",
-    description: "Track application status, manage documents, and communicate with applicants throughout the process.",
-    icon: Users,
+    title: "Payment Tracking",
+    description: "Track payments and generate detailed fee reports.",
+    icon: FileText,
   },
   {
-    title: "Document Management",
-    description: "Securely store and manage all admission-related documents with easy retrieval and verification.",
-    icon: ClipboardList,
+    title: "Due Reminders",
+    description: "Automated reminders for pending fee payments.",
+    icon: Bell,
   },
 ];
 
-export default AdmissionsManagement;
+export default FeeManagement;

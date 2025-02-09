@@ -2,11 +2,11 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { BookOpen, Users, ClipboardList } from "lucide-react";
+import { Clock, BarChart, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 
-const AdmissionsManagement = () => {
-  console.log("Rendering AdmissionsManagement page");
+const AttendanceManagement = () => {
+  console.log("Rendering AttendanceManagement page");
   
   return (
     <div className="min-h-screen bg-accent">
@@ -14,8 +14,8 @@ const AdmissionsManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
-          alt="Admissions Management"
+          src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+          alt="Attendance Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
@@ -24,8 +24,8 @@ const AdmissionsManagement = () => {
       <section className="relative -mt-20 px-6">
         <div className="container">
           <PageHeader 
-            title="Admissions Management"
-            description="Streamline the entire admission process from application to enrollment with automated workflows and document management."
+            title="Attendance Tracking"
+            description="Digital attendance management for students and staff with real-time tracking and reporting."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -55,20 +55,20 @@ const AdmissionsManagement = () => {
 
 const features = [
   {
-    title: "Online Applications",
-    description: "Enable prospective students to apply online with a user-friendly application form and document upload system.",
-    icon: BookOpen,
+    title: "Real-time Tracking",
+    description: "Track attendance in real-time with digital marking system.",
+    icon: Clock,
   },
   {
-    title: "Application Tracking",
-    description: "Track application status, manage documents, and communicate with applicants throughout the process.",
-    icon: Users,
+    title: "Analytics",
+    description: "Generate detailed attendance reports and analytics.",
+    icon: BarChart,
   },
   {
-    title: "Document Management",
-    description: "Securely store and manage all admission-related documents with easy retrieval and verification.",
-    icon: ClipboardList,
+    title: "Notifications",
+    description: "Automated alerts for low attendance and updates.",
+    icon: Bell,
   },
 ];
 
-export default AdmissionsManagement;
+export default AttendanceManagement;
