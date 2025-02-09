@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -42,6 +41,15 @@ import NirfAccreditation from "@/pages/accreditation/NirfAccreditation";
 import QsAccreditation from "@/pages/accreditation/QsAccreditation";
 import Dashboard from "@/pages/Dashboard";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
+import HostelManagement from "@/pages/features/HostelManagement";
+import TransportManagement from "@/pages/features/TransportManagement";
+import GrievanceRedressal from "@/pages/features/GrievanceRedressal";
+import LeaveManagement from "@/pages/features/LeaveManagement";
+import PayrollManagement from "@/pages/features/PayrollManagement";
+import LibraryManagement from "@/pages/features/LibraryManagement";
+import AcademicPlanning from "@/pages/features/AcademicPlanning";
+import InventoryManagement from "@/pages/features/InventoryManagement";
+import ReportsAnalytics from "@/pages/features/ReportsAnalytics";
 
 // Create a client
 const queryClient = new QueryClient({
@@ -91,6 +99,15 @@ function App() {
               <Route path="/features/feedback" element={<OnlineFeedback />} />
               <Route path="/features/certificates" element={<CertificateGeneration />} />
               <Route path="/features/notifications" element={<Notifications />} />
+              <Route path="/features/hostel" element={<HostelManagement />} />
+              <Route path="/features/transport" element={<TransportManagement />} />
+              <Route path="/features/grievance" element={<GrievanceRedressal />} />
+              <Route path="/features/leave" element={<LeaveManagement />} />
+              <Route path="/features/payroll" element={<PayrollManagement />} />
+              <Route path="/features/library" element={<LibraryManagement />} />
+              <Route path="/features/academic-planning" element={<AcademicPlanning />} />
+              <Route path="/features/inventory" element={<InventoryManagement />} />
+              <Route path="/features/reports" element={<ReportsAnalytics />} />
               <Route path="/careers" element={<Careers />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
