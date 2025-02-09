@@ -23,6 +23,8 @@ import ExaminationManagement from "@/pages/features/ExaminationManagement";
 import TimetablesManagement from "@/pages/features/TimetablesManagement";
 import AttendanceManagement from "@/pages/features/AttendanceManagement";
 import FeeManagement from "@/pages/features/FeeManagement";
+import PaymentGateway from "@/pages/features/PaymentGateway";
+import OnlineExamination from "@/pages/features/OnlineExamination";
 import Careers from "@/pages/Careers";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
