@@ -25,6 +25,9 @@ import AttendanceManagement from "@/pages/features/AttendanceManagement";
 import FeeManagement from "@/pages/features/FeeManagement";
 import PaymentGateway from "@/pages/features/PaymentGateway";
 import OnlineExamination from "@/pages/features/OnlineExamination";
+import OnlineFeedback from "@/pages/features/OnlineFeedback";
+import CertificateGeneration from "@/pages/features/CertificateGeneration";
+import Notifications from "@/pages/features/Notifications";
 import Careers from "@/pages/Careers";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsOfService from "@/pages/TermsOfService";
@@ -83,6 +86,11 @@ function App() {
               <Route path="/features/timetables" element={<TimetablesManagement />} />
               <Route path="/features/attendance" element={<AttendanceManagement />} />
               <Route path="/features/fee-management" element={<FeeManagement />} />
+              <Route path="/features/payment" element={<PaymentGateway />} />
+              <Route path="/features/online-exam" element={<OnlineExamination />} />
+              <Route path="/features/feedback" element={<OnlineFeedback />} />
+              <Route path="/features/certificates" element={<CertificateGeneration />} />
+              <Route path="/features/notifications" element={<Notifications />} />
               <Route path="/careers" element={<Careers />} />
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
