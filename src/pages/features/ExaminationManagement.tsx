@@ -1,7 +1,8 @@
+
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { GraduationCap, ClipboardList, BarChart } from "lucide-react";
+import { GraduationCap, ClipboardList, BarChart, Calendar, Bell, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ExaminationManagement = () => {
@@ -11,7 +12,16 @@ const ExaminationManagement = () => {
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <section className="pt-24 px-6">
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+          alt="Examination Management"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+      </div>
+
+      <section className="relative -mt-20 px-6">
         <div className="container">
           <PageHeader 
             title="Examination Management"
@@ -46,8 +56,8 @@ const ExaminationManagement = () => {
 const features = [
   {
     title: "Exam Scheduling",
-    description: "Plan and organize examinations with automated scheduling.",
-    icon: GraduationCap,
+    description: "Plan and organize examinations with automated scheduling system.",
+    icon: Calendar,
   },
   {
     title: "Result Management",
@@ -58,6 +68,21 @@ const features = [
     title: "Performance Analytics",
     description: "Analyze student performance with detailed reports and insights.",
     icon: BarChart,
+  },
+  {
+    title: "Question Bank",
+    description: "Maintain a comprehensive digital question bank for various subjects.",
+    icon: GraduationCap,
+  },
+  {
+    title: "Result Notifications",
+    description: "Automated alerts for result publication and updates.",
+    icon: Bell,
+  },
+  {
+    title: "Security Measures",
+    description: "Ensure exam integrity with robust security protocols.",
+    icon: Shield,
   },
 ];
 

@@ -1,7 +1,8 @@
+
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Users, ClipboardCheck, Award } from "lucide-react";
+import { Users, ClipboardCheck, Award, Calendar, FileText, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 
 const StaffManagement = () => {
@@ -58,6 +59,21 @@ const features = [
     title: "Professional Development",
     description: "Plan and track professional growth and training programs.",
     icon: Award,
+  },
+  {
+    title: "Leave Management",
+    description: "Efficient leave application and approval system.",
+    icon: Calendar,
+  },
+  {
+    title: "Documentation",
+    description: "Digital storage and management of staff documents.",
+    icon: FileText,
+  },
+  {
+    title: "Notifications",
+    description: "Automated alerts for important updates and deadlines.",
+    icon: Bell,
   },
 ];
 

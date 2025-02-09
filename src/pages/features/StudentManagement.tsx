@@ -1,7 +1,8 @@
+
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Users, GraduationCap, FileCheck } from "lucide-react";
+import { Users, GraduationCap, FileCheck, Bell, Calendar, BarChart } from "lucide-react";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 
@@ -59,6 +60,21 @@ const features = [
     title: "Document Management",
     description: "Organize and manage student documents, certificates, and academic records securely.",
     icon: FileCheck,
+  },
+  {
+    title: "Attendance Tracking",
+    description: "Monitor and manage student attendance across all classes and activities.",
+    icon: Calendar,
+  },
+  {
+    title: "Performance Analytics",
+    description: "Generate comprehensive analytics and insights on student performance.",
+    icon: BarChart,
+  },
+  {
+    title: "Communication System",
+    description: "Send automated notifications and updates to students and parents.",
+    icon: Bell,
   },
 ];
 
