@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Globe, CreditCard, Shield } from "lucide-react";
+import { Shield, CreditCard, Globe, Receipt, Wallet, History } from "lucide-react";
 import { motion } from "framer-motion";
 
 const PaymentGateway = () => {
@@ -14,7 +14,7 @@ const PaymentGateway = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c"
+          src="https://images.unsplash.com/photo-1563013544-824ae1b704d3"
           alt="Payment Gateway"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -25,7 +25,7 @@ const PaymentGateway = () => {
         <div className="container">
           <PageHeader 
             title="Payment Gateway"
-            description="Secure online payment processing for fees, donations, and other transactions."
+            description="Secure online payment processing for fees, donations, and other transactions with multiple payment methods and global support."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -56,7 +56,7 @@ const PaymentGateway = () => {
 const features = [
   {
     title: "Secure Transactions",
-    description: "Industry-standard security protocols for safe payment processing.",
+    description: "Industry-standard security protocols and encryption for safe payment processing.",
     icon: Shield,
   },
   {
@@ -66,9 +66,25 @@ const features = [
   },
   {
     title: "Global Support",
-    description: "Accept payments from anywhere with multi-currency support.",
+    description: "Accept payments from anywhere with multi-currency support and automatic conversion.",
     icon: Globe,
+  },
+  {
+    title: "Digital Receipts",
+    description: "Automated generation and delivery of digital receipts and invoices.",
+    icon: Receipt,
+  },
+  {
+    title: "Digital Wallet",
+    description: "Integrated digital wallet support for quick and convenient payments.",
+    icon: Wallet,
+  },
+  {
+    title: "Transaction History",
+    description: "Detailed transaction history with advanced search and filtering options.",
+    icon: History,
   },
 ];
 
 export default PaymentGateway;
+
