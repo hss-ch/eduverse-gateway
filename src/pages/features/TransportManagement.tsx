@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Bus, MapPin, Clock } from "lucide-react";
+import { Bus, MapPin, Clock, Users, Bell, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 
 const TransportManagement = () => {
@@ -14,7 +14,7 @@ const TransportManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957"
           alt="Transport Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -25,7 +25,7 @@ const TransportManagement = () => {
         <div className="container">
           <PageHeader 
             title="Transport Management"
-            description="Fleet management with route optimization, tracking, and fee collection for transportation services."
+            description="Comprehensive fleet management system with route optimization, tracking, and fee collection."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -56,18 +56,33 @@ const TransportManagement = () => {
 const features = [
   {
     title: "Fleet Management",
-    description: "Track and maintain vehicle fleet with service scheduling.",
+    description: "Track and maintain vehicle fleet with comprehensive service records.",
     icon: Bus,
   },
   {
     title: "Route Planning",
-    description: "Optimize routes for efficient transportation services.",
+    description: "Optimize transport routes for efficient service delivery.",
     icon: MapPin,
   },
   {
     title: "Schedule Management",
-    description: "Create and manage transport schedules effectively.",
+    description: "Create and manage detailed transport schedules.",
     icon: Clock,
+  },
+  {
+    title: "Passenger Tracking",
+    description: "Monitor student transportation and attendance.",
+    icon: Users,
+  },
+  {
+    title: "Notifications",
+    description: "Real-time alerts for schedule changes and delays.",
+    icon: Bell,
+  },
+  {
+    title: "Documentation",
+    description: "Maintain vehicle and driver documentation digitally.",
+    icon: FileText,
   },
 ];
 

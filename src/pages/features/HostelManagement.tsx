@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Building2, Users, MessageCircle } from "lucide-react";
+import { Building2, Users, MessageSquare, Calendar, ClipboardCheck, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 
 const HostelManagement = () => {
@@ -14,7 +14,7 @@ const HostelManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          src="https://images.unsplash.com/photo-1555854877-bab0e564b8d5"
           alt="Hostel Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -25,7 +25,7 @@ const HostelManagement = () => {
         <div className="container">
           <PageHeader 
             title="Hostel Management"
-            description="Complete hostel administration with room allocation, mess management, and complaint handling."
+            description="Complete hostel administration system with room allocation, mess management, and complaint handling."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -67,7 +67,22 @@ const features = [
   {
     title: "Complaint System",
     description: "Digital platform for raising and resolving hostel-related issues.",
-    icon: MessageCircle,
+    icon: MessageSquare,
+  },
+  {
+    title: "Attendance Tracking",
+    description: "Monitor student check-in/check-out and leave management.",
+    icon: Calendar,
+  },
+  {
+    title: "Mess Management",
+    description: "Track meal plans, schedules, and feedback system.",
+    icon: ClipboardCheck,
+  },
+  {
+    title: "Notifications",
+    description: "Instant alerts for important announcements and updates.",
+    icon: Bell,
   },
 ];
 
