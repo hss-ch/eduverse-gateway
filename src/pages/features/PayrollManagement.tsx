@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { CreditCard, FileText, BarChart } from "lucide-react";
+import { CreditCard, FileText, BarChart, Clock, Bell, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 
 const PayrollManagement = () => {
@@ -14,7 +14,7 @@ const PayrollManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7"
           alt="Payroll Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -69,6 +69,22 @@ const features = [
     description: "Comprehensive payroll reports and analytics.",
     icon: BarChart,
   },
+  {
+    title: "Attendance Integration",
+    description: "Seamless integration with attendance records.",
+    icon: Clock,
+  },
+  {
+    title: "Notifications",
+    description: "Automated alerts for salary processing and updates.",
+    icon: Bell,
+  },
+  {
+    title: "Security Controls",
+    description: "Secure payroll processing and data protection.",
+    icon: Shield,
+  },
 ];
 
 export default PayrollManagement;
+

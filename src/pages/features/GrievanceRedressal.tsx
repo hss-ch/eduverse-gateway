@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { MessageCircle, Bell, ClipboardCheck } from "lucide-react";
+import { MessageCircle, Bell, ClipboardCheck, Users, Clock, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 
 const GrievanceRedressal = () => {
@@ -69,6 +69,22 @@ const features = [
     description: "Systematic approach to address and resolve complaints.",
     icon: ClipboardCheck,
   },
+  {
+    title: "Committee Management",
+    description: "Coordinate with grievance resolution committees.",
+    icon: Users,
+  },
+  {
+    title: "Timeline Tracking",
+    description: "Monitor resolution timelines and deadlines.",
+    icon: Clock,
+  },
+  {
+    title: "Documentation",
+    description: "Maintain complete records of grievance cases.",
+    icon: FileText,
+  },
 ];
 
 export default GrievanceRedressal;
+

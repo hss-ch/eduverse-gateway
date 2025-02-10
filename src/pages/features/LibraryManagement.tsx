@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Library, BookOpen, Users } from "lucide-react";
+import { Library, BookOpen, Users, Search, Clock, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 
 const LibraryManagement = () => {
@@ -14,7 +14,7 @@ const LibraryManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570"
           alt="Library Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -69,6 +69,22 @@ const features = [
     description: "Manage library memberships and access controls.",
     icon: Users,
   },
+  {
+    title: "Resource Search",
+    description: "Advanced search capabilities for library resources.",
+    icon: Search,
+  },
+  {
+    title: "Circulation Management",
+    description: "Track circulation periods and manage renewals.",
+    icon: Clock,
+  },
+  {
+    title: "Notifications",
+    description: "Automated alerts for due dates and reservations.",
+    icon: Bell,
+  },
 ];
 
 export default LibraryManagement;
+

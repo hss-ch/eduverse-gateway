@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Calendar, Users, ClipboardCheck } from "lucide-react";
+import { Calendar, Users, ClipboardCheck, Clock, Bell, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 
 const LeaveManagement = () => {
@@ -14,7 +14,7 @@ const LeaveManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
           alt="Leave Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -69,6 +69,22 @@ const features = [
     description: "Monitor and manage leave balances efficiently.",
     icon: ClipboardCheck,
   },
+  {
+    title: "Leave Calendar",
+    description: "Visual calendar view of team leave schedules.",
+    icon: Clock,
+  },
+  {
+    title: "Notifications",
+    description: "Automated alerts for leave status updates.",
+    icon: Bell,
+  },
+  {
+    title: "Reports Generation",
+    description: "Generate detailed leave reports and analytics.",
+    icon: FileText,
+  },
 ];
 
 export default LeaveManagement;
+

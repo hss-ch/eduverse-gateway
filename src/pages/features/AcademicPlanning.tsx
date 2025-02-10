@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { BookOpen, Calendar, GraduationCap } from "lucide-react";
+import { BookOpen, Calendar, GraduationCap, ClipboardList, Users, BarChart } from "lucide-react";
 import { motion } from "framer-motion";
 
 const AcademicPlanning = () => {
@@ -14,7 +14,7 @@ const AcademicPlanning = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1470813740244-df37b8c1edcb"
+          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
           alt="Academic Planning"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -69,6 +69,22 @@ const features = [
     description: "Monitor and assess educational outcomes.",
     icon: GraduationCap,
   },
+  {
+    title: "Course Planning",
+    description: "Detailed planning of course content and delivery.",
+    icon: ClipboardList,
+  },
+  {
+    title: "Faculty Allocation",
+    description: "Efficient allocation of faculty to courses.",
+    icon: Users,
+  },
+  {
+    title: "Performance Analytics",
+    description: "Track and analyze academic performance metrics.",
+    icon: BarChart,
+  },
 ];
 
 export default AcademicPlanning;
+
