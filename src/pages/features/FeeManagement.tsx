@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { CreditCard, FileText, Bell } from "lucide-react";
+import { CreditCard, FileText, Bell, Calendar, BarChart, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 
 const FeeManagement = () => {
@@ -68,6 +68,21 @@ const features = [
     title: "Due Reminders",
     description: "Automated reminders for pending fee payments.",
     icon: Bell,
+  },
+  {
+    title: "Payment Schedule",
+    description: "Flexible installment plans and payment scheduling.",
+    icon: Calendar,
+  },
+  {
+    title: "Financial Analytics",
+    description: "Comprehensive financial reporting and analytics.",
+    icon: BarChart,
+  },
+  {
+    title: "Secure Transactions",
+    description: "Secure payment processing and data protection.",
+    icon: Shield,
   },
 ];
 

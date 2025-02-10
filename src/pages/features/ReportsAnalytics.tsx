@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { BarChart, FileText, Download } from "lucide-react";
+import { BarChart, FileText, Download, LineChart, PieChart, ArrowUpDown } from "lucide-react";
 import { motion } from "framer-motion";
 
 const ReportsAnalytics = () => {
@@ -68,6 +68,21 @@ const features = [
     title: "Export Options",
     description: "Multiple formats for downloading and sharing reports.",
     icon: Download,
+  },
+  {
+    title: "Trend Analysis",
+    description: "Track and analyze trends over time periods.",
+    icon: LineChart,
+  },
+  {
+    title: "Visual Analytics",
+    description: "Interactive charts and graphs for data visualization.",
+    icon: PieChart,
+  },
+  {
+    title: "Comparative Analysis",
+    description: "Compare data across different parameters and timeframes.",
+    icon: ArrowUpDown,
   },
 ];
 

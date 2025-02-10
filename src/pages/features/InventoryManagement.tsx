@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { ClipboardList, BarChart, Bell } from "lucide-react";
+import { ClipboardList, BarChart, Bell, Package, Truck, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 
 const InventoryManagement = () => {
@@ -68,6 +68,21 @@ const features = [
     title: "Maintenance Alerts",
     description: "Automated alerts for maintenance and restocking.",
     icon: Bell,
+  },
+  {
+    title: "Stock Management",
+    description: "Manage stock levels and inventory distribution.",
+    icon: Package,
+  },
+  {
+    title: "Supplier Management",
+    description: "Track suppliers and manage procurement processes.",
+    icon: Truck,
+  },
+  {
+    title: "Security Controls",
+    description: "Secure access controls and audit trails.",
+    icon: Shield,
   },
 ];
 

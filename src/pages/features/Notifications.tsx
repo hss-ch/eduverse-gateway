@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Bell, Mail, MessageSquare } from "lucide-react";
+import { Bell, Mail, MessageSquare, Globe, Shield, Clock } from "lucide-react";
 import { motion } from "framer-motion";
 
 const Notifications = () => {
@@ -68,6 +68,21 @@ const features = [
     title: "In-App Messages",
     description: "Direct messaging system within the platform.",
     icon: MessageSquare,
+  },
+  {
+    title: "Multi-language Support",
+    description: "Notifications in multiple languages for diverse users.",
+    icon: Globe,
+  },
+  {
+    title: "Privacy Controls",
+    description: "Customizable notification preferences and privacy settings.",
+    icon: Shield,
+  },
+  {
+    title: "Scheduled Notifications",
+    description: "Schedule notifications for future delivery.",
+    icon: Clock,
   },
 ];
 
