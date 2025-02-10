@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { BookOpen, Users, ClipboardList } from "lucide-react";
+import { BookOpen, Users, ClipboardList, MessageSquare, Bell, FileText } from "lucide-react";
 import { motion } from "framer-motion";
 
 const AdmissionsManagement = () => {
@@ -14,7 +14,7 @@ const AdmissionsManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
+          src="https://images.unsplash.com/photo-1523240795612-9a054b0db644"
           alt="Admissions Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -25,7 +25,7 @@ const AdmissionsManagement = () => {
         <div className="container">
           <PageHeader 
             title="Admissions Management"
-            description="Streamline the entire admission process from application to enrollment with automated workflows and document management."
+            description="Comprehensive admission management system with online applications, document verification, and automated workflows."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -56,18 +56,33 @@ const AdmissionsManagement = () => {
 const features = [
   {
     title: "Online Applications",
-    description: "Enable prospective students to apply online with a user-friendly application form and document upload system.",
+    description: "User-friendly application portal with document upload system.",
     icon: BookOpen,
   },
   {
-    title: "Application Tracking",
-    description: "Track application status, manage documents, and communicate with applicants throughout the process.",
+    title: "Applicant Management",
+    description: "Track and process applications with automated workflows.",
     icon: Users,
   },
   {
-    title: "Document Management",
-    description: "Securely store and manage all admission-related documents with easy retrieval and verification.",
+    title: "Document Verification",
+    description: "Digital document verification and validation system.",
     icon: ClipboardList,
+  },
+  {
+    title: "Communication Hub",
+    description: "Integrated messaging system for applicant communication.",
+    icon: MessageSquare,
+  },
+  {
+    title: "Status Updates",
+    description: "Real-time application status updates and notifications.",
+    icon: Bell,
+  },
+  {
+    title: "Report Generation",
+    description: "Comprehensive admission reports and analytics.",
+    icon: FileText,
   },
 ];
 

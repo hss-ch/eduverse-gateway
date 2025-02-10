@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Award, FileCheck, Lock } from "lucide-react";
+import { Award, FileCheck, Lock, Download, QrCode, History } from "lucide-react";
 import { motion } from "framer-motion";
 
 const CertificateGeneration = () => {
@@ -14,7 +14,7 @@ const CertificateGeneration = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7"
+          src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3"
           alt="Certificate Generation"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -25,7 +25,7 @@ const CertificateGeneration = () => {
         <div className="container">
           <PageHeader 
             title="Certificate Generation"
-            description="Automated generation of various certificates with digital signatures and verification system."
+            description="Advanced certificate management system with automated generation, digital signatures, and secure verification."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -56,18 +56,33 @@ const CertificateGeneration = () => {
 const features = [
   {
     title: "Automated Generation",
-    description: "Bulk certificate generation with customizable templates.",
+    description: "Bulk certificate generation with customizable templates and designs.",
     icon: Award,
   },
   {
     title: "Digital Signatures",
-    description: "Secure digital signing process for certificate authentication.",
+    description: "Secure digital signing process with multiple authority support.",
     icon: FileCheck,
   },
   {
-    title: "Verification System",
-    description: "Online verification portal for certificate validation.",
+    title: "Secure Verification",
+    description: "Online verification portal with encrypted certificate validation.",
     icon: Lock,
+  },
+  {
+    title: "Batch Processing",
+    description: "Process and download multiple certificates simultaneously.",
+    icon: Download,
+  },
+  {
+    title: "QR Integration",
+    description: "Built-in QR codes for quick certificate verification.",
+    icon: QrCode,
+  },
+  {
+    title: "Audit Trail",
+    description: "Complete history of certificate generation and verification.",
+    icon: History,
   },
 ];
 

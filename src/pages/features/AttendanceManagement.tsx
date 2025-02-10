@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Clock, BarChart, Bell } from "lucide-react";
+import { Clock, BarChart, Bell, CalendarCheck, UserCheck, FileSpreadsheet } from "lucide-react";
 import { motion } from "framer-motion";
 
 const AttendanceManagement = () => {
@@ -14,7 +14,7 @@ const AttendanceManagement = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c"
           alt="Attendance Management"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -25,7 +25,7 @@ const AttendanceManagement = () => {
         <div className="container">
           <PageHeader 
             title="Attendance Tracking"
-            description="Digital attendance management for students and staff with real-time tracking and reporting."
+            description="Digital attendance management system with real-time tracking, automated reports, and instant notifications."
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -56,18 +56,33 @@ const AttendanceManagement = () => {
 const features = [
   {
     title: "Real-time Tracking",
-    description: "Track attendance in real-time with digital marking system.",
+    description: "Monitor attendance in real-time with digital check-in/check-out system.",
     icon: Clock,
   },
   {
-    title: "Analytics",
-    description: "Generate detailed attendance reports and analytics.",
+    title: "Analytics Dashboard",
+    description: "Comprehensive attendance analytics with visual reports and insights.",
     icon: BarChart,
   },
   {
-    title: "Notifications",
-    description: "Automated alerts for low attendance and updates.",
+    title: "Smart Notifications",
+    description: "Automated alerts for absent students and attendance updates.",
     icon: Bell,
+  },
+  {
+    title: "Calendar Integration",
+    description: "Seamless integration with academic calendar and schedules.",
+    icon: CalendarCheck,
+  },
+  {
+    title: "Biometric Support",
+    description: "Support for biometric attendance and manual verification.",
+    icon: UserCheck,
+  },
+  {
+    title: "Custom Reports",
+    description: "Generate customized attendance reports and statistics.",
+    icon: FileSpreadsheet,
   },
 ];
 
