@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { MessageCircle, Bell, ClipboardCheck, Users, Clock, FileText } from "lucide-react";
+import { MessageSquare, AlertCircle, User, Calendar, FileText, CheckCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 const GrievanceRedressal = () => {
@@ -14,7 +14,7 @@ const GrievanceRedressal = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+          src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40"
           alt="Grievance Redressal"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -56,35 +56,34 @@ const GrievanceRedressal = () => {
 const features = [
   {
     title: "Complaint Filing",
-    description: "Easy-to-use platform for submitting grievances.",
-    icon: MessageCircle,
+    description: "Easy-to-use platform for submitting grievances and concerns.",
+    icon: MessageSquare,
   },
   {
     title: "Status Tracking",
-    description: "Real-time updates on grievance resolution status.",
-    icon: Bell,
-  },
-  {
-    title: "Resolution Management",
-    description: "Systematic approach to address and resolve complaints.",
-    icon: ClipboardCheck,
+    description: "Real-time updates on grievance resolution progress.",
+    icon: AlertCircle,
   },
   {
     title: "Committee Management",
-    description: "Coordinate with grievance resolution committees.",
-    icon: Users,
+    description: "Coordinate with grievance resolution committees efficiently.",
+    icon: User,
   },
   {
-    title: "Timeline Tracking",
-    description: "Monitor resolution timelines and deadlines.",
-    icon: Clock,
+    title: "Timeline Management",
+    description: "Monitor resolution timelines and track deadlines.",
+    icon: Calendar,
   },
   {
     title: "Documentation",
-    description: "Maintain complete records of grievance cases.",
+    description: "Maintain complete records of all grievance cases.",
     icon: FileText,
+  },
+  {
+    title: "Resolution Updates",
+    description: "Track and update grievance resolution status.",
+    icon: CheckCircle,
   },
 ];
 
 export default GrievanceRedressal;
-
