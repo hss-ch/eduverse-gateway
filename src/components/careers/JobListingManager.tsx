@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface JobListingFormData {
-  id?: string; // Added id as optional property
+  id?: string;
   title: string;
   location: string;
   department: string;
@@ -40,11 +40,17 @@ export function JobListingManager({ jobToEdit, onEditComplete }: JobListingManag
     console.log("Submitting job listing:", formData);
 
     try {
-      if (jobToEdit) {
+      if (jobToEdit?.id) {
         // Update existing job listing
         const { error } = await supabase
           .from("job_listings")
-          .update(formData)
+          .update({
+            title: formData.title,
+            location: formData.location,
+            department: formData.department,
+            type: formData.type,
+            description: formData.description,
+          })
           .eq("id", jobToEdit.id);
 
         if (error) throw error;
@@ -61,7 +67,13 @@ export function JobListingManager({ jobToEdit, onEditComplete }: JobListingManag
         // Create new job listing
         const { error } = await supabase
           .from("job_listings")
-          .insert(formData);
+          .insert({
+            title: formData.title,
+            location: formData.location,
+            department: formData.department,
+            type: formData.type,
+            description: formData.description,
+          });
 
         if (error) throw error;
 
@@ -104,7 +116,7 @@ export function JobListingManager({ jobToEdit, onEditComplete }: JobListingManag
           value={formData.title}
           onChange={(e) => setFormData({ ...formData, title: e.target.value })}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
       </div>
 
@@ -118,7 +130,7 @@ export function JobListingManager({ jobToEdit, onEditComplete }: JobListingManag
           value={formData.location}
           onChange={(e) => setFormData({ ...formData, location: e.target.value })}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
       </div>
 
@@ -132,7 +144,7 @@ export function JobListingManager({ jobToEdit, onEditComplete }: JobListingManag
           value={formData.department}
           onChange={(e) => setFormData({ ...formData, department: e.target.value })}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
       </div>
 
@@ -146,7 +158,7 @@ export function JobListingManager({ jobToEdit, onEditComplete }: JobListingManag
           value={formData.type}
           onChange={(e) => setFormData({ ...formData, type: e.target.value })}
           required
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
       </div>
 
@@ -160,7 +172,7 @@ export function JobListingManager({ jobToEdit, onEditComplete }: JobListingManag
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
           required
           rows={4}
-          className="mt-1 block w-full rounded-md border-gray-300 shadow-sm"
+          className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
         />
       </div>
 
