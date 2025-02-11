@@ -1,6 +1,8 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface JobListingFormData {
   title: string;
@@ -10,7 +12,12 @@ interface JobListingFormData {
   description: string;
 }
 
-export function JobListingManager() {
+interface JobListingManagerProps {
+  jobToEdit?: JobListingFormData | null;
+  onEditComplete?: () => void;
+}
+
+export function JobListingManager({ jobToEdit, onEditComplete }: JobListingManagerProps) {
   const [formData, setFormData] = useState<JobListingFormData>({
     title: "",
     location: "",
@@ -19,22 +26,49 @@ export function JobListingManager() {
     description: "",
   });
   const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (jobToEdit) {
+      setFormData(jobToEdit);
+    }
+  }, [jobToEdit]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log("Submitting job listing:", formData);
 
     try {
-      const { error } = await supabase
-        .from("job_listings")
-        .insert(formData);
+      if (jobToEdit) {
+        // Update existing job listing
+        const { error } = await supabase
+          .from("job_listings")
+          .update(formData)
+          .eq("id", jobToEdit.id);
 
-      if (error) throw error;
+        if (error) throw error;
 
-      toast({
-        title: "Success",
-        description: "Job listing created successfully",
-      });
+        toast({
+          title: "Success",
+          description: "Job listing updated successfully",
+        });
+
+        if (onEditComplete) {
+          onEditComplete();
+        }
+      } else {
+        // Create new job listing
+        const { error } = await supabase
+          .from("job_listings")
+          .insert(formData);
+
+        if (error) throw error;
+
+        toast({
+          title: "Success",
+          description: "Job listing created successfully",
+        });
+      }
 
       // Reset form
       setFormData({
@@ -44,8 +78,11 @@ export function JobListingManager() {
         type: "",
         description: "",
       });
+
+      // Refresh the jobs list
+      queryClient.invalidateQueries({ queryKey: ["jobs"] });
     } catch (error: any) {
-      console.error("Error creating job listing:", error);
+      console.error("Error saving job listing:", error);
       toast({
         title: "Error",
         description: error.message,
@@ -130,7 +167,7 @@ export function JobListingManager() {
         type="submit"
         className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
       >
-        Create Job Listing
+        {jobToEdit ? "Update Job Listing" : "Create Job Listing"}
       </button>
     </form>
   );
