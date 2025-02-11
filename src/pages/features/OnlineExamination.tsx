@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Laptop, Shield, BarChart } from "lucide-react";
+import { BookOpen, Timer, Shield, Award, ClipboardCheck, BarChart } from "lucide-react";
 import { motion } from "framer-motion";
 
 const OnlineExamination = () => {
@@ -55,18 +55,33 @@ const OnlineExamination = () => {
 
 const features = [
   {
-    title: "Virtual Testing",
-    description: "Conduct exams remotely with multiple question formats and automated proctoring.",
-    icon: Laptop,
+    title: "Digital Assessment",
+    description: "Comprehensive online testing platform with multiple question formats.",
+    icon: BookOpen,
   },
   {
-    title: "Anti-Cheating System",
-    description: "Advanced proctoring features to maintain exam integrity.",
+    title: "Smart Timer",
+    description: "Automated time management with section-wise time allocation.",
+    icon: Timer,
+  },
+  {
+    title: "Secure Environment",
+    description: "Advanced proctoring and anti-cheating measures.",
     icon: Shield,
   },
   {
-    title: "Automated Evaluation",
-    description: "Instant results and detailed performance analytics.",
+    title: "Auto Grading",
+    description: "Instant evaluation and result generation.",
+    icon: Award,
+  },
+  {
+    title: "Progress Tracking",
+    description: "Real-time monitoring of exam progress and submission status.",
+    icon: ClipboardCheck,
+  },
+  {
+    title: "Performance Analytics",
+    description: "Detailed analysis of exam results with statistical insights.",
     icon: BarChart,
   },
 ];

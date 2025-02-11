@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { MessageSquare, Star, BarChart } from "lucide-react";
+import { MessageSquare, Star, BarChart, ThumbsUp, ClipboardCheck, Bell } from "lucide-react";
 import { motion } from "framer-motion";
 
 const OnlineFeedback = () => {
@@ -14,7 +14,7 @@ const OnlineFeedback = () => {
       
       <div className="relative">
         <img
-          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c"
           alt="Online Feedback"
           className="w-full h-[300px] object-cover opacity-20"
         />
@@ -68,6 +68,21 @@ const features = [
     title: "Analytics Dashboard",
     description: "Detailed analysis and visualization of feedback data.",
     icon: BarChart,
+  },
+  {
+    title: "Quick Responses",
+    description: "Instant feedback submission with predefined response templates.",
+    icon: ThumbsUp,
+  },
+  {
+    title: "Feedback Tracking",
+    description: "Monitor and track the status of submitted feedback.",
+    icon: ClipboardCheck,
+  },
+  {
+    title: "Notifications",
+    description: "Automated alerts for feedback requests and responses.",
+    icon: Bell,
   },
 ];
 
