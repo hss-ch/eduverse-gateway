@@ -68,9 +68,9 @@ export default function Auth() {
           console.log("Password recovery");
         }
 
-        // Handle unconfirmed email error through the error message
-        if (session?.error?.message?.includes("email_not_confirmed")) {
-          console.log("Email not confirmed");
+        // Check for email confirmation error in the event details
+        if (event === 'USER_SIGNATURE_VERIFICATION_FAILED' && session?.user?.email) {
+          console.log("Email verification required");
           toast({
             title: "Email Not Confirmed",
             description: "Please check your email and click the confirmation link to verify your account.",
