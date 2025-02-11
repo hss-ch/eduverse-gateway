@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
@@ -65,6 +66,13 @@ export default function Auth() {
           console.log("User updated");
         } else if (event === 'PASSWORD_RECOVERY') {
           console.log("Password recovery");
+        } else if (event === 'EMAIL_NOT_CONFIRMED') {
+          console.log("Email not confirmed");
+          toast({
+            title: "Email Not Confirmed",
+            description: "Please check your email and click the confirmation link to verify your account.",
+            duration: 6000,
+          });
         }
       }
     });
@@ -74,6 +82,23 @@ export default function Auth() {
       subscription.unsubscribe();
     };
   }, [navigate, toast]);
+
+  const handleError = (error: any) => {
+    console.error("Auth error:", error);
+    if (error.message.includes("email_not_confirmed")) {
+      toast({
+        title: "Email Not Confirmed",
+        description: "Please check your email and click the confirmation link to verify your account.",
+        duration: 6000,
+      });
+    } else {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-accent">
@@ -109,6 +134,7 @@ export default function Auth() {
               theme="light"
               providers={[]}
               redirectTo={`${window.location.origin}/auth/callback`}
+              onError={handleError}
             />
           </div>
         </div>
