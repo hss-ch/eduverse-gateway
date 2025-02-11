@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -39,14 +40,32 @@ export const JobApplicationsManagement = () => {
     message: "",
   });
 
+  // Get current user's session and role
+  const { data: session } = await supabase.auth.getSession();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", session?.user?.id)
+    .single();
+
+  const isAdmin = profile?.role === "admin";
+  const userEmail = session?.user?.email;
+
   const { data: applications, isLoading } = useQuery({
-    queryKey: ["job-applications"],
+    queryKey: ["job-applications", isAdmin, userEmail],
     queryFn: async () => {
       console.log("Fetching job applications");
-      const { data, error } = await supabase
+      let query = supabase
         .from("job_applications")
         .select("*")
         .order("created_at", { ascending: false });
+
+      // If not admin, only fetch user's own applications
+      if (!isAdmin && userEmail) {
+        query = query.eq("email", userEmail);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error("Error fetching job applications:", error);
@@ -58,6 +77,15 @@ export const JobApplicationsManagement = () => {
   });
 
   const updateApplicationStatus = async (id: string, status: string) => {
+    if (!isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "Only administrators can update application status.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       console.log("Updating application status:", { id, status });
       const { error } = await supabase
@@ -82,6 +110,15 @@ export const JobApplicationsManagement = () => {
   };
 
   const sendEmail = async (to: string, name: string) => {
+    if (!isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "Only administrators can send emails.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const response = await supabase.functions.invoke('send-email', {
         body: {
@@ -124,7 +161,7 @@ export const JobApplicationsManagement = () => {
             <TableHead>Phone</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Cover Letter</TableHead>
-            <TableHead>Actions</TableHead>
+            {isAdmin && <TableHead>Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -135,23 +172,27 @@ export const JobApplicationsManagement = () => {
               <TableCell>{application.email}</TableCell>
               <TableCell>{application.phone}</TableCell>
               <TableCell>
-                <Select
-                  value={application.status}
-                  onValueChange={(value) =>
-                    updateApplicationStatus(application.id, value)
-                  }
-                >
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="reviewing">Reviewing</SelectItem>
-                    <SelectItem value="interviewed">Interviewed</SelectItem>
-                    <SelectItem value="accepted">Accepted</SelectItem>
-                    <SelectItem value="rejected">Rejected</SelectItem>
-                  </SelectContent>
-                </Select>
+                {isAdmin ? (
+                  <Select
+                    value={application.status}
+                    onValueChange={(value) =>
+                      updateApplicationStatus(application.id, value)
+                    }
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="reviewing">Reviewing</SelectItem>
+                      <SelectItem value="interviewed">Interviewed</SelectItem>
+                      <SelectItem value="accepted">Accepted</SelectItem>
+                      <SelectItem value="rejected">Rejected</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <span>{application.status}</span>
+                )}
               </TableCell>
               <TableCell>
                 <Dialog>
@@ -172,56 +213,58 @@ export const JobApplicationsManagement = () => {
                   </DialogContent>
                 </Dialog>
               </TableCell>
-              <TableCell>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      Send Email
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Send Email Response</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid gap-2">
-                        <Label htmlFor="subject">Subject</Label>
-                        <Input
-                          id="subject"
-                          value={emailContent.subject}
-                          onChange={(e) =>
-                            setEmailContent((prev) => ({
-                              ...prev,
-                              subject: e.target.value,
-                            }))
-                          }
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="message">Message</Label>
-                        <Textarea
-                          id="message"
-                          value={emailContent.message}
-                          onChange={(e) =>
-                            setEmailContent((prev) => ({
-                              ...prev,
-                              message: e.target.value,
-                            }))
-                          }
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                      </DialogClose>
-                      <Button onClick={() => sendEmail(application.email, application.name)}>
+              {isAdmin && (
+                <TableCell>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
                         Send Email
                       </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </TableCell>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Send Email Response</DialogTitle>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                          <Label htmlFor="subject">Subject</Label>
+                          <Input
+                            id="subject"
+                            value={emailContent.subject}
+                            onChange={(e) =>
+                              setEmailContent((prev) => ({
+                                ...prev,
+                                subject: e.target.value,
+                              }))
+                            }
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="message">Message</Label>
+                          <Textarea
+                            id="message"
+                            value={emailContent.message}
+                            onChange={(e) =>
+                              setEmailContent((prev) => ({
+                                ...prev,
+                                message: e.target.value,
+                              }))
+                            }
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button onClick={() => sendEmail(application.email, application.name)}>
+                          Send Email
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>

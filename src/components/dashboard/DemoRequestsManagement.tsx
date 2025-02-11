@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -40,14 +41,32 @@ export const DemoRequestsManagement = () => {
     message: "",
   });
 
+  // Get current user's session and role
+  const { data: session } = await supabase.auth.getSession();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", session?.user?.id)
+    .single();
+
+  const isAdmin = profile?.role === "admin";
+  const userEmail = session?.user?.email;
+
   const { data: demoRequests, isLoading } = useQuery({
-    queryKey: ["demo-requests"],
+    queryKey: ["demo-requests", isAdmin, userEmail],
     queryFn: async () => {
       console.log("Fetching demo requests");
-      const { data, error } = await supabase
+      let query = supabase
         .from("demo_requests")
         .select("*")
         .order("created_at", { ascending: false });
+
+      // If not admin, only fetch user's own demo requests
+      if (!isAdmin && userEmail) {
+        query = query.eq("email", userEmail);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error("Error fetching demo requests:", error);
@@ -59,6 +78,15 @@ export const DemoRequestsManagement = () => {
   });
 
   const updateDemoStatus = async (id: string, status: string) => {
+    if (!isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "Only administrators can update demo request status.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       console.log("Updating demo request status:", { id, status });
       const { error } = await supabase
@@ -83,6 +111,15 @@ export const DemoRequestsManagement = () => {
   };
 
   const sendEmail = async (to: string, name: string) => {
+    if (!isAdmin) {
+      toast({
+        title: "Access Denied",
+        description: "Only administrators can send emails.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     try {
       const response = await supabase.functions.invoke('send-email', {
         body: {
@@ -125,7 +162,7 @@ export const DemoRequestsManagement = () => {
             <TableHead>Preferred Date</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Message</TableHead>
-            <TableHead>Actions</TableHead>
+            {isAdmin && <TableHead>Actions</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -138,74 +175,80 @@ export const DemoRequestsManagement = () => {
                 {format(new Date(demo.preferred_date), "PPP")}
               </TableCell>
               <TableCell>
-                <Select
-                  value={demo.status}
-                  onValueChange={(value) => updateDemoStatus(demo.id, value)}
-                >
-                  <SelectTrigger className="w-32">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="scheduled">Scheduled</SelectItem>
-                    <SelectItem value="completed">Completed</SelectItem>
-                    <SelectItem value="cancelled">Cancelled</SelectItem>
-                  </SelectContent>
-                </Select>
+                {isAdmin ? (
+                  <Select
+                    value={demo.status}
+                    onValueChange={(value) => updateDemoStatus(demo.id, value)}
+                  >
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="pending">Pending</SelectItem>
+                      <SelectItem value="scheduled">Scheduled</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : (
+                  <span>{demo.status}</span>
+                )}
               </TableCell>
               <TableCell className="max-w-md truncate">
                 {demo.message}
               </TableCell>
-              <TableCell>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="sm">
-                      Send Email
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Send Email Response</DialogTitle>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                      <div className="grid gap-2">
-                        <Label htmlFor="subject">Subject</Label>
-                        <Input
-                          id="subject"
-                          value={emailContent.subject}
-                          onChange={(e) =>
-                            setEmailContent((prev) => ({
-                              ...prev,
-                              subject: e.target.value,
-                            }))
-                          }
-                        />
-                      </div>
-                      <div className="grid gap-2">
-                        <Label htmlFor="message">Message</Label>
-                        <Textarea
-                          id="message"
-                          value={emailContent.message}
-                          onChange={(e) =>
-                            setEmailContent((prev) => ({
-                              ...prev,
-                              message: e.target.value,
-                            }))
-                          }
-                        />
-                      </div>
-                    </div>
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button variant="outline">Cancel</Button>
-                      </DialogClose>
-                      <Button onClick={() => sendEmail(demo.email, demo.name)}>
+              {isAdmin && (
+                <TableCell>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="sm">
                         Send Email
                       </Button>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              </TableCell>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Send Email Response</DialogTitle>
+                      </DialogHeader>
+                      <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                          <Label htmlFor="subject">Subject</Label>
+                          <Input
+                            id="subject"
+                            value={emailContent.subject}
+                            onChange={(e) =>
+                              setEmailContent((prev) => ({
+                                ...prev,
+                                subject: e.target.value,
+                              }))
+                            }
+                          />
+                        </div>
+                        <div className="grid gap-2">
+                          <Label htmlFor="message">Message</Label>
+                          <Textarea
+                            id="message"
+                            value={emailContent.message}
+                            onChange={(e) =>
+                              setEmailContent((prev) => ({
+                                ...prev,
+                                message: e.target.value,
+                              }))
+                            }
+                          />
+                        </div>
+                      </div>
+                      <DialogFooter>
+                        <DialogClose asChild>
+                          <Button variant="outline">Cancel</Button>
+                        </DialogClose>
+                        <Button onClick={() => sendEmail(demo.email, demo.name)}>
+                          Send Email
+                        </Button>
+                      </DialogFooter>
+                    </DialogContent>
+                  </Dialog>
+                </TableCell>
+              )}
             </TableRow>
           ))}
         </TableBody>
