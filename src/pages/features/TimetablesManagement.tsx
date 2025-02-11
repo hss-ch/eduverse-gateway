@@ -2,7 +2,7 @@
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
-import { Calendar, Clock, Laptop } from "lucide-react";
+import { Calendar, Clock, CalendarCheck, CalendarRange, ListCheck, Table } from "lucide-react";
 import { motion } from "framer-motion";
 
 const TimetablesManagement = () => {
@@ -56,19 +56,35 @@ const TimetablesManagement = () => {
 const features = [
   {
     title: "Smart Scheduling",
-    description: "Automatically generate optimal timetables considering all constraints.",
+    description: "Automatically generate optimal timetables considering all constraints and requirements.",
     icon: Calendar,
   },
   {
-    title: "Resource Management",
-    description: "Efficiently allocate classrooms, labs, and other resources.",
+    title: "Time Management",
+    description: "Efficient allocation of time slots for different classes and activities.",
     icon: Clock,
   },
   {
-    title: "Digital Access",
-    description: "Access timetables from any device with real-time updates.",
-    icon: Laptop,
+    title: "Schedule Verification",
+    description: "Verify and validate schedules to avoid conflicts and overlaps.",
+    icon: CalendarCheck,
+  },
+  {
+    title: "Date Range Planning",
+    description: "Plan schedules across multiple dates and academic terms.",
+    icon: CalendarRange,
+  },
+  {
+    title: "Task Management",
+    description: "Track and manage academic tasks and activities within the timetable.",
+    icon: ListCheck,
+  },
+  {
+    title: "Visual Timetables",
+    description: "Generate clear, visual representations of schedules for easy understanding.",
+    icon: Table,
   },
 ];
 
 export default TimetablesManagement;
+
