@@ -87,4 +87,3 @@ const features = [
 ];
 
 export default PaymentGateway;
-
