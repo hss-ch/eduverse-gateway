@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 
 interface JobListingFormData {
+  id?: string; // Added id as optional property
   title: string;
   location: string;
   department: string;
