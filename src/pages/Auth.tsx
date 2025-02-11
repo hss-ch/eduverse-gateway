@@ -68,8 +68,8 @@ export default function Auth() {
           console.log("Password recovery");
         }
 
-        // Check for email confirmation error in the event details
-        if (event === 'USER_SIGNATURE_VERIFICATION_FAILED' && session?.user?.email) {
+        // Check for email confirmation status through session details
+        if (!session?.user?.email_confirmed_at && session?.user?.email) {
           console.log("Email verification required");
           toast({
             title: "Email Not Confirmed",
