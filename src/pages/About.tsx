@@ -1,28 +1,30 @@
+
 import { motion } from "framer-motion";
 import { Users, Target, Heart } from "lucide-react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
+import { PageHeader } from "@/components/PageHeader";
 
 const About = () => {
   return (
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <section className="pt-24 px-6">
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1552664730-d307ca884978"
+          alt="About Us"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+      </div>
+
+      <section className="relative -mt-20 px-6">
         <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
-              About Us
-            </h1>
-            <p className="text-secondary/70 max-w-2xl mx-auto">
-              Learn about our mission and the team behind GuideCampus
-            </p>
-          </motion.div>
+          <PageHeader 
+            title="About Us"
+            description="Learn about our mission and the team behind GuideCampus"
+          />
 
           <div className="grid md:grid-cols-3 gap-8 mb-16">
             {features.map((feature, index) => (

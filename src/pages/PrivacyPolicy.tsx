@@ -1,3 +1,4 @@
+
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
@@ -7,10 +8,23 @@ const PrivacyPolicy = () => {
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <PageHeader 
-        title="Privacy Policy" 
-        description="Last updated: March 2024"
-      />
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40"
+          alt="Privacy Policy"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+      </div>
+      
+      <section className="relative -mt-20 px-6">
+        <div className="container">
+          <PageHeader 
+            title="Privacy Policy" 
+            description="Last updated: March 2024"
+          />
+        </div>
+      </section>
 
       <div className="container mx-auto px-6 py-12">
         <div className="prose prose-lg max-w-4xl mx-auto">

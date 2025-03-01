@@ -24,7 +24,16 @@ const Pricing = () => {
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <section className="pt-24 px-6">
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+          alt="Pricing"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+      </div>
+
+      <section className="relative -mt-20 px-6">
         <div className="container">
           <PageHeader 
             title="Simple, Transparent Pricing"
