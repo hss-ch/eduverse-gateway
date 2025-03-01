@@ -1,5 +1,6 @@
+
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, School, University, BookOpen } from "lucide-react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -37,48 +38,80 @@ const Pricing = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className={`p-8 rounded-2xl ${
+                className={`rounded-2xl overflow-hidden ${
                   plan.popular
-                    ? "bg-primary text-white ring-4 ring-primary/20"
-                    : "bg-white"
+                    ? "ring-4 ring-primary/20"
+                    : ""
                 }`}
               >
-                {plan.popular && (
-                  <span className="inline-block px-4 py-1 text-sm font-medium bg-white/20 rounded-full mb-4">
-                    Most Popular
-                  </span>
-                )}
-                <h3 className={`text-2xl font-bold ${plan.popular ? "text-white" : "text-secondary"}`}>
-                  {plan.name}
-                </h3>
-                <div className="mt-4 mb-6">
-                  <span className={`text-4xl font-bold ${plan.popular ? "text-white" : "text-secondary"}`}>
-                    ${plan.price}
-                  </span>
-                  <span className={`text-sm ${plan.popular ? "text-white/80" : "text-secondary/70"}`}>
-                    /month
-                  </span>
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={plan.image} 
+                    alt={plan.name} 
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60 flex items-end">
+                    <div className="p-6 w-full">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-2xl font-bold text-white flex items-center">
+                          <plan.icon className="mr-2 h-6 w-6" />
+                          {plan.name}
+                        </h3>
+                        {plan.popular && (
+                          <span className="inline-block px-4 py-1 text-sm font-medium bg-white/20 text-white rounded-full">
+                            Most Popular
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-start space-x-3">
-                      <Check className={`h-5 w-5 mt-0.5 ${plan.popular ? "text-white" : "text-primary"}`} />
-                      <span className={plan.popular ? "text-white/80" : "text-secondary/70"}>
-                        {feature}
+                
+                <div className={`p-6 ${
+                  plan.popular
+                    ? "bg-primary text-white"
+                    : "bg-white"
+                }`}>
+                  <div className="mb-4">
+                    <div className="flex items-center">
+                      <span className={`text-xl line-through opacity-70 ${plan.popular ? "text-white/80" : "text-secondary/70"}`}>
+                        ₹{plan.actualPrice}
                       </span>
-                    </li>
-                  ))}
-                </ul>
-                <Button
-                  onClick={() => handleGetStarted(plan.name)}
-                  className={`w-full ${
-                    plan.popular
-                      ? "bg-white text-primary hover:bg-white/90"
-                      : "bg-primary text-white hover:bg-primary/90"
-                  }`}
-                >
-                  Get Started
-                </Button>
+                      <span className="ml-2 px-2 py-1 bg-green-500 text-white text-xs rounded-full">
+                        Launch Offer
+                      </span>
+                    </div>
+                    <div className="mt-1 flex items-baseline">
+                      <span className={`text-4xl font-bold ${plan.popular ? "text-white" : "text-secondary"}`}>
+                        ₹{plan.price}
+                      </span>
+                      <span className={`text-sm ml-2 ${plan.popular ? "text-white/80" : "text-secondary/70"}`}>
+                        per student per year
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <ul className="space-y-4 mb-8">
+                    {plan.features.map((feature) => (
+                      <li key={feature} className="flex items-start space-x-3">
+                        <Check className={`h-5 w-5 mt-0.5 ${plan.popular ? "text-white" : "text-primary"}`} />
+                        <span className={plan.popular ? "text-white/80" : "text-secondary/70"}>
+                          {feature}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <Button
+                    onClick={() => handleGetStarted(plan.name)}
+                    className={`w-full ${
+                      plan.popular
+                        ? "bg-white text-primary hover:bg-white/90"
+                        : "bg-primary text-white hover:bg-primary/90"
+                    }`}
+                  >
+                    Get Started
+                  </Button>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -113,9 +146,12 @@ const Pricing = () => {
 
 const plans = [
   {
-    name: "Starter",
-    price: 99,
+    name: "Schools",
+    price: 450,
+    actualPrice: 900,
     popular: false,
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    icon: School,
     features: [
       "Up to 100 students",
       "Basic academic management",
@@ -124,9 +160,12 @@ const plans = [
     ],
   },
   {
-    name: "Professional",
-    price: 199,
+    name: "Colleges",
+    price: 500,
+    actualPrice: 1000,
     popular: true,
+    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+    icon: BookOpen,
     features: [
       "Up to 500 students",
       "Advanced academic management",
@@ -136,9 +175,12 @@ const plans = [
     ],
   },
   {
-    name: "Enterprise",
-    price: 399,
+    name: "Universities",
+    price: 600,
+    actualPrice: 1200,
     popular: false,
+    image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
+    icon: University,
     features: [
       "Unlimited students",
       "Full feature access",
