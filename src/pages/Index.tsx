@@ -91,7 +91,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Why Choose ESAAP Section */}
+      {/* Why Choose GuideCampus Section */}
       <section className="py-24 px-6 bg-white">
         <div className="container">
           <motion.div
@@ -101,10 +101,10 @@ const Index = () => {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-bold text-secondary mb-4">
-              Why Choose ESAAP?
+              Why Choose GuideCampus?
             </h2>
             <p className="text-muted-foreground max-w-3xl mx-auto">
-              ESAAP automates the entire institutional process, making campus management effortless. 
+              GuideCampus automates the entire institutional process, making campus management effortless. 
               Our powerful AI-based modules cover every aspect of academic and administrative workflows, 
               ensuring smooth functioning across departments.
             </p>
