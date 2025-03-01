@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Users, Calendar } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Calendar, Shield, Database, Server, Smartphone, Printer, BarChart, Award, DollarSign, Check, School, GraduationCap, Building, University } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
@@ -88,6 +88,79 @@ const Index = () => {
             <CarouselPrevious className="hidden md:flex" />
             <CarouselNext className="hidden md:flex" />
           </Carousel>
+        </div>
+      </section>
+
+      {/* Why Choose ESAAP Section */}
+      <section className="py-24 px-6 bg-white">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold text-secondary mb-4">
+              Why Choose ESAAP?
+            </h2>
+            <p className="text-muted-foreground max-w-3xl mx-auto">
+              ESAAP automates the entire institutional process, making campus management effortless. 
+              Our powerful AI-based modules cover every aspect of academic and administrative workflows, 
+              ensuring smooth functioning across departments.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {whyChooseFeatures.map((feature, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="flex items-start p-4"
+              >
+                <feature.icon className="h-5 w-5 text-primary mr-3 flex-shrink-0 mt-1" />
+                <span className="text-secondary/80 text-sm">{feature.title}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Institution Types Section */}
+      <section className="py-24 px-6 bg-accent">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl font-bold text-secondary mb-4">
+              Managing Institutions of Any Size
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Our solutions are designed to adapt to the unique needs of different educational institutions
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {institutionTypes.map((type, index) => (
+              <motion.div
+                key={type.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="p-6 rounded-2xl bg-white hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
+              >
+                <type.icon className="h-16 w-16 text-primary mb-4" />
+                <h3 className="text-xl font-semibold text-secondary mb-2">
+                  {type.title}
+                </h3>
+                <p className="text-muted-foreground text-sm">{type.description}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -183,6 +256,46 @@ const features = [
     description: "Optimize institutional planning with smart scheduling tools for classes, events, and resource allocation.",
     icon: Calendar,
     href: "/planning"
+  },
+];
+
+const whyChooseFeatures = [
+  { title: "Adaptable to Any Institution", icon: Check },
+  { title: "Seamless Data Migration", icon: Database },
+  { title: "Role-Based Access Control", icon: Users },
+  { title: "Robust Data Security", icon: Shield },
+  { title: "24/7 Dedicated Support", icon: Server },
+  { title: "User-Friendly & Printer-Friendly", icon: Printer },
+  { title: "Web-Based & Mobile App", icon: Smartphone },
+  { title: "Cost-Effective & High Quality", icon: DollarSign },
+  { title: "Comprehensive Reports", icon: BarChart },
+  { title: "Customizable & Scalable", icon: Award },
+  { title: "Secure Password Management", icon: Shield },
+  { title: "Automated Workflows", icon: Server },
+  { title: "Multi-User Collaboration", icon: Users },
+  { title: "Customization Ready", icon: Check },
+];
+
+const institutionTypes = [
+  {
+    title: "Schools",
+    description: "Automating admissions, attendance, timetables, and academic tracking, ensuring smooth day-to-day operations.",
+    icon: School,
+  },
+  {
+    title: "Training Institutions",
+    description: "Streamlines course scheduling, trainee enrollment, performance tracking, and resource management for efficient training delivery.",
+    icon: GraduationCap,
+  },
+  {
+    title: "Colleges",
+    description: "Enhances college administration with modules for student records, examinations, finance, and campus communication, improving overall efficiency.",
+    icon: Building,
+  },
+  {
+    title: "Universities",
+    description: "Offers scalable solutions for complex university structures, integrating multi-department management, research tracking, and regulatory compliance.",
+    icon: University,
   },
 ];
 
