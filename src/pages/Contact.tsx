@@ -46,7 +46,7 @@ const Contact = () => {
                     <Phone className="h-6 w-6 text-primary mt-1" />
                     <div>
                       <h3 className="font-semibold text-secondary">Call Us</h3>
-                      <p className="text-secondary/70">+1 (555) 123-4567</p>
+                      <p className="text-secondary/70">+91 85558 62483</p>
                     </div>
                   </div>
                   
@@ -55,8 +55,8 @@ const Contact = () => {
                     <div>
                       <h3 className="font-semibold text-secondary">Visit Us</h3>
                       <p className="text-secondary/70">
-                        123 Education Street<br />
-                        Tech City, TC 12345
+                        Nizampet<br />
+                        Hyderabad, TG 500090
                       </p>
                     </div>
                   </div>
