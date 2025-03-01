@@ -1,30 +1,32 @@
+
 import { motion } from "framer-motion";
-import { ClipboardCheck, FileText, Settings } from "lucide-react";
+import { ClipboardCheck, FileText, Settings, Users, Bell, Database } from "lucide-react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
+import { PageHeader } from "@/components/PageHeader";
 
 const Administrative = () => {
   return (
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <section className="pt-24 px-6">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
-              Administrative Tools
-            </h1>
-            <p className="text-secondary/70 max-w-2xl mx-auto">
-              Simplify administrative tasks with our powerful management tools
-            </p>
-          </motion.div>
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
+          alt="Administration"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+      </div>
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+      <section className="relative -mt-20 px-6">
+        <div className="container">
+          <PageHeader 
+            title="Administration"
+            description="Simplify administrative tasks with our powerful management tools"
+          />
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
             {features.map((feature, index) => (
               <motion.div
                 key={feature.title}
@@ -52,7 +54,7 @@ const Administrative = () => {
 const features = [
   {
     title: "Document Management",
-    description: "Organize and manage administrative documents efficiently.",
+    description: "Organize and manage administrative documents efficiently in a secure digital system.",
     icon: FileText,
   },
   {
@@ -62,8 +64,23 @@ const features = [
   },
   {
     title: "System Configuration",
-    description: "Customize system settings to match your institution's needs.",
+    description: "Customize system settings to match your institution's needs and workflows.",
     icon: Settings,
+  },
+  {
+    title: "Staff Management",
+    description: "Efficiently manage staff information, roles, and responsibilities.",
+    icon: Users,
+  },
+  {
+    title: "Notification System",
+    description: "Send automated notifications and important updates to relevant stakeholders.",
+    icon: Bell,
+  },
+  {
+    title: "Data Management",
+    description: "Centralize institutional data with secure storage and easy retrieval systems.",
+    icon: Database,
   },
 ];
 

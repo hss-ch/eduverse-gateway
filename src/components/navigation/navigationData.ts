@@ -1,3 +1,4 @@
+
 interface NavigationItem {
   title: string;
   href?: string;
@@ -18,7 +19,7 @@ export const navigationData: NavigationItem[] = [
         description: "Streamline curriculum planning, grading, and student performance tracking.",
       },
       {
-        title: "Administrative Tools",
+        title: "Administration",
         href: "/administrative",
         description: "Simplify administrative tasks with automated workflows.",
       },

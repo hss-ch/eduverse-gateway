@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Linkedin, Instagram, Compass } from "lucide-react";
 
@@ -20,7 +21,7 @@ export function Footer() {
             <h3 className="font-semibold text-lg mb-4">Solutions</h3>
             <ul className="space-y-2">
               <li><Link to="/academic" className="text-secondary-foreground/80 hover:text-secondary-foreground transition-colors">Academic Management</Link></li>
-              <li><Link to="/administrative" className="text-secondary-foreground/80 hover:text-secondary-foreground transition-colors">Administrative Tools</Link></li>
+              <li><Link to="/administrative" className="text-secondary-foreground/80 hover:text-secondary-foreground transition-colors">Administration</Link></li>
               <li><Link to="/planning" className="text-secondary-foreground/80 hover:text-secondary-foreground transition-colors">Planning & Scheduling</Link></li>
               <li><Link to="/accreditation" className="text-secondary-foreground/80 hover:text-secondary-foreground transition-colors">Accreditation</Link></li>
             </ul>

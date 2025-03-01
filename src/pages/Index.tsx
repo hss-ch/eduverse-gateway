@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, Users, Calendar } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -119,7 +120,14 @@ const Index = () => {
                 <h3 className="text-xl font-semibold text-foreground mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-muted-foreground">{feature.description}</p>
+                <p className="text-muted-foreground mb-4">{feature.description}</p>
+                <Link
+                  to={feature.href}
+                  className="inline-flex items-center text-primary hover:underline"
+                >
+                  Learn More
+                  <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
               </motion.div>
             ))}
           </div>
@@ -162,16 +170,19 @@ const features = [
     title: "Academic Management",
     description: "Streamline curriculum planning, grading, and student performance tracking with our intuitive academic tools.",
     icon: BookOpen,
+    href: "/academic"
   },
   {
-    title: "Administrative Tools",
+    title: "Administration",
     description: "Simplify administrative tasks with automated workflows for admissions, attendance, and resource management.",
     icon: Users,
+    href: "/administrative"
   },
   {
     title: "Planning & Scheduling",
     description: "Optimize institutional planning with smart scheduling tools for classes, events, and resource allocation.",
     icon: Calendar,
+    href: "/planning"
   },
 ];
 
