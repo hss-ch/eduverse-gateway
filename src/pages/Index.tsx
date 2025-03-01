@@ -18,7 +18,7 @@ const Index = () => {
   const slides = [
     {
       title: "Transform Your Institution",
-      description: "Streamline operations and enhance learning experiences",
+      description: "Streamline operations and enhance efficiency and transparency",
       image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
       fallbackImage: "/placeholder.svg"
     },
