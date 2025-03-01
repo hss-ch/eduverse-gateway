@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Check, School, University, BookOpen } from "lucide-react";
+import { Check, School, University, BookOpen, GraduationCap } from "lucide-react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -31,7 +31,7 @@ const Pricing = () => {
             description="Choose the plan that best fits your institution's needs"
           />
 
-          <div className="grid md:grid-cols-3 gap-8 mb-16">
+          <div className="grid md:grid-cols-4 gap-8 mb-16">
             {plans.map((plan, index) => (
               <motion.div
                 key={plan.name}
@@ -92,7 +92,7 @@ const Pricing = () => {
                   </div>
                   
                   <ul className="space-y-4 mb-8">
-                    {plan.features.map((feature) => (
+                    {features.map((feature) => (
                       <li key={feature} className="flex items-start space-x-3">
                         <Check className={`h-5 w-5 mt-0.5 ${plan.popular ? "text-white" : "text-primary"}`} />
                         <span className={plan.popular ? "text-white/80" : "text-secondary/70"}>
@@ -144,6 +144,15 @@ const Pricing = () => {
   );
 };
 
+const features = [
+  "Unlimited students",
+  "Full feature access",
+  "24/7 premium support",
+  "Email support",
+  "Custom integration",
+  "Custom branding"
+];
+
 const plans = [
   {
     name: "Schools",
@@ -152,27 +161,22 @@ const plans = [
     popular: false,
     image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
     icon: School,
-    features: [
-      "Up to 100 students",
-      "Basic academic management",
-      "Email support",
-      "Basic reporting",
-    ],
+  },
+  {
+    name: "Training Institutions",
+    price: 150,
+    actualPrice: 500,
+    popular: true,
+    image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655",
+    icon: GraduationCap,
   },
   {
     name: "Colleges",
     price: 500,
     actualPrice: 1000,
-    popular: true,
+    popular: false,
     image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
     icon: BookOpen,
-    features: [
-      "Up to 500 students",
-      "Advanced academic management",
-      "Priority support",
-      "Advanced analytics",
-      "Custom branding",
-    ],
   },
   {
     name: "Universities",
@@ -181,13 +185,6 @@ const plans = [
     popular: false,
     image: "https://images.unsplash.com/photo-1605810230434-7631ac76ec81",
     icon: University,
-    features: [
-      "Unlimited students",
-      "Full feature access",
-      "24/7 premium support",
-      "Custom integration",
-      "Dedicated account manager",
-    ],
   },
 ];
 
