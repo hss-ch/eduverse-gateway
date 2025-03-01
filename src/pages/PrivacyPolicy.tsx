@@ -74,7 +74,7 @@ const PrivacyPolicy = () => {
               <br />
               Email: privacy@GuideCampus.com
               <br />
-              Phone: +1 (555) 123-4567
+              Phone: +91 8555862483
             </p>
           </section>
         </div>
