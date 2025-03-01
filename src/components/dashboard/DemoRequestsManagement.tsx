@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -40,17 +40,40 @@ export const DemoRequestsManagement = () => {
     subject: "",
     message: "",
   });
+  
+  // State for session and user profile
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [userEmail, setUserEmail] = useState<string | null>(null);
 
-  // Get current user's session and role
-  const { data: session } = await supabase.auth.getSession();
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("role")
-    .eq("id", session?.user?.id)
-    .single();
-
-  const isAdmin = profile?.role === "admin";
-  const userEmail = session?.user?.email;
+  // Get session and user profile data
+  useEffect(() => {
+    async function getSessionAndProfile() {
+      try {
+        // Get session
+        const { data: sessionData } = await supabase.auth.getSession();
+        const session = sessionData?.session;
+        
+        if (!session?.user?.id) return;
+        
+        // Set user email
+        setUserEmail(session.user.email);
+        
+        // Get profile
+        const { data: profile } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", session.user.id)
+          .single();
+        
+        // Check if user is admin
+        setIsAdmin(profile?.role === "admin");
+      } catch (error) {
+        console.error("Error fetching session/profile:", error);
+      }
+    }
+    
+    getSessionAndProfile();
+  }, []);
 
   const { data: demoRequests, isLoading } = useQuery({
     queryKey: ["demo-requests", isAdmin, userEmail],
@@ -75,6 +98,7 @@ export const DemoRequestsManagement = () => {
 
       return data;
     },
+    enabled: userEmail !== null, // Only run query when user email is available
   });
 
   const updateDemoStatus = async (id: string, status: string) => {
