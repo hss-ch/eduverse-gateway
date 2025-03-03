@@ -1,6 +1,6 @@
+
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
-import { PageHeader } from "@/components/PageHeader";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Award, CheckCircle, BarChart, BookOpen, Users } from "lucide-react";
@@ -59,10 +59,24 @@ const Accreditation = () => {
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <PageHeader 
-        title="Accreditation & Ranking Solutions" 
-        description="Comprehensive software solutions for managing institutional accreditation and rankings"
-      />
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66"
+          alt="Accreditation"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+              Accreditation & Ranking Solutions
+            </h1>
+            <p className="text-secondary/70 max-w-2xl mx-auto">
+              Comprehensive software solutions for managing institutional accreditation and rankings
+            </p>
+          </div>
+        </div>
+      </div>
 
       <main className="container mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

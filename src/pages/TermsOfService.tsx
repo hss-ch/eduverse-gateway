@@ -1,16 +1,30 @@
+
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
-import { PageHeader } from "@/components/PageHeader";
 
 const TermsOfService = () => {
   return (
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <PageHeader 
-        title="Terms of Service" 
-        description="Last updated: March 2024"
-      />
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c"
+          alt="Terms of Service"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+              Terms of Service
+            </h1>
+            <p className="text-secondary/70 max-w-2xl mx-auto">
+              Last updated: March 2024
+            </p>
+          </div>
+        </div>
+      </div>
 
       <div className="container mx-auto px-6 py-12">
         <div className="prose prose-lg max-w-4xl mx-auto">

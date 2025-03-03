@@ -1,8 +1,8 @@
+
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
-import { PageHeader } from "@/components/PageHeader";
 import { Card } from "@/components/ui/card";
 import {
   BookOpen,
@@ -36,41 +36,53 @@ const Features = () => {
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <section className="pt-24 px-6">
-        <div className="container">
-          <PageHeader 
-            title="Comprehensive ERP Features"
-            description="Everything you need to manage your educational institution efficiently"
-          />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {features.map((feature) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Link to={feature.path}>
-                  <Card className="p-6 h-full hover:shadow-lg transition-shadow group">
-                    <div className="flex items-start space-x-4">
-                      <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
-                        <feature.icon className="h-6 w-6 text-primary" />
-                      </div>
-                      <div>
-                        <h3 className="text-lg font-semibold text-secondary mb-2 group-hover:text-primary transition-colors">
-                          {feature.title}
-                        </h3>
-                        <p className="text-secondary/70 text-sm">
-                          {feature.description}
-                        </p>
-                      </div>
-                    </div>
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+          alt="Features"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+              Comprehensive ERP Features
+            </h1>
+            <p className="text-secondary/70 max-w-2xl mx-auto">
+              Everything you need to manage your educational institution efficiently
+            </p>
           </div>
+        </div>
+      </div>
+
+      <section className="container mx-auto px-6 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {features.map((feature) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Link to={feature.path}>
+                <Card className="p-6 h-full hover:shadow-lg transition-shadow group">
+                  <div className="flex items-start space-x-4">
+                    <div className="p-2 bg-primary/10 rounded-lg group-hover:bg-primary/20 transition-colors">
+                      <feature.icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-lg font-semibold text-secondary mb-2 group-hover:text-primary transition-colors">
+                        {feature.title}
+                      </h3>
+                      <p className="text-secondary/70 text-sm">
+                        {feature.description}
+                      </p>
+                    </div>
+                  </div>
+                </Card>
+              </Link>
+            </motion.div>
+          ))}
         </div>
       </section>
 

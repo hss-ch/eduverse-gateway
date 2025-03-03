@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -43,9 +44,8 @@ export function BlogAdminActions({ blogId, isPublished, onPublishChange }: BlogA
           throw error;
         }
 
-        const isUserAdmin = profile?.role === 'admin';
-        console.log("BlogAdminActions - User role:", profile?.role, "Is admin:", isUserAdmin);
-        setIsAdmin(isUserAdmin);
+        console.log("BlogAdminActions - User role:", profile?.role, "Is admin:", profile?.role === 'admin');
+        setIsAdmin(profile?.role === 'admin');
       } catch (error) {
         console.error('BlogAdminActions - Error checking admin status:', error);
         toast({

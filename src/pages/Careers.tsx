@@ -94,56 +94,59 @@ export default function Careers() {
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <section className="pt-24 px-6">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40"
+          alt="Careers"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
               Join Our Team
             </h1>
             <p className="text-secondary/70 max-w-2xl mx-auto">
               Be part of our mission to transform education management
             </p>
-          </motion.div>
-
-          {isAdmin && (
-            <div className="mb-8">
-              <JobListingManager 
-                jobToEdit={jobToEdit}
-                onEditComplete={() => setJobToEdit(null)}
-              />
-            </div>
-          )}
-
-          <div className="grid gap-6 mb-16">
-            {isLoading ? (
-              <div>Loading...</div>
-            ) : jobs?.map((job) => (
-              <motion.div
-                key={job.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                <JobListing
-                  id={job.id}
-                  title={job.title}
-                  location={job.location}
-                  department={job.department}
-                  type={job.type}
-                  description={job.description}
-                  onApply={() => setSelectedJob(job.title)}
-                  onEdit={() => setJobToEdit(job)}
-                  onDelete={() => setJobToDelete(job.id)}
-                  isAdmin={isAdmin}
-                />
-              </motion.div>
-            ))}
           </div>
+        </div>
+      </div>
+
+      <section className="container mx-auto px-6 py-12">
+        {isAdmin && (
+          <div className="mb-8">
+            <JobListingManager 
+              jobToEdit={jobToEdit}
+              onEditComplete={() => setJobToEdit(null)}
+            />
+          </div>
+        )}
+
+        <div className="grid gap-6 mb-16">
+          {isLoading ? (
+            <div>Loading...</div>
+          ) : jobs?.map((job) => (
+            <motion.div
+              key={job.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+            >
+              <JobListing
+                id={job.id}
+                title={job.title}
+                location={job.location}
+                department={job.department}
+                type={job.type}
+                description={job.description}
+                onApply={() => setSelectedJob(job.title)}
+                onEdit={() => setJobToEdit(job)}
+                onDelete={() => setJobToDelete(job.id)}
+                isAdmin={isAdmin}
+              />
+            </motion.div>
+          ))}
         </div>
       </section>
 

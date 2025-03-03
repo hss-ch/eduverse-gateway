@@ -1,112 +1,133 @@
+import { useState } from "react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
-import { PageHeader } from "@/components/PageHeader";
-import { motion } from "framer-motion";
-import { Card, CardContent } from "@/components/ui/card";
-import { CheckCircle, ArrowLeft } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BookOpen, CheckCircle, FileCheck, FileText, BarChart, Users } from "lucide-react";
 
-const AbetAccreditation = () => {
-  const features = [
-    "International Recognition",
-    "Engineering Program Assessment",
-    "Student Learning Outcomes",
-    "Professional Development",
-    "Quality Assurance",
-    "Global Standards Compliance",
-  ];
+export default function AbetAccreditation() {
+  const [activeTab, setActiveTab] = useState("overview");
 
   return (
     <div className="min-h-screen bg-accent">
       <MainNav />
       
-      <div className="container mx-auto px-6 py-8">
-        <Link 
-          to="/accreditation"
-          className="inline-flex items-center text-primary hover:text-primary/90 mb-6"
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          Back to Accreditation
-        </Link>
+      <div className="relative">
+        <img
+          src="https://images.unsplash.com/photo-1513530534585-c7b1394c6d51"
+          alt="ABET Accreditation"
+          className="w-full h-[300px] object-cover opacity-20"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-secondary/20" />
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <h1 className="text-4xl md:text-5xl font-bold text-secondary mb-6">
+              ABET Accreditation
+            </h1>
+            <p className="text-secondary/70 max-w-2xl mx-auto">
+              Accreditation Board for Engineering and Technology
+            </p>
+          </div>
+        </div>
       </div>
 
-      <PageHeader 
-        title="ABET Accreditation" 
-        description="Accreditation Board for Engineering and Technology - Global Excellence in Technical Education"
-      />
-
-      <main className="container mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <div className="prose prose-lg max-w-none">
-              <h2 className="text-3xl font-bold text-secondary mb-6">
-                Why Choose ABET Accreditation?
-              </h2>
-              <p className="text-secondary/70 mb-6">
-                ABET accreditation is globally recognized and ensures that programs meet the quality 
-                standards of the technical profession for which they prepare students.
-              </p>
-              <div className="aspect-video rounded-lg overflow-hidden mb-6">
-                <img 
-                  src="https://images.unsplash.com/photo-1498050108023-c5249f4df085"
-                  alt="ABET Accreditation Process"
-                  className="w-full h-full object-cover"
-                />
+      <div className="container mx-auto px-6 py-12">
+        <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="grid grid-cols-3 md:grid-cols-5 mb-8">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="criteria">Criteria</TabsTrigger>
+            <TabsTrigger value="process">Process</TabsTrigger>
+            <TabsTrigger value="documents">Documentation</TabsTrigger>
+            <TabsTrigger value="benefits">Benefits</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="overview" className="space-y-6">
+            <div className="bg-white rounded-lg p-8 shadow-sm">
+              <div className="flex items-center mb-6">
+                <BookOpen className="h-10 w-10 text-primary mr-4" />
+                <h2 className="text-3xl font-bold text-secondary">ABET Overview</h2>
               </div>
+              <p className="text-secondary/70 mb-4">
+                ABET (Accreditation Board for Engineering and Technology) is a non-governmental organization that accredits college and university programs in the disciplines of applied and natural science, computing, engineering, and engineering technology.
+              </p>
+              <p className="text-secondary/70 mb-4">
+                ABET accreditation provides assurance that a college or university program meets the quality standards of the profession for which that program prepares graduates.
+              </p>
+              <p className="text-secondary/70">
+                Our software provides comprehensive solutions for managing the entire ABET accreditation process, from self-study reports to final submissions.
+              </p>
             </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-          >
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-2xl font-bold text-secondary mb-6">
-                  Key Features
-                </h3>
-                <ul className="space-y-4">
-                  {features.map((feature, index) => (
-                    <motion.li
-                      key={index}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.3, delay: index * 0.1 }}
-                      className="flex items-start"
-                    >
-                      <CheckCircle className="w-5 h-5 text-primary mt-1 mr-3 flex-shrink-0" />
-                      <span className="text-secondary/70">{feature}</span>
-                    </motion.li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-16 text-center"
-        >
-          <Link
-            to="/contact"
-            className="inline-flex items-center px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors"
-          >
+          </TabsContent>
+          
+          <TabsContent value="criteria" className="space-y-6">
+            <div className="bg-white rounded-lg p-8 shadow-sm">
+              <div className="flex items-center mb-6">
+                <CheckCircle className="h-10 w-10 text-primary mr-4" />
+                <h2 className="text-3xl font-bold text-secondary">ABET Criteria</h2>
+              </div>
+              <p className="text-secondary/70 mb-4">
+                ABET accreditation is globally recognized and ensures that programs meet the quality standards of the technical profession for which they prepare students.
+              </p>
+              <p className="text-secondary/70 mb-4">
+                Our software provides comprehensive solutions for managing the entire ABET accreditation process, from self-study reports to final submissions.
+              </p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="process" className="space-y-6">
+            <div className="bg-white rounded-lg p-8 shadow-sm">
+              <div className="flex items-center mb-6">
+                <FileCheck className="h-10 w-10 text-primary mr-4" />
+                <h2 className="text-3xl font-bold text-secondary">ABET Process</h2>
+              </div>
+              <p className="text-secondary/70 mb-4">
+                ABET accreditation is globally recognized and ensures that programs meet the quality standards of the technical profession for which they prepare students.
+              </p>
+              <p className="text-secondary/70 mb-4">
+                Our software provides comprehensive solutions for managing the entire ABET accreditation process, from self-study reports to final submissions.
+              </p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="documents" className="space-y-6">
+            <div className="bg-white rounded-lg p-8 shadow-sm">
+              <div className="flex items-center mb-6">
+                <FileText className="h-10 w-10 text-primary mr-4" />
+                <h2 className="text-3xl font-bold text-secondary">ABET Documents</h2>
+              </div>
+              <p className="text-secondary/70 mb-4">
+                ABET accreditation is globally recognized and ensures that programs meet the quality standards of the technical profession for which they prepare students.
+              </p>
+              <p className="text-secondary/70 mb-4">
+                Our software provides comprehensive solutions for managing the entire ABET accreditation process, from self-study reports to final submissions.
+              </p>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="benefits" className="space-y-6">
+            <div className="bg-white rounded-lg p-8 shadow-sm">
+              <div className="flex items-center mb-6">
+                <BarChart className="h-10 w-10 text-primary mr-4" />
+                <h2 className="text-3xl font-bold text-secondary">ABET Benefits</h2>
+              </div>
+              <p className="text-secondary/70 mb-4">
+                ABET accreditation is globally recognized and ensures that programs meet the quality standards of the technical profession for which they prepare students.
+              </p>
+              <p className="text-secondary/70 mb-4">
+                Our software provides comprehensive solutions for managing the entire ABET accreditation process, from self-study reports to final submissions.
+              </p>
+            </div>
+          </TabsContent>
+        </Tabs>
+        
+        <div className="mt-16 text-center">
+          <Button size="lg" className="bg-primary hover:bg-primary/90">
             Get Started with ABET Accreditation
-          </Link>
-        </motion.div>
-      </main>
-
+          </Button>
+        </div>
+      </div>
+      
       <Footer />
     </div>
   );
-};
-
-export default AbetAccreditation;
+}

@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,7 +29,7 @@ export function DeleteBlogDialog({ blogId }: DeleteBlogDialogProps) {
   const handleDelete = async () => {
     try {
       setIsDeleting(true);
-      console.log("BlogAdminActions - Deleting blog:", blogId);
+      console.log("DeleteBlogDialog - Deleting blog:", blogId);
 
       // First delete associated ratings
       const { error: ratingsError } = await supabase
@@ -53,7 +54,7 @@ export function DeleteBlogDialog({ blogId }: DeleteBlogDialogProps) {
       
       navigate("/blog");
     } catch (error: any) {
-      console.error("Error deleting blog:", error);
+      console.error("DeleteBlogDialog - Error deleting blog:", error);
       toast({
         title: "Error",
         description: error.message,
