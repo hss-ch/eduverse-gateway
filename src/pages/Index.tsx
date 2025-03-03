@@ -337,11 +337,12 @@ const institutionTypes = [
 ];
 
 const trustedInstitutions = [
-  "CMR HYDERABAD",
-  "MREM HYDERABAD",
-  "PRAGATHI HYDERABAD",
-  "ESWAR AP",
-  "SANFORD HYDERABAD",
+  "CMR Hyderabad",
+  "MREM Hyderabad",
+  "PRAGATHI Hyderabad",
+  "SANFORD Hyderabad",
+  "ESWAR Narasaraopet ",
+  "and many more...",
 
 ];
 
