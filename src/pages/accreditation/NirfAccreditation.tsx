@@ -1,9 +1,10 @@
+
 import { useState } from "react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart, CheckCircle, FileCheck, FileText, BookOpen, Users } from "lucide-react";
+import { BarChart, CheckCircle, FileCheck, FileText, BookOpen, Users, GraduationCap as GraduationIcon } from "lucide-react";
 
 export default function NirfAccreditation() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -75,7 +76,7 @@ export default function NirfAccreditation() {
                   <span className="text-blue-800">Performance Metrics</span>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-green-100 rounded-lg">
-                  <GraduationCap className="w-8 h-8 text-green-600" />
+                  <GraduationIcon className="w-8 h-8 text-green-600" />
                   <span className="text-green-800">Academic Excellence</span>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-purple-100 rounded-lg">
