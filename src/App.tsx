@@ -1,3 +1,4 @@
+
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
@@ -25,8 +26,8 @@ import BlogView from "@/pages/BlogView";
 import BlogEdit from "@/pages/BlogEdit";
 import BlogNew from "@/pages/BlogNew";
 import BlogPortal from "@/pages/BlogPortal";
-import BlogLayout from "@/layouts/BlogLayout";
-import ProtectedRoutes from "@/components/ProtectedRoutes";
+import { Outlet } from "react-router-dom";
+import ProtectedRoutes from "@/routes/ProtectedRoutes";
 import Dashboard from "@/pages/Dashboard";
 import AcademicPlanning from "@/pages/features/AcademicPlanning";
 import AdmissionsManagement from "@/pages/features/AdmissionsManagement";
@@ -76,7 +77,7 @@ const App = () => {
             <Route path="/accreditation/abet" element={<AbetAccreditation />} />
             <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
             <Route path="/accreditation/qs" element={<QsAccreditation />} />
-            <Route path="/blog" element={<BlogLayout />}>
+            <Route path="/blog" element={<div><Outlet /></div>}>
               <Route index element={<Blog />} />
               <Route path=":id" element={<BlogView />} />
               <Route path=":id/edit" element={<BlogEdit />} />
