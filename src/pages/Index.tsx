@@ -1,6 +1,5 @@
-
 import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Users, Calendar, Shield, Database, Server, Smartphone, Printer, BarChart, Award, DollarSign, Check, School, GraduationCap, Building, University } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Calendar, Shield, Database, Server, Smartphone, Printer, BarChart, Award, DollarSign, Check, School, GraduationCap, Building, University, FileText, SaveAll } from "lucide-react";
 import { Link } from "react-router-dom";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
@@ -164,6 +163,7 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Comprehensive Solutions section */}
       <section className="py-24 px-6">
         <div className="container">
           <motion.div
@@ -233,6 +233,41 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Trusted by top institutions Section */}
+      <section className="py-20 px-6 bg-white">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl font-bold text-secondary mb-4">
+              Trusted by Top Institutions
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Leading educational institutions across the country rely on GuideCampus for their campus management needs
+            </p>
+          </motion.div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center justify-items-center">
+            {trustedInstitutions.map((institution, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="w-full max-w-[160px] aspect-[3/2] bg-accent/30 rounded-md flex items-center justify-center p-4"
+              >
+                <p className="font-semibold text-secondary text-center">
+                  {institution}
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
@@ -274,6 +309,8 @@ const whyChooseFeatures = [
   { title: "Automated Workflows", icon: Server },
   { title: "Multi-User Collaboration", icon: Users },
   { title: "Customization Ready", icon: Check },
+  { title: "Paperless Campus", icon: FileText },
+  { title: "Minimize Expenditure & Maximize Savings", icon: SaveAll },
 ];
 
 const institutionTypes = [
@@ -297,6 +334,19 @@ const institutionTypes = [
     description: "Offers scalable solutions for complex university structures, integrating multi-department management, research tracking, and regulatory compliance.",
     icon: University,
   },
+];
+
+const trustedInstitutions = [
+  "IIT Delhi",
+  "BITS Pilani",
+  "Amity University",
+  "VIT Vellore",
+  "NIIT University",
+  "Manipal Academy",
+  "Delhi University",
+  "SRM Institute",
+  "IIIT Hyderabad",
+  "NIT Trichy",
 ];
 
 export default Index;

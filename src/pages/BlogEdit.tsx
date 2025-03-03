@@ -1,18 +1,17 @@
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function BlogEdit() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const session = useSession();
   const { toast } = useToast();
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -20,39 +19,87 @@ export default function BlogEdit() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [image, setImage] = useState<File | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const fetchPost = async () => {
+    const checkAdminAndFetchPost = async () => {
       try {
-        console.log('Fetching blog post for editing:', id);
-        const { data, error } = await supabase
-          .from('blogs')
-          .select('*')
-          .eq('id', id)
-          .single();
-
-        if (error) throw error;
+        setLoading(true);
+        console.log('BlogEdit - Checking admin status and fetching post', id);
         
-        if (data.author_id !== session?.user?.id) {
-          console.log('Unauthorized edit attempt');
+        // Check if user is authenticated and admin
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (!user) {
+          console.log("BlogEdit - No user found");
           toast({
             title: "Error",
-            description: "You don't have permission to edit this post",
+            description: "You must be logged in to edit posts",
+            variant: "destructive",
+          });
+          navigate('/auth');
+          return;
+        }
+
+        // Get user's profile with role
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
+
+        if (profileError) {
+          console.error("BlogEdit - Error fetching profile:", profileError);
+          throw profileError;
+        }
+
+        const userIsAdmin = profile?.role === 'admin';
+        setIsAdmin(userIsAdmin);
+        
+        if (!userIsAdmin) {
+          console.log("BlogEdit - User is not an admin");
+          toast({
+            title: "Unauthorized",
+            description: "You don't have permission to edit blog posts",
             variant: "destructive",
           });
           navigate('/blog');
           return;
         }
 
-        console.log('Blog post data loaded:', data);
+        // Fetch the blog post
+        console.log('BlogEdit - Fetching blog post:', id);
+        const { data, error } = await supabase
+          .from('blogs')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+        if (error) {
+          console.error('BlogEdit - Error fetching post:', error);
+          throw error;
+        }
+        
+        if (!data) {
+          console.log('BlogEdit - No post found with ID:', id);
+          toast({
+            title: "Not Found",
+            description: "The blog post you're trying to edit doesn't exist",
+            variant: "destructive",
+          });
+          navigate('/blog');
+          return;
+        }
+
+        console.log('BlogEdit - Blog post data loaded:', data);
         setTitle(data.title);
         setContent(data.content);
         setCurrentImageUrl(data.image_url);
       } catch (error: any) {
-        console.error('Error fetching post:', error);
+        console.error('BlogEdit - Error:', error);
         toast({
           title: "Error",
-          description: "Failed to fetch blog post",
+          description: error.message || "Failed to fetch blog post",
           variant: "destructive",
         });
         navigate('/blog');
@@ -61,10 +108,8 @@ export default function BlogEdit() {
       }
     };
 
-    if (session) {
-      fetchPost();
-    }
-  }, [id, session, toast, navigate]);
+    checkAdminAndFetchPost();
+  }, [id, toast, navigate]);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -74,7 +119,6 @@ export default function BlogEdit() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session) return;
 
     setIsSubmitting(true);
     try {
@@ -106,22 +150,21 @@ export default function BlogEdit() {
           image_url: imageUrl,
           updated_at: new Date().toISOString()
         })
-        .eq('id', id)
-        .eq('author_id', session.user.id);
+        .eq('id', id);
 
       if (error) throw error;
 
-      console.log('Blog post updated successfully');
+      console.log('BlogEdit - Blog post updated successfully');
       toast({
         title: "Success",
         description: "Blog post updated successfully",
       });
       navigate('/blog');
     } catch (error: any) {
-      console.error('Error updating post:', error);
+      console.error('BlogEdit - Error updating post:', error);
       toast({
         title: "Error",
-        description: error.message,
+        description: error.message || "Failed to update blog post",
         variant: "destructive",
       });
     } finally {
@@ -131,10 +174,25 @@ export default function BlogEdit() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      <div className="max-w-4xl mx-auto px-6 py-8">
+        <Button
+          variant="ghost"
+          className="mb-6"
+          onClick={() => navigate('/blog')}
+        >
+          <ArrowLeft className="mr-2 h-4 w-4" />
+          Back to Blog
+        </Button>
+        
+        <div className="flex items-center justify-center min-h-[400px]">
+          <Loader2 className="h-8 w-8 animate-spin" />
+        </div>
       </div>
     );
+  }
+
+  if (!isAdmin) {
+    return null;
   }
 
   return (
