@@ -164,20 +164,20 @@ const features = [
 
 const plans = [
   {
-    name: "Schools",
-    price: 450,
-    actualPrice: 900,
-    popular: false,
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-    icon: School,
-  },
-  {
     name: "Training Institutions",
     price: 150,
     actualPrice: 500,
     popular: true,
     image: "https://images.unsplash.com/photo-1524178232363-1fb2b075b655",
     icon: GraduationCap,
+  },
+  {
+    name: "Schools",
+    price: 450,
+    actualPrice: 900,
+    popular: false,
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+    icon: School,
   },
   {
     name: "Colleges",
