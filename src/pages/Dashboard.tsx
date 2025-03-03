@@ -1,5 +1,6 @@
+
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { DashboardNav } from "@/components/dashboard/DashboardNav";
@@ -13,6 +14,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const activeTab = searchParams.get('tab') || 'profile';
   const { toast } = useToast();
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -60,29 +63,42 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-accent">
       <MainNav />
-      <div className="container py-8">
-        <div className="flex flex-col gap-8">
-          <h1 className="text-3xl font-bold">Dashboard</h1>
-          <Tabs defaultValue="profile" className="w-full">
-            <TabsList>
-              <TabsTrigger value="profile">Profile</TabsTrigger>
-              <TabsTrigger value="users">Users</TabsTrigger>
-              <TabsTrigger value="demos">Demo Requests</TabsTrigger>
-              <TabsTrigger value="applications">Job Applications</TabsTrigger>
-            </TabsList>
-            <TabsContent value="profile">
-              <ProfileManagement session={session} />
-            </TabsContent>
-            <TabsContent value="users">
-              <UserManagement session={session} />
-            </TabsContent>
-            <TabsContent value="demos">
-              <DemoRequestsManagement />
-            </TabsContent>
-            <TabsContent value="applications">
-              <JobApplicationsManagement />
-            </TabsContent>
-          </Tabs>
+      <div className="container py-4 md:py-8">
+        <div className="flex flex-col gap-4 md:gap-8">
+          <h1 className="text-2xl md:text-3xl font-bold">Dashboard</h1>
+          
+          <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6">
+            {/* Sidebar - Visible only on MD and larger screens */}
+            <div className="hidden md:block bg-white rounded-lg shadow p-4">
+              <DashboardNav />
+            </div>
+            
+            {/* Main content */}
+            <div className="bg-white rounded-lg shadow p-4">
+              <Tabs defaultValue={activeTab} className="w-full">
+                {/* Tabs for mobile view */}
+                <TabsList className="w-full md:hidden mb-4 overflow-x-auto grid grid-flow-col justify-start">
+                  <TabsTrigger value="profile">Profile</TabsTrigger>
+                  <TabsTrigger value="users">Users</TabsTrigger>
+                  <TabsTrigger value="demos">Demo Requests</TabsTrigger>
+                  <TabsTrigger value="applications">Job Applications</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="profile">
+                  <ProfileManagement session={session} />
+                </TabsContent>
+                <TabsContent value="users">
+                  <UserManagement session={session} />
+                </TabsContent>
+                <TabsContent value="demos">
+                  <DemoRequestsManagement />
+                </TabsContent>
+                <TabsContent value="applications">
+                  <JobApplicationsManagement />
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
         </div>
       </div>
       <Footer />

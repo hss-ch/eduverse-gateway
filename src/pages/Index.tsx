@@ -1,16 +1,14 @@
 
-import { motion } from "framer-motion";
-import { ArrowRight, BookOpen, Users, Calendar, Shield, Database, Server, Smartphone, Printer, BarChart, Award, DollarSign, Check, School, GraduationCap, Building, University, FileText, SaveAll } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { BookOpen, Users, Calendar, Shield, Database, Server, Smartphone, Printer, BarChart, Award, DollarSign, Check, School, GraduationCap, Building, University, FileText, SaveAll } from "lucide-react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { HeroSection } from "@/components/home/HeroSection";
+import { WhyChooseSection } from "@/components/home/WhyChooseSection";
+import { InstitutionTypesSection } from "@/components/home/InstitutionTypesSection";
+import { FeaturesSection } from "@/components/home/FeaturesSection";
+import { CTASection } from "@/components/home/CTASection";
+import { TrustedInstitutionsSection } from "@/components/home/TrustedInstitutionsSection";
 
 const Index = () => {
   console.log("Index page rendering"); // Debug log
@@ -49,230 +47,12 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <MainNav />
       
-      {/* Hero Section with Slider */}
-      <section className="pt-16 md:pt-20">
-        <div className="w-full">
-          <Carousel className="w-full max-w-none">
-            <CarouselContent>
-              {slides.map((slide, index) => (
-                <CarouselItem key={index}>
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="relative"
-                  >
-                    <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
-                      <img 
-                        src={slide.image} 
-                        alt={slide.title}
-                        onError={handleImageError}
-                        className="w-full h-full object-cover"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col items-center justify-end p-4 md:p-8 text-center">
-                        <span className="inline-block px-4 py-1.5 mb-4 text-sm font-medium bg-primary/90 text-white rounded-full">
-                          Slide {index + 1} of {slides.length}
-                        </span>
-                        <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 text-white">
-                          {slide.title}
-                        </h1>
-                        <p className="text-base md:text-lg text-white/90 max-w-2xl">
-                          {slide.description}
-                        </p>
-                      </div>
-                    </div>
-                  </motion.div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <CarouselPrevious className="hidden md:flex" />
-            <CarouselNext className="hidden md:flex" />
-          </Carousel>
-        </div>
-      </section>
-
-      {/* Why Choose GuideCampus Section */}
-      <section className="py-24 px-6 bg-white">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-secondary mb-4">
-              Why Choose GuideCampus?
-            </h2>
-            <p className="text-muted-foreground max-w-3xl mx-auto">
-              GuideCampus automates the entire institutional process, making campus management effortless. 
-              Our powerful AI-based modules cover every aspect of academic and administrative workflows, 
-              ensuring smooth functioning across departments.
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {whyChooseFeatures.map((feature, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.05 }}
-                className="flex items-start p-4"
-              >
-                <feature.icon className="h-5 w-5 text-primary mr-3 flex-shrink-0 mt-1" />
-                <span className="text-secondary/80 text-sm">{feature.title}</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Institution Types Section */}
-      <section className="py-24 px-6 bg-accent">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-secondary mb-4">
-              Managing Institutions of Any Size
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Our solutions are designed to adapt to the unique needs of different educational institutions
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {institutionTypes.map((type, index) => (
-              <motion.div
-                key={type.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-6 rounded-2xl bg-white hover:shadow-lg transition-all duration-300 flex flex-col items-center text-center"
-              >
-                <type.icon className="h-16 w-16 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-secondary mb-2">
-                  {type.title}
-                </h3>
-                <p className="text-muted-foreground text-sm">{type.description}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Comprehensive Solutions section */}
-      <section className="py-24 px-6">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-4xl font-bold text-foreground mb-4">
-              Comprehensive Solutions
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to manage your educational institution efficiently
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {features.map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="p-8 rounded-2xl bg-card hover:shadow-lg transition-all duration-300"
-              >
-                <feature.icon className="h-12 w-12 text-primary mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-2">
-                  {feature.title}
-                </h3>
-                <p className="text-muted-foreground mb-4">{feature.description}</p>
-                <Link
-                  to={feature.href}
-                  className="inline-flex items-center text-primary hover:underline"
-                >
-                  Learn More
-                  <ArrowRight className="ml-1 h-4 w-4" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-24 px-6 bg-secondary">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <h2 className="text-4xl font-bold text-secondary-foreground mb-6">
-              Ready to Transform Your Institution?
-            </h2>
-            <p className="text-secondary-foreground/80 max-w-2xl mx-auto mb-8">
-              Join hundreds of educational institutions that have already modernized their operations with our ERP solution.
-            </p>
-            <Link
-              to="/contact"
-              className="inline-flex items-center px-8 py-4 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-            >
-              Schedule a Demo
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Link>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Trusted by top institutions Section */}
-      <section className="py-20 px-6 bg-white">
-        <div className="container">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-3xl font-bold text-secondary mb-4">
-              Trusted by Top Institutions
-            </h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Leading educational institutions across the country rely on GuideCampus for their campus management needs
-            </p>
-          </motion.div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 items-center justify-items-center">
-            {trustedInstitutions.map((institution, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3, delay: index * 0.1 }}
-                className="w-full max-w-[160px] aspect-[3/2] bg-accent/30 rounded-md flex items-center justify-center p-4"
-              >
-                <div className="text-center">
-                  <p className="font-semibold text-secondary text-center mb-1">
-                    {institution.name}
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    {institution.location}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
+      <HeroSection slides={slides} onImageError={handleImageError} />
+      <WhyChooseSection features={whyChooseFeatures} />
+      <InstitutionTypesSection types={institutionTypes} />
+      <FeaturesSection features={features} />
+      <CTASection />
+      <TrustedInstitutionsSection institutions={trustedInstitutions} />
 
       <Footer />
     </div>
