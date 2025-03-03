@@ -15,18 +15,21 @@ const Index = () => {
 
   const slides = [
     {
+      header: "Everything to manage your educational institution",
       title: "Transform Your Institution",
       description: "Streamline operations and enhance efficiency and transparency",
       image: "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b",
       fallbackImage: "/placeholder.svg"
     },
     {
+      header: "Smart Campus Solutions",
       title: "Empower Your Staff",
       description: "Provide powerful tools for efficient management",
       image: "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158",
       fallbackImage: "/placeholder.svg"
     },
     {
+      header: "Student Success Platform",
       title: "Engage Your Students",
       description: "Create an interactive learning environment",
       image: "https://images.unsplash.com/photo-1649972904349-6e44c42644a7",
