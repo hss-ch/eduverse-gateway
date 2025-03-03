@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,6 +8,7 @@ import { ArrowLeft } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { format } from "date-fns";
 import { Skeleton } from "@/components/ui/skeleton";
+import { BlogAdminActions } from "@/components/blog/BlogAdminActions";
 
 interface Profile {
   full_name: string | null;
@@ -150,6 +152,13 @@ export default function BlogView() {
           {post.content.split('\n').map((paragraph, index) => (
             paragraph ? <p key={index}>{paragraph}</p> : <br key={index} />
           ))}
+        </div>
+
+        <div className="mt-8">
+          <BlogAdminActions 
+            blogId={post.id}
+            isPublished={post.published}
+          />
         </div>
       </article>
     </div>

@@ -84,7 +84,10 @@ export function DeleteBlogDialog({ blogId }: DeleteBlogDialogProps) {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={handleDelete}
+            onClick={(e) => {
+              e.preventDefault(); // Prevent the dialog from closing automatically
+              handleDelete();
+            }}
             disabled={isDeleting}
             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
           >
