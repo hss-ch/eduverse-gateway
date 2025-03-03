@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
@@ -85,7 +86,7 @@ export default function QsAccreditation() {
           <TabsContent value="process" className="space-y-6">
             <div className="bg-white rounded-lg p-8 shadow-sm">
               <div className="flex items-center mb-6">
-                FileText className="h-10 w-10 text-primary mr-4" />
+                <FileText className="h-10 w-10 text-primary mr-4" />
                 <h2 className="text-3xl font-bold text-secondary">QS Ranking Process</h2>
               </div>
               <p className="text-secondary/70 mb-4">
@@ -106,7 +107,7 @@ export default function QsAccreditation() {
           <TabsContent value="documents" className="space-y-6">
             <div className="bg-white rounded-lg p-8 shadow-sm">
               <div className="flex items-center mb-6">
-                FileCheck className="h-10 w-10 text-primary mr-4" />
+                <FileCheck className="h-10 w-10 text-primary mr-4" />
                 <h2 className="text-3xl font-bold text-secondary">Required Documentation</h2>
               </div>
               <p className="text-secondary/70 mb-4">
@@ -127,7 +128,7 @@ export default function QsAccreditation() {
           <TabsContent value="benefits" className="space-y-6">
             <div className="bg-white rounded-lg p-8 shadow-sm">
               <div className="flex items-center mb-6">
-                Users className="h-10 w-10 text-primary mr-4" />
+                <Users className="h-10 w-10 text-primary mr-4" />
                 <h2 className="text-3xl font-bold text-secondary">Benefits of QS Ranking</h2>
               </div>
               <p className="text-secondary/70 mb-4">
