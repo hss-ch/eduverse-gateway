@@ -43,7 +43,7 @@ export function HeroSection({ slides, onImageError }: HeroSectionProps) {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex flex-col items-center justify-end p-4 md:p-8 text-center">
                       <span className="inline-block px-4 py-1.5 mb-4 text-sm font-medium bg-primary/90 text-white rounded-full">
-                        Slide {index + 1} of {slides.length}
+                        {slide.header}
                       </span>
                       <h1 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-2 md:mb-4 text-white">
                         {slide.title}
