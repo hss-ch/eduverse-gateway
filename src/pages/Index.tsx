@@ -337,16 +337,12 @@ const institutionTypes = [
 ];
 
 const trustedInstitutions = [
-  "IIT Delhi",
-  "BITS Pilani",
-  "Amity University",
-  "VIT Vellore",
-  "NIIT University",
-  "Manipal Academy",
-  "Delhi University",
-  "SRM Institute",
-  "IIIT Hyderabad",
-  "NIT Trichy",
+  "CMR HYDERABAD",
+  "MREM HYDERABAD",
+  "PRAGATHI HYDERABAD",
+  "ESWAR AP",
+  "SANFORD HYDERABAD",
+
 ];
 
 export default Index;
