@@ -1,8 +1,7 @@
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
-import { Outlet } from "react-router-dom";
 
 import Index from "@/pages/Index";
 import About from "@/pages/About";
@@ -77,7 +76,7 @@ const App = () => {
             <Route path="/accreditation/abet" element={<AbetAccreditation />} />
             <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
             <Route path="/accreditation/qs" element={<QsAccreditation />} />
-            <Route path="/blog" element={<div><Outlet /></div>}>
+            <Route path="/blog" element={<Outlet />}>
               <Route index element={<Blog />} />
               <Route path=":id" element={<BlogView />} />
               <Route path=":id/edit" element={<BlogEdit />} />
@@ -105,9 +104,7 @@ const App = () => {
             <Route path="/features/payment-gateway" element={<PaymentGateway />} />
             <Route path="/features/notifications" element={<Notifications />} />
             <Route path="/features/reports-analytics" element={<ReportsAnalytics />} />
-            <Route element={<ProtectedRoutes />}>
-              <Route path="/dashboard" element={<Dashboard />} />
-            </Route>
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
           <Toaster />
         </div>

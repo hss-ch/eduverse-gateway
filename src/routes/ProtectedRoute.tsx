@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
@@ -11,6 +12,7 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isChecking, setIsChecking] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   
   useEffect(() => {
     let mounted = true;
@@ -28,6 +30,8 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
             variant: "destructive",
           });
           navigate("/auth");
+        } else if (session && mounted) {
+          setIsAuthenticated(true);
         }
       } catch (error) {
         console.error("ProtectedRoute - Error checking session:", error);
@@ -46,6 +50,8 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
       if (!session && mounted) {
         console.log("ProtectedRoute - Auth state changed: No session");
         navigate("/auth");
+      } else if (session && mounted) {
+        setIsAuthenticated(true);
       }
     });
 
@@ -67,5 +73,5 @@ export function ProtectedRoute({ children }: ProtectedRouteProps) {
     );
   }
 
-  return <>{children}</>;
+  return isAuthenticated ? <>{children}</> : null;
 }

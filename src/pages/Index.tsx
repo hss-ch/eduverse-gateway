@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 import { ArrowRight, BookOpen, Users, Calendar, Shield, Database, Server, Smartphone, Printer, BarChart, Award, DollarSign, Check, School, GraduationCap, Building, University, FileText, SaveAll } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -259,9 +260,14 @@ const Index = () => {
                 transition={{ duration: 0.3, delay: index * 0.1 }}
                 className="w-full max-w-[160px] aspect-[3/2] bg-accent/30 rounded-md flex items-center justify-center p-4"
               >
-                <p className="font-semibold text-secondary text-center">
-                  {institution}
-                </p>
+                <div className="text-center">
+                  <p className="font-semibold text-secondary text-center mb-1">
+                    {institution.name}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {institution.location}
+                  </p>
+                </div>
               </motion.div>
             ))}
           </div>
@@ -337,13 +343,16 @@ const institutionTypes = [
 ];
 
 const trustedInstitutions = [
-  "CMR Hyderabad",
-  "MREM Hyderabad",
-  "PRAGATHI Hyderabad",
-  "SANFORD Hyderabad",
-  "ESWAR Narasaraopet ",
-  "and many more...",
-
+  { name: "CMR University", location: "Hyderabad" },
+  { name: "MREM College", location: "Hyderabad" },
+  { name: "PRAGATHI College", location: "Hyderabad" },
+  { name: "SANFORD University", location: "Hyderabad" },
+  { name: "ESWAR College", location: "Narasaraopet" },
+  { name: "Vignan University", location: "Guntur" },
+  { name: "KL University", location: "Vijayawada" },
+  { name: "GITAM University", location: "Visakhapatnam" },
+  { name: "SRM University", location: "Chennai" },
+  { name: "BITS Pilani", location: "Hyderabad" },
 ];
 
 export default Index;
