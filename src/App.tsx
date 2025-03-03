@@ -2,6 +2,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
+import { Outlet } from "react-router-dom";
 
 import Index from "@/pages/Index";
 import About from "@/pages/About";
@@ -26,8 +27,7 @@ import BlogView from "@/pages/BlogView";
 import BlogEdit from "@/pages/BlogEdit";
 import BlogNew from "@/pages/BlogNew";
 import BlogPortal from "@/pages/BlogPortal";
-import { Outlet } from "react-router-dom";
-import ProtectedRoutes from "@/routes/ProtectedRoutes";
+import { ProtectedRoutes } from "@/routes/ProtectedRoutes";
 import Dashboard from "@/pages/Dashboard";
 import AcademicPlanning from "@/pages/features/AcademicPlanning";
 import AdmissionsManagement from "@/pages/features/AdmissionsManagement";
