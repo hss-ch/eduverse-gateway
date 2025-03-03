@@ -123,16 +123,13 @@ const institutionTypes = [
 ];
 
 const trustedInstitutions = [
-  { name: "CMR University", location: "Hyderabad" },
+  { name: "CMR College", location: "Hyderabad" },
   { name: "MREM College", location: "Hyderabad" },
   { name: "PRAGATHI College", location: "Hyderabad" },
-  { name: "SANFORD University", location: "Hyderabad" },
+  { name: "SANFORD School", location: "Hyderabad" },
   { name: "ESWAR College", location: "Narasaraopet" },
-  { name: "Vignan University", location: "Guntur" },
-  { name: "KL University", location: "Vijayawada" },
-  { name: "GITAM University", location: "Visakhapatnam" },
-  { name: "SRM University", location: "Chennai" },
-  { name: "BITS Pilani", location: "Hyderabad" },
+  { name: "", location: "and many more..." },
+
 ];
 
 export default Index;
