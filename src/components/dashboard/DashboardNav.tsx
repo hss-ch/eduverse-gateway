@@ -10,7 +10,11 @@ import {
 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
-export function DashboardNav() {
+interface DashboardNavProps {
+  onTabChange?: (tabId: string) => void;
+}
+
+export function DashboardNav({ onTabChange }: DashboardNavProps) {
   const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'profile';
   
@@ -25,6 +29,9 @@ export function DashboardNav() {
   const handleTabChange = (tabId: string) => {
     if (tabId !== 'contact') {
       setSearchParams({ tab: tabId });
+      if (onTabChange) {
+        onTabChange(tabId);
+      }
     }
   };
 

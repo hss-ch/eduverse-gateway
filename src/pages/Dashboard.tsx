@@ -11,6 +11,9 @@ import { JobApplicationsManagement } from "@/components/dashboard/JobApplication
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Menu } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -19,6 +22,7 @@ const Dashboard = () => {
   const { toast } = useToast();
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     console.log("Dashboard - Checking session");
@@ -43,6 +47,7 @@ const Dashboard = () => {
   const handleTabChange = (value: string) => {
     console.log("Tab changed to:", value);
     setSearchParams({ tab: value });
+    setSidebarOpen(false);
   };
 
   if (loading) {
@@ -71,19 +76,37 @@ const Dashboard = () => {
       <MainNav />
       <div className="container py-4 md:py-8">
         <div className="flex flex-col gap-4 md:gap-8">
-          <h1 className="text-2xl md:text-3xl font-bold">Dashboard</h1>
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl md:text-3xl font-bold">Dashboard</h1>
+            
+            {/* Mobile sidebar trigger */}
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetTrigger asChild className="md:hidden">
+                <Button variant="outline" size="icon">
+                  <Menu className="h-5 w-5" />
+                  <span className="sr-only">Toggle menu</span>
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-[240px] sm:w-[300px] p-0">
+                <div className="py-6 px-4">
+                  <h2 className="text-lg font-semibold mb-4">Dashboard Menu</h2>
+                  <DashboardNav onTabChange={handleTabChange} />
+                </div>
+              </SheetContent>
+            </Sheet>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-6">
             {/* Sidebar - Visible only on MD and larger screens */}
             <div className="hidden md:block bg-white rounded-lg shadow p-4">
-              <DashboardNav />
+              <DashboardNav onTabChange={handleTabChange} />
             </div>
             
             {/* Main content */}
             <div className="bg-white rounded-lg shadow p-4">
               <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
                 {/* Tabs for mobile view */}
-                <TabsList className="w-full md:hidden mb-4 overflow-x-auto grid grid-flow-col justify-start">
+                <TabsList className="w-full md:hidden mb-4 overflow-x-auto flex justify-start">
                   <TabsTrigger value="profile">Profile</TabsTrigger>
                   <TabsTrigger value="users">Users</TabsTrigger>
                   <TabsTrigger value="demos">Demo Requests</TabsTrigger>

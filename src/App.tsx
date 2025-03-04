@@ -2,6 +2,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
+import { ChatWithUs } from "@/components/chat/ChatWithUs";
 
 import Index from "@/pages/Index";
 import About from "@/pages/About";
@@ -107,6 +108,7 @@ const App = () => {
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
           <Toaster />
+          <ChatWithUs />
         </div>
       </BrowserRouter>
     </QueryClientProvider>

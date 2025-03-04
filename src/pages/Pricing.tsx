@@ -128,7 +128,7 @@ const Pricing = () => {
       </section>
 
       <Dialog open={showDemoDialog} onOpenChange={setShowDemoDialog}>
-        <DialogContent className="sm:max-w-[600px]">
+        <DialogContent className="sm:max-w-[600px] w-[95vw] max-h-[90vh] overflow-auto">
           <DialogHeader>
             <DialogTitle>Schedule a Demo - {selectedPlan} Plan</DialogTitle>
             <DialogDescription>
