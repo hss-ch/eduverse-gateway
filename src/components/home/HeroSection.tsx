@@ -13,6 +13,7 @@ interface Slide {
   description: string;
   image: string;
   fallbackImage: string;
+  header: string; // Added the missing header property
 }
 
 interface HeroSectionProps {
