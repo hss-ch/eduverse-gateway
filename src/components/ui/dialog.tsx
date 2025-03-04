@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
@@ -216,23 +217,25 @@ const DialogDescription = React.forwardRef<
 ))
 DialogDescription.displayName = DialogPrimitive.Description.displayName
 
-const DialogAction = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Action>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Action>
+// Fixed: Renamed DialogAction to DialogClose (using the Close primitive instead of Action)
+const DialogClose = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Close>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Action
+  <DialogPrimitive.Close
     ref={ref}
     className={cn(buttonVariants(), className)}
     {...props}
   />
 ))
-DialogAction.displayName = AlertDialogPrimitive.Action.displayName
+DialogClose.displayName = DialogPrimitive.Close.displayName
 
-const DialogCancel = React.forwardRef<
-  React.ElementRef<typeof DialogPrimitive.Cancel>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Cancel>
+// Fixed: Created DialogCloseButton using DialogPrimitive.Close instead of Cancel
+const DialogCloseButton = React.forwardRef<
+  React.ElementRef<typeof DialogPrimitive.Close>,
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Close>
 >(({ className, ...props }, ref) => (
-  <AlertDialogPrimitive.Cancel
+  <DialogPrimitive.Close
     ref={ref}
     className={cn(
       buttonVariants({ variant: "outline" }),
@@ -242,7 +245,7 @@ const DialogCancel = React.forwardRef<
     {...props}
   />
 ))
-DialogCancel.displayName = AlertDialogPrimitive.Cancel.displayName
+DialogCloseButton.displayName = "DialogCloseButton"
 
 export {
   AlertDialog,
@@ -265,6 +268,6 @@ export {
   DialogFooter,
   DialogTitle,
   DialogDescription,
-  DialogAction as DialogClose,
-  DialogCancel as DialogCloseButton,
+  DialogClose,
+  DialogCloseButton,
 }
