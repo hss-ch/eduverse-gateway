@@ -23,7 +23,7 @@ type Message = {
 const initialMessages: Message[] = [
   {
     id: '1',
-    text: 'Hi there! I\'m your EduVerse assistant. How can I help you today?',
+    text: 'Hi there! I\'m your GuideCampus assistant. How can I help you today?',
     sender: 'bot',
     timestamp: new Date(),
   },
@@ -42,14 +42,14 @@ const predefinedResponses: Record<string, string> = {
   "see it in action": "We offer comprehensive demos tailored to your institution's needs. Our team will walk you through all the features and answer any questions you might have.",
   
   // Features related queries
-  "features": "EduVerse offers a comprehensive suite of features including Academic Planning, Admissions Management, Examination Management, Timetable Management, Attendance Tracking, Student Information System, Staff Management, and much more!",
+  "features": "GuideCampus offers a comprehensive suite of features including Academic Planning, Admissions Management, Examination Management, Timetable Management, Attendance Tracking, Student Information System, Staff Management, and much more!",
   "modules": "Our platform includes modules for Academic Management, Administrative Management, Student Life Management, Finance Management, and Accreditation Management, all integrated seamlessly.",
-  "what can it do": "EduVerse can streamline your entire educational institution's operations - from admissions to alumni management, academic planning to financial tracking, and everything in between.",
+  "what can it do": "GuideCampus can streamline your entire educational institution's operations - from admissions to alumni management, academic planning to financial tracking, and everything in between.",
   
   // Support related queries
   "support": "We offer 24/7 premium support for all our plans. You can reach out to us via email, phone, or chat anytime you need assistance.",
-  "help": "Our support team is available 24/7 to assist you with any issues. You can reach us via email at support@eduverse.com or call us at +91 98765 43210.",
-  "contact": "You can reach us by email at info@eduverse.com, call us at +91 98765 43210, or visit our office at 123 Education Street, Tech Park, Bangalore 560001.",
+  "help": "Our support team is available 24/7 to assist you with any issues. You can reach us via email at support@GuideCampus.com or call us at +91 98765 43210.",
+  "contact": "You can reach us by email at info@GuideCampus.com, call us at +91 8555862483, or visit our office at Nizampet, Hyderabad 500090.",
   
   // Implementation related queries
   "implementation": "Implementation typically takes 2-4 weeks, depending on the size and complexity of your institution. Our team will guide you through the entire process to ensure a smooth transition.",
@@ -67,7 +67,7 @@ const predefinedResponses: Record<string, string> = {
   
   // Training related queries
   "training": "We offer comprehensive training for all users including administrators, faculty, and staff. Training sessions can be conducted online or in-person based on your preference.",
-  "learn how to use": "We provide detailed documentation, video tutorials, and live training sessions to help your team get the most out of EduVerse. Our support team is also always available to answer questions.",
+  "learn how to use": "We provide detailed documentation, video tutorials, and live training sessions to help your team get the most out of GuideCampus. Our support team is also always available to answer questions.",
   
   // Academic Management related queries
   "academic": "Our Academic Management module helps you handle curriculum management, student progress tracking, grade management, academic calendar planning, outcome-based education implementation, and detailed performance analytics.",
@@ -175,7 +175,7 @@ export function ChatWithUs() {
               </Button>
             </div>
             <DialogDescription>
-              Ask questions about EduVerse
+              Ask questions about GuideCampus
             </DialogDescription>
           </DialogHeader>
           
