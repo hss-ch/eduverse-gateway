@@ -101,13 +101,16 @@ export default function BlogView() {
     );
   }
 
+  // Use the image_url if available, otherwise use a fallback image
+  const headerImageUrl = post.image_url || "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8";
+
   return (
     <div className="min-h-screen bg-background">
       <MainNav />
       
       <BlogPageHeader 
         title={post.title}
-        imageSrc={post.image_url || "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8"}
+        imageSrc={headerImageUrl}
       />
       
       <article className="container mx-auto px-4 py-8">
@@ -120,9 +123,9 @@ export default function BlogView() {
           Back to Blog
         </Button>
         
-        <div className="bg-card rounded-lg shadow-sm p-6 md:p-8">
+        <div className="bg-card rounded-lg shadow-sm p-4 sm:p-6 md:p-8">
           <div className="mb-8">
-            <div className="flex justify-between items-center">
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">
                   {format(new Date(post.created_at), "MMMM d, yyyy")}

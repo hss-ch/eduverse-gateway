@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -65,11 +66,6 @@ export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRati
     
     if (!session?.user?.id) {
       console.log('BlogRating - User not authenticated');
-      toast({
-        title: "Authentication Required",
-        description: "Please sign in to rate posts",
-        variant: "destructive",
-      });
       return;
     }
 
@@ -129,7 +125,8 @@ export function BlogRating({ id, initialRating = 0, initialCount = 0 }: BlogRati
         rating={userRating ?? currentRating}
         onRate={handleRating}
         isSubmitting={isSubmitting}
-        isInteractive={!!session}
+        isInteractive={true}
+        isAuthenticated={!!session}
       />
       <RatingCount count={currentCount} />
     </div>

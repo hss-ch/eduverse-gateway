@@ -101,10 +101,10 @@ export default function Blog() {
       />
       
       <div className="container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-wrap justify-between items-center mb-8 gap-4">
           <h2 className="text-2xl font-bold">Latest Posts</h2>
           {isAuthenticated && (
-            <Button onClick={() => navigate("/blog/new")} className="flex items-center gap-2">
+            <Button onClick={() => navigate("/blog/new")} className="flex items-center gap-2 ml-auto">
               <Plus className="h-4 w-4" />
               <span>Create Post</span>
             </Button>

@@ -37,7 +37,7 @@ export function DashboardNav() {
             <Button
               key={item.id}
               variant="ghost"
-              className="w-full justify-start gap-2 text-sm"
+              className="w-full justify-start gap-2 text-sm font-medium"
               asChild
             >
               <Link to={item.path}>
@@ -52,7 +52,7 @@ export function DashboardNav() {
           <Button
             key={item.id}
             variant={activeTab === item.id ? "secondary" : "ghost"}
-            className="w-full justify-start gap-2 text-sm"
+            className="w-full justify-start gap-2 text-sm font-medium"
             onClick={() => handleTabChange(item.id)}
           >
             <item.icon className="h-4 w-4" />
