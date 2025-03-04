@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { EmployeeTestimonial } from "@/components/careers/EmployeeTestimonial";
 
 interface JobData {
   id: string;
@@ -113,7 +114,96 @@ export default function Careers() {
         </div>
       </div>
 
-      <section className="container mx-auto px-4 md:px-6 py-8 md:py-12">
+      {/* Mission Statement Section */}
+      <section className="py-12 md:py-20 bg-white">
+        <div className="container mx-auto px-4 md:px-6">
+          <div className="grid md:grid-cols-2 gap-8 items-center">
+            <div className="order-2 md:order-1">
+              <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-6">
+                The future is created by people like you
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                At GuideCampus, we believe that transforming education requires exceptional talent. 
+                We're building a team of passionate innovators who are committed to making education 
+                more accessible, efficient, and effective through technology.
+              </p>
+              <p className="text-muted-foreground mb-6">
+                When you join GuideCampus, you become part of a mission to empower educational 
+                institutions across the globe. We offer a collaborative environment where your 
+                ideas matter and your growth is prioritized.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <div className="bg-muted p-4 rounded-lg flex-1 min-w-[200px]">
+                  <h3 className="font-bold text-lg mb-2">Innovation</h3>
+                  <p className="text-sm text-muted-foreground">We encourage creative thinking and bold solutions</p>
+                </div>
+                <div className="bg-muted p-4 rounded-lg flex-1 min-w-[200px]">
+                  <h3 className="font-bold text-lg mb-2">Growth</h3>
+                  <p className="text-sm text-muted-foreground">We invest in your personal and professional development</p>
+                </div>
+                <div className="bg-muted p-4 rounded-lg flex-1 min-w-[200px]">
+                  <h3 className="font-bold text-lg mb-2">Impact</h3>
+                  <p className="text-sm text-muted-foreground">Your work directly affects educational outcomes worldwide</p>
+                </div>
+              </div>
+            </div>
+            <div className="order-1 md:order-2">
+              <img 
+                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c" 
+                alt="Team collaborating" 
+                className="rounded-lg shadow-lg w-full h-auto"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Employee Testimonials Section */}
+      <section className="py-12 md:py-20 bg-accent">
+        <div className="container mx-auto px-4 md:px-6">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-12">
+            Employee Experience - Hear from Our Team
+          </h2>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <EmployeeTestimonial 
+              name="Priya Sharma"
+              position="Senior Product Designer"
+              years="4 years at GuideCampus"
+              testimonial="Working at GuideCampus has given me the opportunity to solve real problems in education while growing my design skills. The collaborative environment and focus on user impact is unmatched."
+              imageSrc="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158"
+            />
+            
+            <EmployeeTestimonial 
+              name="Rahul Mehta"
+              position="Engineering Manager"
+              years="3 years at GuideCampus"
+              testimonial="I joined GuideCampus because I wanted my technical skills to make a difference. Today, our solutions are helping institutions serve thousands of students better, and that's incredibly rewarding."
+              imageSrc="https://images.unsplash.com/photo-1488590528505-98d2b5aba04b"
+            />
+            
+            <EmployeeTestimonial 
+              name="Anjali Patel"
+              position="Customer Success Lead"
+              years="2 years at GuideCampus"
+              testimonial="The growth opportunities at GuideCampus are exceptional. I started in support and now lead our customer success initiatives. The company truly invests in its people."
+              imageSrc="https://images.unsplash.com/photo-1649972904349-6e44c42644a7"
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Job Openings Section */}
+      <section className="container mx-auto px-4 md:px-6 py-12 md:py-20">
+        <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-center mb-8">
+          Openings at GuideCampus
+        </h2>
+        
+        <p className="text-center text-muted-foreground max-w-3xl mx-auto mb-12">
+          Join our team and help shape the future of education technology. We're looking for passionate individuals
+          who are excited about making a difference in the education sector.
+        </p>
+
         {isAdmin && (
           <div className="mb-6 md:mb-8">
             <JobListingManager 
