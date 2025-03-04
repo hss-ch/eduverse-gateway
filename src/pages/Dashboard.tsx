@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const activeTab = searchParams.get('tab') || 'profile';
   const { toast } = useToast();
   const [session, setSession] = useState<any>(null);
@@ -38,6 +38,12 @@ const Dashboard = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  // Handle tab change both for the Tabs component and URL
+  const handleTabChange = (value: string) => {
+    console.log("Tab changed to:", value);
+    setSearchParams({ tab: value });
+  };
 
   if (loading) {
     return (
@@ -75,7 +81,7 @@ const Dashboard = () => {
             
             {/* Main content */}
             <div className="bg-white rounded-lg shadow p-4">
-              <Tabs defaultValue={activeTab} className="w-full">
+              <Tabs value={activeTab} onValueChange={handleTabChange} className="w-full">
                 {/* Tabs for mobile view */}
                 <TabsList className="w-full md:hidden mb-4 overflow-x-auto grid grid-flow-col justify-start">
                   <TabsTrigger value="profile">Profile</TabsTrigger>
