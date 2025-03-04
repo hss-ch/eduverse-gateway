@@ -34,7 +34,7 @@ const predefinedResponses: Record<string, string> = {
   // Pricing related queries
   "pricing": "Our pricing is based on a per-student model, starting from ₹150 per student per year for Training Institutions, ₹450 for Schools, ₹500 for Colleges, and ₹600 for Universities. We're currently offering a special launch discount!",
   "cost": "Our pricing is affordable and flexible, with plans starting from ₹150 per student per year depending on your institution type. We also offer customized enterprise solutions for larger institutions.",
-  "subscription": "All our plans are annual subscriptions with options for monthly installments. You can upgrade your plan at any time as your institution grows.",
+  "subscription": "All our plans are annual subscriptions based on a per-student model. Starting from ₹150 per student per year for Training Institutions, ₹450 for Schools, ₹500 for Colleges, and ₹600 for Universities. We're currently offering a special launch discount!",
   
   // Demo related queries
   "demo": "You can schedule a demo by clicking on the 'Get Started' button on our pricing page. We'll set up a personalized demo session to show you how our platform can benefit your institution.",
@@ -48,17 +48,17 @@ const predefinedResponses: Record<string, string> = {
   
   // Support related queries
   "support": "We offer 24/7 premium support for all our plans. You can reach out to us via email, phone, or chat anytime you need assistance.",
-  "help": "Our support team is available 24/7 to assist you with any issues. You can reach us via email at support@GuideCampus.com or call us at +91 98765 43210.",
-  "contact": "You can reach us by email at info@GuideCampus.com, call us at +91 8555862483, or visit our office at Nizampet, Hyderabad 500090.",
+  "help": "Our support team is available 24/7 to assist you with any issues. You can reach us via email at support@GuideCampus.com or call us at +91 85558 62483.",
+  "contact": "You can reach us by email at info@GuideCampus.com, call us at +91 85558 62483, or visit our office at Nizampet, Hyderabad 500090.",
   
   // Implementation related queries
-  "implementation": "Implementation typically takes 2-4 weeks, depending on the size and complexity of your institution. Our team will guide you through the entire process to ensure a smooth transition.",
-  "setup": "Our setup process is designed to be smooth and efficient. We provide comprehensive training and support during the implementation phase, which typically takes 2-4 weeks.",
-  "onboarding": "Our onboarding process includes data migration, system configuration, user training, and a trial period to ensure everything works perfectly for your institution.",
+  "implementation": "Implementation typically takes 1-2 weeks, depending on the size and complexity of your institution. Our team will guide you through the entire process to ensure a smooth transition.",
+  "setup": "Our setup process is designed to be smooth and efficient. We provide comprehensive training and support during the implementation phase, which typically takes 1-2 weeks.",
+  "onboarding": "Our onboarding process includes data migration, system configuration and user training to ensure everything works perfectly for your institution.",
   
   // Trial related queries
-  "trial": "Yes, we offer a 30-day free trial for all our plans. You can explore all features during the trial period with no commitment required.",
-  "free version": "We offer a 30-day free trial that gives you access to all features of your selected plan. This allows you to fully evaluate the platform before making a commitment.",
+  "trial": "No, we do not offer any free trial for all our plans. You can explore all features during demo given by our experts.",
+  "free version": "No. We do not offer free trial. Our experts provides a demo that gives you all the details of all features of your plan. This allows you to fully evaluate the platform before making a commitment.",
   
   // Data related queries
   "data migration": "We provide comprehensive data migration services to help you transition smoothly from your existing systems. Our team will ensure all your data is transferred accurately and securely.",
