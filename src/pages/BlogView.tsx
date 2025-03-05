@@ -6,7 +6,7 @@ import { Footer } from "@/components/Footer";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { format } from "date-fns";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Heart, Calendar, Clock, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BlogRating } from "@/components/blog/BlogRating";
 import { BlogAdminActions } from "@/components/blog/BlogAdminActions";
@@ -18,8 +18,17 @@ export default function BlogView() {
   const { toast } = useToast();
   const [post, setPost] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [hasLiked, setHasLiked] = useState(false);
 
   useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+    };
+    
+    checkAuth();
+    
     if (id) {
       fetchPost(id);
     }
@@ -55,6 +64,13 @@ export default function BlogView() {
 
       console.log("Fetched post:", data);
       setPost(data);
+      
+      // Increment view count
+      incrementViewCount(postId);
+      
+      // Check if user has liked this post
+      checkUserLike(postId);
+      
     } catch (error) {
       console.error("Unexpected error:", error);
       toast({
@@ -65,6 +81,99 @@ export default function BlogView() {
       navigate("/blog");
     } finally {
       setLoading(false);
+    }
+  }
+  
+  async function incrementViewCount(postId: string) {
+    try {
+      const { error } = await supabase.rpc('increment_blog_view', {
+        blog_id: postId
+      });
+      
+      if (error) {
+        console.error("Error incrementing view count:", error);
+      } else {
+        // Update local state to show the incremented view
+        setPost(prev => prev ? {...prev, views_count: (prev.views_count || 0) + 1} : prev);
+      }
+    } catch (error) {
+      console.error("Error tracking view:", error);
+    }
+  }
+  
+  async function checkUserLike(postId: string) {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      
+      const { data } = await supabase
+        .from('blog_likes')
+        .select()
+        .eq('blog_id', postId)
+        .eq('user_id', user.id)
+        .maybeSingle();
+        
+      setHasLiked(!!data);
+    } catch (error) {
+      console.error("Error checking like status:", error);
+    }
+  }
+  
+  async function handleLikeToggle() {
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to like blog posts",
+        variant: "default",
+      });
+      return;
+    }
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || !post) return;
+      
+      if (hasLiked) {
+        // Unlike the post
+        const { error } = await supabase
+          .from('blog_likes')
+          .delete()
+          .eq('blog_id', post.id)
+          .eq('user_id', user.id);
+          
+        if (error) throw error;
+        
+        // Update local state
+        setHasLiked(false);
+        setPost({
+          ...post,
+          likes_count: Math.max((post.likes_count || 1) - 1, 0)
+        });
+      } else {
+        // Like the post
+        const { error } = await supabase
+          .from('blog_likes')
+          .insert({
+            blog_id: post.id,
+            user_id: user.id
+          });
+          
+        if (error) throw error;
+        
+        // Update local state
+        setHasLiked(true);
+        setPost({
+          ...post,
+          likes_count: (post.likes_count || 0) + 1
+        });
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update like status. Please try again.",
+        variant: "destructive",
+      });
     }
   }
 
@@ -127,18 +236,46 @@ export default function BlogView() {
           <div className="mb-8">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
               <div>
-                <p className="text-sm text-muted-foreground">
-                  {format(new Date(post.created_at), "MMMM d, yyyy")}
-                </p>
-                <p className="text-sm text-muted-foreground">
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <div className="flex items-center">
+                    <Calendar className="h-3 w-3 mr-1" />
+                    {format(new Date(post.created_at), "MMMM d, yyyy")}
+                  </div>
+                  {post.updated_at && post.updated_at !== post.created_at && (
+                    <div className="flex items-center">
+                      <Clock className="h-3 w-3 mr-1" />
+                      Updated: {format(new Date(post.updated_at), "MMMM d, yyyy")}
+                    </div>
+                  )}
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">
                   By {post.profiles?.full_name || "Anonymous"}
                 </p>
               </div>
-              <BlogRating 
-                id={post.id} 
-                initialRating={post.rating || 0}
-                initialCount={post.ratings_count || 0}
-              />
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <Eye className="h-4 w-4 text-muted-foreground" />
+                  <span className="text-sm text-muted-foreground">
+                    {post.views_count || 0} views
+                  </span>
+                </div>
+                <div 
+                  className="flex items-center gap-1 cursor-pointer"
+                  onClick={handleLikeToggle}
+                >
+                  <Heart 
+                    className={`h-4 w-4 ${hasLiked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} 
+                  />
+                  <span className="text-sm text-muted-foreground">
+                    {post.likes_count || 0} likes
+                  </span>
+                </div>
+                <BlogRating 
+                  id={post.id} 
+                  initialRating={post.rating || 0}
+                  initialCount={post.ratings_count || 0}
+                />
+              </div>
             </div>
           </div>
           

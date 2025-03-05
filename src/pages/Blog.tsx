@@ -5,7 +5,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { Plus } from "lucide-react";
+import { Plus, Heart, Calendar, Eye, Clock } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { BlogRating } from "@/components/blog/BlogRating";
 import { BlogAdminActions } from "@/components/blog/BlogAdminActions";
@@ -63,6 +63,14 @@ export default function Blog() {
       }
 
       console.log("Fetched posts:", data);
+      
+      // Track views for each post that's displayed in the list
+      if (data && data.length > 0) {
+        data.forEach(async (post) => {
+          await incrementViewCount(post.id);
+        });
+      }
+      
       setPosts(data || []);
     } catch (error) {
       console.error("Unexpected error:", error);
@@ -73,6 +81,90 @@ export default function Blog() {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const incrementViewCount = async (blogId: string) => {
+    try {
+      // Increment the view count
+      const { error } = await supabase.rpc('increment_blog_view', {
+        blog_id: blogId
+      });
+      
+      if (error) {
+        console.error("Error incrementing view count:", error);
+      }
+    } catch (error) {
+      console.error("Error tracking view:", error);
+    }
+  };
+
+  const handleLikeClick = async (blogId: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication Required",
+        description: "Please sign in to like blog posts",
+        variant: "default",
+      });
+      return;
+    }
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+      
+      // Check if user already liked the post
+      const { data: existingLike } = await supabase
+        .from('blog_likes')
+        .select()
+        .eq('blog_id', blogId)
+        .eq('user_id', user.id)
+        .single();
+      
+      if (existingLike) {
+        // Unlike the post
+        await supabase
+          .from('blog_likes')
+          .delete()
+          .eq('blog_id', blogId)
+          .eq('user_id', user.id);
+          
+        // Update local state
+        setPosts(prevPosts => 
+          prevPosts.map(post => 
+            post.id === blogId 
+              ? { ...post, likes_count: (post.likes_count || 1) - 1, user_has_liked: false } 
+              : post
+          )
+        );
+      } else {
+        // Like the post
+        await supabase
+          .from('blog_likes')
+          .insert({
+            blog_id: blogId,
+            user_id: user.id
+          });
+          
+        // Update local state
+        setPosts(prevPosts => 
+          prevPosts.map(post => 
+            post.id === blogId 
+              ? { ...post, likes_count: (post.likes_count || 0) + 1, user_has_liked: true } 
+              : post
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Error toggling like:", error);
+      toast({
+        title: "Error",
+        description: "Failed to update like status. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -138,25 +230,57 @@ export default function Blog() {
                     )}
                     <CardHeader>
                       <CardTitle className="line-clamp-2">{post.title}</CardTitle>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(post.created_at), "MMMM d, yyyy")}
-                      </p>
+                      <div className="flex items-center text-sm text-muted-foreground gap-4">
+                        <div className="flex items-center">
+                          <Calendar className="h-3 w-3 mr-1" />
+                          {format(new Date(post.created_at), "MMM d, yyyy")}
+                        </div>
+                        {post.updated_at && post.updated_at !== post.created_at && (
+                          <div className="flex items-center">
+                            <Clock className="h-3 w-3 mr-1" />
+                            Updated: {format(new Date(post.updated_at), "MMM d, yyyy")}
+                          </div>
+                        )}
+                      </div>
                     </CardHeader>
                     <CardContent>
                       <p className="line-clamp-3 text-muted-foreground mb-4">
                         {post.content}
                       </p>
-                      <div onClick={(e) => e.preventDefault()}>
-                        <BlogRating 
-                          id={post.id} 
-                          initialRating={post.rating || 0}
-                          initialCount={post.ratings_count || 0}
-                        />
-                        <BlogAdminActions
-                          blogId={post.id}
-                          isPublished={post.published}
-                          onPublishChange={fetchPosts}
-                        />
+                      <div className="flex items-center justify-between mt-4">
+                        <div className="flex items-center gap-4">
+                          <div 
+                            onClick={(e) => handleLikeClick(post.id, e)}
+                            className="flex items-center gap-1 cursor-pointer"
+                          >
+                            <Heart 
+                              className={`h-4 w-4 ${post.user_has_liked ? 'fill-red-500 text-red-500' : 'text-muted-foreground'}`} 
+                            />
+                            <span className="text-xs text-muted-foreground">
+                              {post.likes_count || 0}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            <Eye className="h-4 w-4 text-muted-foreground" />
+                            <span className="text-xs text-muted-foreground">
+                              {post.views_count || 0}
+                            </span>
+                          </div>
+                          <div onClick={(e) => e.preventDefault()}>
+                            <BlogRating 
+                              id={post.id} 
+                              initialRating={post.rating || 0}
+                              initialCount={post.ratings_count || 0}
+                            />
+                          </div>
+                        </div>
+                        <div onClick={(e) => e.preventDefault()}>
+                          <BlogAdminActions
+                            blogId={post.id}
+                            isPublished={post.published}
+                            onPublishChange={fetchPosts}
+                          />
+                        </div>
                       </div>
                     </CardContent>
                   </Card>
