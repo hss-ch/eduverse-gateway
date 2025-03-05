@@ -8,6 +8,7 @@ import { UserManagement } from "@/components/dashboard/UserManagement";
 import { ProfileManagement } from "@/components/dashboard/ProfileManagement";
 import { DemoRequestsManagement } from "@/components/dashboard/DemoRequestsManagement";
 import { JobApplicationsManagement } from "@/components/dashboard/JobApplicationsManagement";
+import { PartnerRequestsManagement } from "@/components/dashboard/PartnerRequestsManagement";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -111,6 +112,7 @@ const Dashboard = () => {
                   <TabsTrigger value="users">Users</TabsTrigger>
                   <TabsTrigger value="demos">Demo Requests</TabsTrigger>
                   <TabsTrigger value="applications">Job Applications</TabsTrigger>
+                  <TabsTrigger value="partners">Partner Requests</TabsTrigger>
                 </TabsList>
                 
                 <TabsContent value="profile">
@@ -125,6 +127,9 @@ const Dashboard = () => {
                 <TabsContent value="applications">
                   <JobApplicationsManagement />
                 </TabsContent>
+                <TabsContent value="partners">
+                  <PartnerRequestsManagement />
+                </TabsContent>
               </Tabs>
             </div>
           </div>
@@ -133,6 +138,6 @@ const Dashboard = () => {
       <Footer />
     </div>
   );
-};
+}
 
 export default Dashboard;

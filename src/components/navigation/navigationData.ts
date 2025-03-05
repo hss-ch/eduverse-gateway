@@ -54,6 +54,11 @@ export const navigationData: NavigationItem[] = [
         description: "Manage your profile and account settings.",
       },
       {
+        title: "Partners",
+        href: "/partners",
+        description: "Explore partnership opportunities with us.",
+      },
+      {
         title: "About Us",
         href: "/about",
         description: "Learn about our mission and vision.",

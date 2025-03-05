@@ -7,6 +7,7 @@ import {
   Calendar,
   Briefcase,
   MessageSquare,
+  Handshake,
 } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
 
@@ -23,6 +24,7 @@ export function DashboardNav({ onTabChange }: DashboardNavProps) {
     { id: 'users', label: 'Users', icon: Users },
     { id: 'demos', label: 'Demo Requests', icon: Calendar },
     { id: 'applications', label: 'Job Applications', icon: Briefcase },
+    { id: 'partners', label: 'Partner Requests', icon: Handshake },
     { id: 'contact', label: 'Contact', icon: MessageSquare, path: '/contact' },
   ];
 
