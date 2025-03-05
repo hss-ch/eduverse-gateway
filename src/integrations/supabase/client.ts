@@ -16,7 +16,7 @@ export const supabase = createClient<Database>(
     auth: {
       persistSession: true,
       autoRefreshToken: true,
-      detectSessionInUrl: true
+      detectSessionInUrl: false // Changed from true to false to avoid URL fragment issues
     },
     global: {
       headers: {

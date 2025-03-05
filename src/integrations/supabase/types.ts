@@ -9,6 +9,35 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      blog_likes: {
+        Row: {
+          blog_id: string | null
+          created_at: string | null
+          id: string
+          user_id: string | null
+        }
+        Insert: {
+          blog_id?: string | null
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Update: {
+          blog_id?: string | null
+          created_at?: string | null
+          id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_likes_blog_id_fkey"
+            columns: ["blog_id"]
+            isOneToOne: false
+            referencedRelation: "blogs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blog_ratings: {
         Row: {
           blog_id: string | null
@@ -48,11 +77,13 @@ export type Database = {
           created_at: string
           id: string
           image_url: string | null
+          likes_count: number | null
           published: boolean | null
           rating: number | null
           ratings_count: number | null
           title: string
           updated_at: string
+          views_count: number | null
         }
         Insert: {
           author_id: string
@@ -60,11 +91,13 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          likes_count?: number | null
           published?: boolean | null
           rating?: number | null
           ratings_count?: number | null
           title: string
           updated_at?: string
+          views_count?: number | null
         }
         Update: {
           author_id?: string
@@ -72,11 +105,13 @@ export type Database = {
           created_at?: string
           id?: string
           image_url?: string | null
+          likes_count?: number | null
           published?: boolean | null
           rating?: number | null
           ratings_count?: number | null
           title?: string
           updated_at?: string
+          views_count?: number | null
         }
         Relationships: [
           {
@@ -317,7 +352,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      increment_blog_view: {
+        Args: {
+          blog_id: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
