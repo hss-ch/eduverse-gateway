@@ -320,6 +320,51 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_requests: {
+        Row: {
+          admin_notes: string | null
+          admin_response: string | null
+          company: string
+          created_at: string | null
+          email: string
+          id: string
+          message: string | null
+          name: string
+          partner_type: string
+          phone: string
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          admin_notes?: string | null
+          admin_response?: string | null
+          company: string
+          created_at?: string | null
+          email: string
+          id?: string
+          message?: string | null
+          name: string
+          partner_type: string
+          phone: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          admin_notes?: string | null
+          admin_response?: string | null
+          company?: string
+          created_at?: string | null
+          email?: string
+          id?: string
+          message?: string | null
+          name?: string
+          partner_type?: string
+          phone?: string
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

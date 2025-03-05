@@ -53,10 +53,12 @@ export function PartnerRequestsManagement() {
   const fetchRequests = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("partner_requests")
-        .select("*")
-        .order("created_at", { ascending: false });
+      // Use the "as any" workaround to temporarily bypass TypeScript checking
+      // This is needed because the Supabase types don't know about our new table yet
+      const { data, error } = await (supabase
+        .from('partner_requests' as any)
+        .select('*')
+        .order('created_at', { ascending: false }) as any);
 
       if (error) throw error;
       setRequests(data || []);
@@ -97,14 +99,15 @@ export function PartnerRequestsManagement() {
     if (!selectedRequest) return;
     
     try {
-      const { error } = await supabase
-        .from("partner_requests")
+      // Use the "as any" workaround to temporarily bypass TypeScript checking
+      const { error } = await (supabase
+        .from('partner_requests' as any)
         .update({
           status: responseData.status,
           admin_notes: responseData.notes,
           admin_response: responseData.response,
         })
-        .eq("id", selectedRequest.id);
+        .eq("id", selectedRequest.id) as any);
 
       if (error) throw error;
       
