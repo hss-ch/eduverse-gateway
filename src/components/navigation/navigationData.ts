@@ -59,6 +59,11 @@ export const navigationData: NavigationItem[] = [
         description: "Explore partnership opportunities with us.",
       },
       {
+        title: "News & Events",
+        href: "/news-and-events",
+        description: "Stay updated with our latest news and upcoming events.",
+      },
+      {
         title: "About Us",
         href: "/about",
         description: "Learn about our mission and vision.",

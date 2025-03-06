@@ -30,6 +30,7 @@ import BlogPortal from "@/pages/BlogPortal";
 import { ProtectedRoutes } from "@/routes/ProtectedRoutes";
 import Dashboard from "@/pages/Dashboard";
 import Partners from "@/pages/Partners";
+import NewsAndEvents from "@/pages/NewsAndEvents";
 import AcademicPlanning from "@/pages/features/AcademicPlanning";
 import AdmissionsManagement from "@/pages/features/AdmissionsManagement";
 import ExaminationManagement from "@/pages/features/ExaminationManagement";
@@ -79,6 +80,7 @@ const App = () => {
             <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
             <Route path="/accreditation/qs" element={<QsAccreditation />} />
             <Route path="/partners" element={<Partners />} />
+            <Route path="/news-and-events" element={<NewsAndEvents />} />
             <Route path="/blog" element={<Outlet />}>
               <Route index element={<Blog />} />
               <Route path=":id" element={<BlogView />} />
@@ -108,6 +110,7 @@ const App = () => {
             <Route path="/features/notifications" element={<Notifications />} />
             <Route path="/features/reports-analytics" element={<ReportsAnalytics />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <ProtectedRoutes />
           </Routes>
           <Toaster />
           <ChatWithUs />

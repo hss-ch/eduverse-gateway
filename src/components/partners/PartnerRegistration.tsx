@@ -1,5 +1,6 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,10 @@ interface PartnerRegistrationProps {
 
 export function PartnerRegistration({ initialPartnerType = "business_partner" }: PartnerRegistrationProps) {
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -24,6 +28,26 @@ export function PartnerRegistration({ initialPartnerType = "business_partner" }:
     partnerType: initialPartnerType,
     message: "",
   });
+
+  // Check authentication on mount
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      setIsAuthenticated(!!session);
+      setCheckingAuth(false);
+    };
+    
+    checkAuth();
+    
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setIsAuthenticated(!!session);
+    });
+    
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -44,6 +68,7 @@ export function PartnerRegistration({ initialPartnerType = "business_partner" }:
           description: "Please sign in to submit a partner request.",
           variant: "destructive",
         });
+        navigate("/auth");
         return;
       }
       
@@ -89,6 +114,36 @@ export function PartnerRegistration({ initialPartnerType = "business_partner" }:
       setLoading(false);
     }
   };
+
+  const handleLoginRedirect = () => {
+    toast({
+      title: "Authentication Required",
+      description: "You'll be redirected to the login page to authenticate.",
+    });
+    navigate("/auth");
+  };
+
+  if (checkingAuth) {
+    return (
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <h3 className="text-lg font-semibold mb-4">Partner With Us</h3>
+        <p className="mb-4 text-secondary/70">You need to be signed in to submit a partnership request.</p>
+        <Button onClick={handleLoginRedirect} className="w-full">
+          Sign In to Continue
+        </Button>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-white shadow-md rounded-lg p-6">
