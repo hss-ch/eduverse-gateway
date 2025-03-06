@@ -105,7 +105,7 @@ const newsItems = [
     content:"Hyderabad, India – Feb 2025 – Pragathi College, a leading educational institution in Hyderabad, has officially gone live with GuideCampus, an advanced Smart Campus Management & Automation Software. This strategic move aims to digitize and streamline academic, administrative, and operational activities, enhancing the overall efficiency of the institution.",
     excerpt: " Pragathi College, a leading educational institution in Hyderabad, has officially gone live with GuideCampus, an advanced Smart Campus Management & Automation Software.",
     date: "Feb 10, 2025",
-    category: "Awards",
+    category: "MoU",
     imageUrl: "https://images.unsplash.com/photo-1551836022-8b2858c9c69b?auto=format&fit=crop&w=800&q=80"
   },
   {
