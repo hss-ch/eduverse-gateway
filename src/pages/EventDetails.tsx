@@ -122,7 +122,7 @@ const events = [
     description: "A hands-on workshop focused on improving campus management processes using modern digital tools. Learn from industry experts and share experiences with peers.",
     date: "July 10, 2025",
     time: "10:30 AM - 3:30 PM",
-    location: "Bangalore, India",
+    location: "Hyderabad, India",
     imageUrl: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80",
     isFeatured: false,
     attendees: 120
@@ -144,7 +144,7 @@ const events = [
     description: "A premier gathering of higher education leaders, discussing the future of education, emerging technologies, and strategic initiatives for institutional growth.",
     date: "September 20, 2025",
     time: "9:00 AM - 6:00 PM",
-    location: "New Delhi, India",
+    location: "Hyderabad, India",
     imageUrl: "https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&w=800&q=80",
     isFeatured: true,
     attendees: 300
