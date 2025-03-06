@@ -27,7 +27,7 @@ import BlogView from "@/pages/BlogView";
 import BlogEdit from "@/pages/BlogEdit";
 import BlogNew from "@/pages/BlogNew";
 import BlogPortal from "@/pages/BlogPortal";
-import { ProtectedRoutes } from "@/routes/ProtectedRoutes";
+import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import Dashboard from "@/pages/Dashboard";
 import Partners from "@/pages/Partners";
 import NewsAndEvents from "@/pages/NewsAndEvents";
@@ -66,13 +66,10 @@ const App = () => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/features" element={<Features />} />
             <Route path="/pricing" element={<Pricing />} />
-            <Route path="/academic" element={<Academic />} />
-            <Route path="/administrative" element={<Administrative />} />
-            <Route path="/planning" element={<Planning />} />
-            <Route path="/auth" element={<Auth />} />
             <Route path="/careers" element={<Careers />} />
             <Route path="/terms-of-service" element={<TermsOfService />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/accreditation" element={<Accreditation />} />
             <Route path="/accreditation/naac" element={<NaacAccreditation />} />
             <Route path="/accreditation/nba" element={<NbaAccreditation />} />
@@ -109,8 +106,12 @@ const App = () => {
             <Route path="/features/payment-gateway" element={<PaymentGateway />} />
             <Route path="/features/notifications" element={<Notifications />} />
             <Route path="/features/reports-analytics" element={<ReportsAnalytics />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <ProtectedRoutes />
+            
+            {/* Protected routes */}
+            <Route path="/academic" element={<ProtectedRoute><Academic /></ProtectedRoute>} />
+            <Route path="/administrative" element={<ProtectedRoute><Administrative /></ProtectedRoute>} />
+            <Route path="/planning" element={<ProtectedRoute><Planning /></ProtectedRoute>} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           </Routes>
           <Toaster />
           <ChatWithUs />
