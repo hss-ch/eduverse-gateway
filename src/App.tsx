@@ -1,4 +1,3 @@
-
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { Toaster } from "@/components/ui/toaster";
@@ -52,6 +51,8 @@ import CertificateGeneration from "@/pages/features/CertificateGeneration";
 import PaymentGateway from "@/pages/features/PaymentGateway";
 import Notifications from "@/pages/features/Notifications";
 import ReportsAnalytics from "@/pages/features/ReportsAnalytics";
+import EventDetails from "@/pages/EventDetails";
+import NewsDetails from "@/pages/NewsDetails";
 
 const queryClient = new QueryClient();
 
@@ -78,6 +79,8 @@ const App = () => {
             <Route path="/accreditation/qs" element={<QsAccreditation />} />
             <Route path="/partners" element={<Partners />} />
             <Route path="/news-and-events" element={<NewsAndEvents />} />
+            <Route path="/events/:id" element={<EventDetails />} />
+            <Route path="/news/:id" element={<NewsDetails />} />
             <Route path="/blog" element={<Outlet />}>
               <Route index element={<Blog />} />
               <Route path=":id" element={<BlogView />} />
@@ -107,7 +110,6 @@ const App = () => {
             <Route path="/features/notifications" element={<Notifications />} />
             <Route path="/features/reports-analytics" element={<ReportsAnalytics />} />
             
-            {/* Protected routes */}
             <Route path="/academic" element={<ProtectedRoute><Academic /></ProtectedRoute>} />
             <Route path="/administrative" element={<ProtectedRoute><Administrative /></ProtectedRoute>} />
             <Route path="/planning" element={<ProtectedRoute><Planning /></ProtectedRoute>} />

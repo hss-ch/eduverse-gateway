@@ -1,4 +1,3 @@
-
 import { motion } from "framer-motion";
 import { CalendarDays, Users, MapPin, Clock, Search } from "lucide-react";
 import { useState } from "react";
@@ -17,43 +16,30 @@ const NewsAndEvents = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Filter events based on search query
   const filteredEvents = events.filter(
     event => 
       event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.description.toLowerCase().includes(searchQuery.toLowerCase())
   );
   
-  // Filter news based on search query
   const filteredNews = newsItems.filter(
     news => 
       news.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       news.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Handle event details view
   const handleViewEventDetails = (eventId: string) => {
-    // For demonstration, we'll just show a toast
-    // In a real app, you might navigate to a detailed event page
-    toast({
-      title: "Event Details",
-      description: `Viewing details for event ID: ${eventId}`,
-    });
-    // Navigate to a hypothetical event details page - uncomment when page is created
-    // navigate(`/events/${eventId}`);
+    navigate(`/events/${eventId}`);
   };
 
-  // Handle view all events
   const handleViewAllEvents = () => {
     toast({
       title: "All Events",
       description: "Viewing all events",
     });
-    // Simulate page navigation - uncomment when page is created
-    // navigate("/all-events");
+    navigate("/all-events");
   };
 
-  // Handle newsletter subscription
   const handleSubscribe = () => {
     if (!email) {
       toast({
@@ -80,7 +66,6 @@ const NewsAndEvents = () => {
     setEmail("");
   };
 
-  // Handle contact
   const handleContact = () => {
     navigate("/contact");
   };
@@ -232,10 +217,7 @@ const NewsAndEvents = () => {
                         <Button 
                           variant="link" 
                           className="p-0 h-auto text-primary"
-                          onClick={() => toast({
-                            title: "News Article",
-                            description: `Reading full article: ${news.title}`,
-                          })}
+                          onClick={() => navigate(`/news/${news.id}`)}
                         >
                           Read More →
                         </Button>
@@ -296,7 +278,6 @@ const NewsAndEvents = () => {
   );
 };
 
-// Sample event data
 const events = [
   {
     id: "1",
@@ -366,7 +347,6 @@ const events = [
   }
 ];
 
-// Sample news data
 const newsItems = [
   {
     id: "1",
