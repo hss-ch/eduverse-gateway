@@ -2,15 +2,20 @@
 import { motion } from "framer-motion";
 import { CalendarDays, Users, MapPin, Clock, Search } from "lucide-react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { PageHeader } from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
 
 const NewsAndEvents = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [email, setEmail] = useState("");
+  const navigate = useNavigate();
+  const { toast } = useToast();
   
   // Filter events based on search query
   const filteredEvents = events.filter(
@@ -25,6 +30,60 @@ const NewsAndEvents = () => {
       news.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       news.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  // Handle event details view
+  const handleViewEventDetails = (eventId: string) => {
+    // For demonstration, we'll just show a toast
+    // In a real app, you might navigate to a detailed event page
+    toast({
+      title: "Event Details",
+      description: `Viewing details for event ID: ${eventId}`,
+    });
+    // Navigate to a hypothetical event details page - uncomment when page is created
+    // navigate(`/events/${eventId}`);
+  };
+
+  // Handle view all events
+  const handleViewAllEvents = () => {
+    toast({
+      title: "All Events",
+      description: "Viewing all events",
+    });
+    // Simulate page navigation - uncomment when page is created
+    // navigate("/all-events");
+  };
+
+  // Handle newsletter subscription
+  const handleSubscribe = () => {
+    if (!email) {
+      toast({
+        title: "Error",
+        description: "Please enter your email address",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      toast({
+        title: "Error",
+        description: "Please enter a valid email address",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    toast({
+      title: "Success!",
+      description: "You've been subscribed to our newsletter",
+    });
+    setEmail("");
+  };
+
+  // Handle contact
+  const handleContact = () => {
+    navigate("/contact");
+  };
 
   return (
     <div className="min-h-screen bg-accent">
@@ -114,7 +173,11 @@ const NewsAndEvents = () => {
                           )}
                         </div>
                         
-                        <Button variant="outline" className="w-full">
+                        <Button 
+                          variant="outline" 
+                          className="w-full"
+                          onClick={() => handleViewEventDetails(event.id)}
+                        >
                           View Details
                         </Button>
                       </div>
@@ -129,7 +192,12 @@ const NewsAndEvents = () => {
               
               {filteredEvents.length > 0 && (
                 <div className="mt-8 text-center">
-                  <Button variant="outline">View All Events</Button>
+                  <Button 
+                    variant="outline"
+                    onClick={handleViewAllEvents}
+                  >
+                    View All Events
+                  </Button>
                 </div>
               )}
             </TabsContent>
@@ -161,7 +229,14 @@ const NewsAndEvents = () => {
                         <h3 className="text-xl font-semibold mb-2 line-clamp-2">{news.title}</h3>
                         <p className="text-secondary/70 mb-4 line-clamp-3">{news.excerpt}</p>
                         
-                        <Button variant="link" className="p-0 h-auto text-primary">
+                        <Button 
+                          variant="link" 
+                          className="p-0 h-auto text-primary"
+                          onClick={() => toast({
+                            title: "News Article",
+                            description: `Reading full article: ${news.title}`,
+                          })}
+                        >
                           Read More →
                         </Button>
                       </div>
@@ -176,7 +251,15 @@ const NewsAndEvents = () => {
               
               {filteredNews.length > 0 && (
                 <div className="mt-8 text-center">
-                  <Button variant="outline">View All News</Button>
+                  <Button 
+                    variant="outline"
+                    onClick={() => toast({
+                      title: "All News",
+                      description: "Viewing all news articles",
+                    })}
+                  >
+                    View All News
+                  </Button>
                 </div>
               )}
             </TabsContent>
@@ -189,15 +272,21 @@ const NewsAndEvents = () => {
             </div>
             
             <div className="max-w-md mx-auto flex flex-col sm:flex-row gap-3">
-              <Input placeholder="Enter your email address" className="flex-1" />
-              <Button>Subscribe</Button>
+              <Input 
+                placeholder="Enter your email address" 
+                className="flex-1"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <Button onClick={handleSubscribe}>Subscribe</Button>
             </div>
           </div>
           
           <div className="text-center">
             <h2 className="text-3xl font-bold text-secondary mb-6">Got Questions?</h2>
             <p className="text-secondary/70 max-w-xl mx-auto mb-6">If you have any questions about our events or need more information, our team is here to help.</p>
-            <Button>Contact Us</Button>
+            <Button onClick={handleContact}>Contact Us</Button>
           </div>
         </div>
       </section>
