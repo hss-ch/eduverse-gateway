@@ -66,7 +66,7 @@ const NewsDetails = () => {
                 
                 {/* In a real app, you would have full article content here */}
                 <p className="text-secondary/70 mt-4">
-                  This is a sample news article. In a real application, this would contain the full article content.
+                  {newsItem.content}
                 </p>
               </div>
             </div>
