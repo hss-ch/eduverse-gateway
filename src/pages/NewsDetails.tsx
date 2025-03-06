@@ -84,6 +84,7 @@ const newsItems = [
   {
     id: "1",
     title: "GuideCampus Partners with Top 100 Engineering Colleges for Smart Campus Initiative",
+    content:"",
     excerpt: "GuideCampus announces a groundbreaking partnership with India's top 100 engineering colleges to implement comprehensive Smart Campus solutions, transforming educational infrastructure nationwide.",
     date: "May 25, 2025",
     category: "Partnerships",
@@ -92,6 +93,7 @@ const newsItems = [
   {
     id: "2",
     title: "New AI-Powered Attendance Tracking Module Released",
+    content:"June 5, 2024 – A groundbreaking 𝐀𝐈-𝐩𝐨𝐰𝐞𝐫𝐞𝐝 𝐀𝐭𝐭𝐞𝐧𝐝𝐚𝐧𝐜𝐞 𝐓𝐫𝐚𝐜𝐤𝐢𝐧𝐠 𝐌𝐨𝐝𝐮𝐥𝐞 has been launched, setting a new benchmark for 𝐚𝐮𝐭𝐨𝐦𝐚𝐭𝐞𝐝 𝐚𝐭𝐭𝐞𝐧𝐝𝐚𝐧𝐜𝐞 𝐦𝐚𝐧𝐚𝐠𝐞𝐦𝐞𝐧𝐭 in educational institutions. This cutting-edge solution leverages 𝐚𝐫𝐭𝐢𝐟𝐢𝐜𝐢𝐚𝐥 𝐢𝐧𝐭𝐞𝐥𝐥𝐢𝐠𝐞𝐧𝐜𝐞, 𝐟𝐚𝐜𝐢𝐚𝐥 𝐫𝐞𝐜𝐨𝐠𝐧𝐢𝐭𝐢𝐨𝐧, 𝐚𝐧𝐝 𝐫𝐞𝐚𝐥-𝐭𝐢𝐦𝐞 𝐝𝐚𝐭𝐚 𝐩𝐫𝐨𝐜𝐞𝐬𝐬𝐢𝐧𝐠 to streamline attendance tracking, reduce administrative burden, and eliminate proxy attendance.  ",
     excerpt: "Our latest feature release introduces artificial intelligence to streamline attendance tracking, reducing administrative burden while improving accuracy and providing valuable insights.",
     date: "May 18, 2025",
     category: "Product Update",
@@ -100,6 +102,7 @@ const newsItems = [
   {
     id: "3",
     title: "GuideCampus Wins 'Best EdTech Solution' at National Technology Awards",
+    content:"",
     excerpt: "We're proud to announce that GuideCampus has been recognized as the 'Best EdTech Solution' at the prestigious National Technology Awards, highlighting our commitment to educational excellence.",
     date: "May 10, 2025",
     category: "Awards",
@@ -107,8 +110,9 @@ const newsItems = [
   },
   {
     id: "4",
-    title: "Case Study: How Delhi University Improved Operational Efficiency by 60%",
-    excerpt: "Read how Delhi University leveraged GuideCampus ERP solutions to streamline administrative processes, reduce paperwork, and significantly improve institutional efficiency.",
+    title: "Case Study: How CMR College Improved Operational Efficiency by 60%",
+    content:"",
+    excerpt: "Read how CMR College leveraged GuideCampus ERP solutions to streamline administrative processes, reduce paperwork, and significantly improve institutional efficiency.",
     date: "April 28, 2025",
     category: "Case Study",
     imageUrl: "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80"
