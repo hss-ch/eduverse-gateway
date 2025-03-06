@@ -29,6 +29,7 @@ import BlogNew from "@/pages/BlogNew";
 import BlogPortal from "@/pages/BlogPortal";
 import { ProtectedRoutes } from "@/routes/ProtectedRoutes";
 import Dashboard from "@/pages/Dashboard";
+import Partners from "@/pages/Partners";
 import AcademicPlanning from "@/pages/features/AcademicPlanning";
 import AdmissionsManagement from "@/pages/features/AdmissionsManagement";
 import ExaminationManagement from "@/pages/features/ExaminationManagement";
@@ -77,6 +78,7 @@ const App = () => {
             <Route path="/accreditation/abet" element={<AbetAccreditation />} />
             <Route path="/accreditation/nirf" element={<NirfAccreditation />} />
             <Route path="/accreditation/qs" element={<QsAccreditation />} />
+            <Route path="/partners" element={<Partners />} />
             <Route path="/blog" element={<Outlet />}>
               <Route index element={<Blog />} />
               <Route path=":id" element={<BlogView />} />

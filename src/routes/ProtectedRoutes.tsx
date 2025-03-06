@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Route } from 'react-router-dom';
 import { ProtectedRoute } from "./ProtectedRoute";
@@ -13,6 +14,7 @@ import QsAccreditation from "@/pages/accreditation/QsAccreditation";
 import BlogNew from "@/pages/BlogNew";
 import BlogEdit from "@/pages/BlogEdit";
 import Dashboard from "@/pages/Dashboard";
+import Partners from "@/pages/Partners";
 
 export const ProtectedRoutes = () => {
   return (
@@ -110,6 +112,14 @@ export const ProtectedRoutes = () => {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/partners"
+        element={
+          <ProtectedRoute>
+            <Partners />
           </ProtectedRoute>
         }
       />
