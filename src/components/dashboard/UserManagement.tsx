@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -24,7 +23,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-export const UserManagement = ({ session }: { session: any }) => {
+interface UserManagementProps {
+  session: any;
+}
+
+export const UserManagement = ({ session }: UserManagementProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(true);
   const [users, setUsers] = useState<any[]>([]);
@@ -32,12 +35,16 @@ export const UserManagement = ({ session }: { session: any }) => {
   const [currentUserRole, setCurrentUserRole] = useState<string>('user');
 
   useEffect(() => {
-    getUsers();
-    getCurrentUserRole();
-  }, []);
+    if (session) {
+      getUsers();
+      getCurrentUserRole();
+    }
+  }, [session]);
 
   async function getCurrentUserRole() {
     try {
+      if (!session?.user?.id) return;
+      
       const { data, error } = await supabase
         .from("profiles")
         .select("role")
@@ -251,7 +258,7 @@ export const UserManagement = ({ session }: { session: any }) => {
                           </Button>
                         </>
                       )}
-                      {(currentUserRole === 'admin' || user.id === session.user.id) && (
+                      {(currentUserRole === 'admin' || user.id === session?.user?.id) && (
                         <Dialog>
                           <DialogTrigger asChild>
                             <Button

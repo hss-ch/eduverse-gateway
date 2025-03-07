@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { DashboardNav } from "@/components/dashboard/DashboardNav";
@@ -9,16 +9,40 @@ import { PartnerRequestsManagement } from "@/components/dashboard/PartnerRequest
 import { JobApplicationsManagement } from "@/components/dashboard/JobApplicationsManagement";
 import { DemoRequestsManagement } from "@/components/dashboard/DemoRequestsManagement";
 import { NewsEventsManagement } from "@/components/dashboard/NewsEventsManagement";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Dashboard() {
   const [activePage, setActivePage] = useState("users");
+  const [session, setSession] = useState<any>(null);
+  
+  useEffect(() => {
+    // Fetch the user session on component mount
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+    };
+    
+    getSession();
+    
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setSession(session);
+      }
+    );
+    
+    // Cleanup subscription on unmount
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const renderContent = () => {
     switch (activePage) {
       case "users":
-        return <UserManagement />;
+        return <UserManagement session={session} />;
       case "profile":
-        return <ProfileManagement />;
+        return <ProfileManagement session={session} />;
       case "partners":
         return <PartnerRequestsManagement />;
       case "jobs":
