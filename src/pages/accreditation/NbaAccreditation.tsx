@@ -1,3 +1,4 @@
+
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { CheckCircle, ArrowRight, Award, FileText, BarChart, BookOpen, Settings, Code, Building, Users } from "lucide-react";
@@ -13,18 +14,25 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { DemoScheduler } from "@/components/demo/DemoScheduler";
+import { useState } from "react";
 
 export default function NbaAccreditation() {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [demoDialogOpen, setDemoDialogOpen] = useState(false);
 
-  const handleRequestDemo = () => {
+  const handleDemoSuccess = () => {
+    setDemoDialogOpen(false);
     toast({
       title: "Demo Requested",
       description: "Thank you for your interest in our NBA accreditation solution. Our team will contact you shortly.",
     });
-    // In a real app, you might navigate to a demo scheduling page
-    // navigate('/request-demo');
   };
 
   const handleContactUs = () => {
@@ -115,10 +123,17 @@ export default function NbaAccreditation() {
                     <span className="text-sm">Comprehensive analytics</span>
                   </li>
                 </ul>
-                <Button className="w-full" onClick={handleRequestDemo}>
-                  Request Demo
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                <Dialog open={demoDialogOpen} onOpenChange={setDemoDialogOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="w-full">
+                      Request Demo
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[500px]">
+                    <DemoScheduler selectedPlan="NBA Accreditation" onSuccess={handleDemoSuccess} />
+                  </DialogContent>
+                </Dialog>
               </CardContent>
             </Card>
           </motion.div>

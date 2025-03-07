@@ -1,74 +1,118 @@
 
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Users,
-  UserCircle,
-  Calendar,
+  Building,
   Briefcase,
-  MessageSquare,
-  Handshake,
+  Calendar,
+  FileText,
+  Settings,
+  User,
+  PhoneCall,
+  Newspaper
 } from "lucide-react";
-import { useSearchParams } from "react-router-dom";
 
-interface DashboardNavProps {
-  onTabChange?: (tabId: string) => void;
+interface DashboardNavProps extends React.HTMLAttributes<HTMLElement> {
+  onNavigate: (page: string) => void;
 }
 
-export function DashboardNav({ onTabChange }: DashboardNavProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const activeTab = searchParams.get('tab') || 'profile';
-  
-  const navItems = [
-    { id: 'profile', label: 'Profile', icon: UserCircle },
-    { id: 'users', label: 'Users', icon: Users },
-    { id: 'demos', label: 'Demo Requests', icon: Calendar },
-    { id: 'applications', label: 'Job Applications', icon: Briefcase },
-    { id: 'partners', label: 'Partner Requests', icon: Handshake },
-    { id: 'contact', label: 'Contact', icon: MessageSquare, path: '/contact' },
-  ];
+export function DashboardNav({
+  className,
+  onNavigate,
+  ...props
+}: DashboardNavProps) {
+  const [activeItem, setActiveItem] = useState("users");
 
-  const handleTabChange = (tabId: string) => {
-    if (tabId !== 'contact') {
-      setSearchParams({ tab: tabId });
-      if (onTabChange) {
-        onTabChange(tabId);
-      }
-    }
+  const handleClick = (item: string) => {
+    setActiveItem(item);
+    onNavigate(item);
   };
 
   return (
-    <nav className="space-y-1">
-      {navItems.map(item => {
-        // For contact, we use a direct link, for others we use the tab system
-        if (item.path) {
-          return (
-            <Button
-              key={item.id}
-              variant="ghost"
-              className="w-full justify-start gap-2 text-sm font-medium"
-              asChild
-            >
-              <Link to={item.path}>
-                <item.icon className="h-4 w-4" />
-                <span>{item.label}</span>
-              </Link>
-            </Button>
-          );
-        }
-        
-        return (
+    <nav
+      className={cn("flex flex-col space-y-2", className)}
+      {...props}
+    >
+      <div className="px-3 py-2">
+        <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+          Management
+        </h2>
+        <div className="space-y-1">
           <Button
-            key={item.id}
-            variant={activeTab === item.id ? "secondary" : "ghost"}
-            className="w-full justify-start gap-2 text-sm font-medium"
-            onClick={() => handleTabChange(item.id)}
+            variant={activeItem === "users" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => handleClick("users")}
           >
-            <item.icon className="h-4 w-4" />
-            <span>{item.label}</span>
+            <Users className="mr-2 h-4 w-4" />
+            Users
           </Button>
-        );
-      })}
+          <Button
+            variant={activeItem === "partners" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => handleClick("partners")}
+          >
+            <Building className="mr-2 h-4 w-4" />
+            Partners
+          </Button>
+          <Button
+            variant={activeItem === "jobs" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => handleClick("jobs")}
+          >
+            <Briefcase className="mr-2 h-4 w-4" />
+            Job Applications
+          </Button>
+          <Button
+            variant={activeItem === "demos" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => handleClick("demos")}
+          >
+            <Calendar className="mr-2 h-4 w-4" />
+            Demo Requests
+          </Button>
+          <Button
+            variant={activeItem === "news" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => handleClick("news")}
+          >
+            <Newspaper className="mr-2 h-4 w-4" />
+            News & Events
+          </Button>
+        </div>
+      </div>
+      <div className="px-3 py-2">
+        <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+          Account
+        </h2>
+        <div className="space-y-1">
+          <Button
+            variant={activeItem === "profile" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => handleClick("profile")}
+          >
+            <User className="mr-2 h-4 w-4" />
+            Profile
+          </Button>
+          <Button
+            variant={activeItem === "settings" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => handleClick("settings")}
+          >
+            <Settings className="mr-2 h-4 w-4" />
+            Settings
+          </Button>
+          <Button
+            variant={activeItem === "support" ? "default" : "ghost"}
+            className="w-full justify-start"
+            onClick={() => handleClick("support")}
+          >
+            <PhoneCall className="mr-2 h-4 w-4" />
+            Support
+          </Button>
+        </div>
+      </div>
     </nav>
   );
 }
