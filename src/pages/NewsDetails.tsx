@@ -1,13 +1,33 @@
+
 import { useParams, useNavigate } from "react-router-dom";
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Edit, Trash2 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/components/ui/use-toast";
 
 const NewsDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  // State for delete confirmation dialog
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  
+  // Mock admin status - in a real app, this would come from auth context
+  const isAdmin = true; // For demonstration purposes, set to true
   
   // Find the news item from our news data
   const newsItem = newsItems.find(n => n.id === id);
@@ -26,19 +46,55 @@ const NewsDetails = () => {
       </div>
     );
   }
+  
+  const handleEdit = () => {
+    // In a real app, this would navigate to an edit form
+    toast({
+      title: "Edit News",
+      description: `Editing news item: ${newsItem.title}`,
+    });
+    // For demonstration, we're just showing a toast notification
+    // navigate(`/admin/news/edit/${id}`);
+  };
+  
+  const handleDelete = () => {
+    // Close the dialog
+    setShowDeleteDialog(false);
+    
+    // In a real app, this would delete the item from the database
+    toast({
+      title: "Success",
+      description: "News item has been deleted",
+    });
+    
+    // Navigate back to the news list
+    navigate("/news-and-events");
+  };
 
   return (
     <div className="min-h-screen bg-accent">
       <MainNav />
       
       <div className="container py-16">
-        <Button 
-          variant="outline" 
-          className="mb-8"
-          onClick={() => navigate("/news-and-events")}
-        >
-          <ArrowLeft className="mr-2 h-4 w-4" /> Back to News & Events
-        </Button>
+        <div className="flex justify-between items-center mb-8">
+          <Button 
+            variant="outline"
+            onClick={() => navigate("/news-and-events")}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" /> Back to News & Events
+          </Button>
+          
+          {isAdmin && (
+            <div className="flex gap-2">
+              <Button variant="outline" size="icon" onClick={handleEdit}>
+                <Edit className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" onClick={() => setShowDeleteDialog(true)}>
+                <Trash2 className="h-4 w-4 text-destructive" />
+              </Button>
+            </div>
+          )}
+        </div>
         
         <PageHeader 
           title={newsItem.title}
@@ -73,6 +129,24 @@ const NewsDetails = () => {
           </div>
         </div>
       </div>
+      
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. This will permanently delete the news item.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete} className="bg-destructive text-destructive-foreground">
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
       
       <Footer />
     </div>

@@ -1,4 +1,3 @@
-
 import { MainNav } from "@/components/MainNav";
 import { Footer } from "@/components/Footer";
 import { CheckCircle, ArrowRight, Award, FileText, BarChart, BookOpen } from "lucide-react";
@@ -12,8 +11,27 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function NaacAccreditation() {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleRequestDemo = () => {
+    toast({
+      title: "Demo Requested",
+      description: "Thank you for your interest. Our team will contact you shortly.",
+    });
+    // In a real app, you might navigate to a demo scheduling page
+    // navigate('/request-demo');
+  };
+
+  const handleContactUs = () => {
+    // Navigate to the contact us page
+    navigate('/contact');
+  };
+
   return (
     <div className="min-h-screen bg-accent">
       <MainNav />
@@ -97,7 +115,7 @@ export default function NaacAccreditation() {
                     <span className="text-sm">Comprehensive analytics</span>
                   </li>
                 </ul>
-                <Button className="w-full">
+                <Button className="w-full" onClick={handleRequestDemo}>
                   Request Demo
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
@@ -167,7 +185,7 @@ export default function NaacAccreditation() {
           <p className="text-secondary/70 max-w-2xl mx-auto mb-8">
             Get in touch with our experts to learn how our software can streamline your NAAC accreditation process
           </p>
-          <Button size="lg">
+          <Button size="lg" onClick={handleContactUs}>
             Contact Us
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
