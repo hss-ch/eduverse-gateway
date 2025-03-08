@@ -350,8 +350,8 @@ const events = [
 const newsItems = [
   {
     id: "1",
-    title: "GuideCampus Partners with Top 100 Engineering Colleges for Smart Campus Initiative",
-    excerpt: "GuideCampus announces a groundbreaking partnership with India's top 100 engineering colleges to implement comprehensive Smart Campus solutions, transforming educational infrastructure nationwide.",
+    title: "GuideCampus Partners with Top 50 Engineering Colleges for Smart Campus Initiative",
+    excerpt: "GuideCampus announces a groundbreaking partnership with India's top 50 engineering colleges to implement comprehensive Smart Campus solutions, transforming educational infrastructure nationwide.",
     date: "May 25, 2025",
     category: "Partnerships",
     imageUrl: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80"
