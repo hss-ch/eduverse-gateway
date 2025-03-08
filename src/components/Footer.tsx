@@ -53,8 +53,8 @@ export function Footer() {
                 <Instagram className="h-5 w-5" />
               </a>
             </div>
-            <h3 className="font-semibold text-lg mb-4">Interested in working with us?</h3>
-            <div className="flex space-x-4">
+            <h4 className="font-semibold text-lg mb-4">Interested in working with us?</h4>
+            <div className="flex space-x-2">
               <p className="text-secondary-foreground/80">
                 Call us now:
               </p>
