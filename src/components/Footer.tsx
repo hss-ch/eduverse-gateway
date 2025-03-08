@@ -55,9 +55,7 @@ export function Footer() {
             </div>
             <h5 className="font-semibold text-sg mb-4 mt-4">Interested in working with us?</h5>
               <p className="text-secondary-foreground/80">
-                Call us now:
-              </p>
-              <p className="text-secondary-foreground/80">
+                Call us now: <br />
                 +91 85558 62483
               </p>
           </div>
