@@ -60,6 +60,7 @@ const Contact = () => {
                   <div>
                     <h3 className="font-semibold text-secondary">Visit Us</h3>
                     <p className="text-secondary/70">
+                      Charvi Technologies Private Limited<br />
                       Nizampet<br />
                       Hyderabad, TG 500090
                     </p>
