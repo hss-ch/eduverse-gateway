@@ -53,9 +53,12 @@ export function Footer() {
                 <Instagram className="h-5 w-5" />
               </a>
             </div>
-            <h5 className="font-semibold text-lg mb-4">Interested in working with us?</h5>
+            <h5 className="font-semibold text-sg mb-4 mt-4">Interested in working with us?</h5>
               <p className="text-secondary-foreground/80">
-                Call us now: +91 85558 62483
+                Call us now:
+              </p>
+              <p className="text-secondary-foreground/80">
+                +91 85558 62483
               </p>
           </div>
         </div>
