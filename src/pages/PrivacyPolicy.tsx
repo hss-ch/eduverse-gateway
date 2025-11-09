@@ -31,13 +31,13 @@ const PrivacyPolicy = () => {
           <section className="mb-12">
             <h2 className="text-2xl font-bold mb-4">1. Information We Collect</h2>
             <p className="text-secondary/70 mb-4">
-              We collect information that you provide directly to us, including:
+              When you use the app, we may collect the following information:
             </p>
             <ul className="list-disc pl-6 text-secondary/70 space-y-2">
-              <li>Name and contact information</li>
-              <li>Institution details</li>
+              <li>User-provided data: Name, email, institution, or other details you submit while using the app.</li>
+              <li>Usage data: App interactions, analytics data, and performance metrics.</li>
               <li>Payment information</li>
-              <li>Usage data and preferences</li>
+              <li>Device information: Device type, operating system, and app version.</li>
             </ul>
           </section>
 
@@ -55,7 +55,45 @@ const PrivacyPolicy = () => {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">3. Data Security</h2>
+            <h2 className="text-2xl font-bold mb-4">3. How We Use Your Information</h2>
+            <p className="text-secondary/70 mb-4">
+              We use the collected information to:
+            </p>
+            <ul className="list-disc pl-6 text-secondary/70 space-y-2">
+              <li>Provide and improve the app’s features and performance.</li>
+              <li>Analyze campus analytics and automation workflows.</li>
+              <li>Communicate important updates or announcements (if you consent).</li>
+            </ul>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">4. Sharing Your Information</h2>
+            <p className="text-secondary/70 mb-4">
+              We do not sell or share your personal data with third parties, except:
+            </p>
+            <ul className="list-disc pl-6 text-secondary/70 space-y-2">
+              <li>With service providers who help us operate the app (e.g., analytics services), strictly under contractual agreements.</li>
+            </ul>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">5. GDPR and EU Users</h2>
+            <p className="text-secondary/70 mb-4">
+              If you are located in the European Union, you have the following rights under GDPR:
+            </p>
+            <ul className="list-disc pl-6 text-secondary/70 space-y-2">
+              <li>Access: Request a copy of your personal data.</li>
+              <li>Correction: Request that we correct inaccurate data.</li>
+              <li>Deletion: Request that we delete your personal data.</li>
+              <li>Withdrawal of Consent: Withdraw consent for data processing at any time.</li>
+            </ul>
+            <p className="text-secondary/70 mb-4">
+              To exercise these rights, contact us at support@guidecampus.com.
+            </p>            
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">6. Data Security</h2>
             <p className="text-secondary/70 mb-4">
               We implement appropriate security measures to protect your personal information:
             </p>
@@ -68,11 +106,25 @@ const PrivacyPolicy = () => {
           </section>
 
           <section className="mb-12">
-            <h2 className="text-2xl font-bold mb-4">4. Contact Us</h2>
+            <h2 className="text-2xl font-bold mb-4">7. Children’s Privacy</h2>
+            <p className="text-secondary/70 mb-4">
+              The app is intended for use by students and staff in educational institutions. We do not knowingly collect personal data from children under 13 without parental consent.
+            </p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">8. Changes to This Privacy Policy</h2>
+            <p className="text-secondary/70 mb-4">
+              We may update this Privacy Policy occasionally. We will notify users through the app or by updating the Effective Date.
+            </p>
+          </section>
+
+          <section className="mb-12">
+            <h2 className="text-2xl font-bold mb-4">9. Contact Us</h2>
             <p className="text-secondary/70">
               If you have any questions about our Privacy Policy, please contact us at:
               <br />
-              Email: privacy@GuideCampus.com
+              Email: support@guidecampus.com
               <br />
               Phone: +91 8555862483
             </p>
